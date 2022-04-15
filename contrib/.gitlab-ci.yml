@@ -491,14 +491,18 @@ windows:vs2019:deploy:
   - mkdir -p build
   
 freebsd:build:
+  stage: build
   extends: .freebsd
   script:
-  - cd build
-  - cmake ../ --preset=bsdci
-  - ninja .
-  
-
+    - cd build
+    - cmake ../ --preset=bsdci
+    - ninja
+  artifacts:
+    expire_in: 60m
+    paths:
+      - build/
 #----------------#
+
 # macOS Builders #
 #----------------#
 
