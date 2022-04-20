@@ -490,20 +490,28 @@ windows:vs2019:deploy:
   - git submodule update
   - mkdir -p build
   
-freebsd:build:
+freebsd:13.0:build:
   stage: build
   extends: .freebsd
   script:
     - cd build
     - cmake ../ --preset=bsdci
-    - ninja
+    - ninja -j 16
   artifacts:
     expire_in: 60m
     paths:
       - build/
-      
-#----------------#
 
+freebsd:13.0:test:
+  stage: test
+  extends: .freebsd
+  needs: ["freebsd:13.0:build"]
+  dependencies: ["freebsd:13.0:build"]
+  script:
+    - cd build
+    - ninja test
+
+#----------------#
 # macOS Builders #
 #----------------#
 
