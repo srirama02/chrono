@@ -36,8 +36,9 @@ FOREACH(PROGRAM ${PROGRAMS})
   source_group("" FILES ${PROGRAM}.cpp)
 
   set_target_properties(${PROGRAM} PROPERTIES 
-      COMPILE_FLAGS "${CH_VEHCOSIM_CXX_FLAGS}"
       LINK_FLAGS "${CH_VEHCOSIM_LINKER_FLAGS}")
+
+  target_compile_options(${PROGRAM} PRIVATE ${CH_VEHCOSIM_CXX_FLAGS})
 
   target_link_libraries(${PROGRAM} ChronoEngine_vehicle_cosim ${CH_VEHCOSIM_LIBRARIES})
 ENDFOREACH()

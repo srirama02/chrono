@@ -18,7 +18,6 @@ endif()
 find_package(fastrtps REQUIRED)
 
 include_directories(${SYN_INCLUDES})
-set(COMPILER_FLAGS "${CH_CXX_FLAGS} ${SYN_CXX_FLAGS}")
 set(LINKER_FLAGS "${CH_LINKERFLAG_EXE}")
 list(APPEND LIBS "ChronoEngine")
 list(APPEND LIBS "ChronoEngine_vehicle")
@@ -27,7 +26,7 @@ list(APPEND LIBS "ChronoModels_vehicle")
 
 if(ENABLE_MODULE_IRRLICHT)
   include_directories(${CH_IRRLICHTINC})
-  set(COMPILER_FLAGS "${COMPILER_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
+  set(irrlicht_CXX_FLAGS ${CH_IRRLICHT_CXX_FLAGS})
   list(APPEND LIBS "ChronoEngine_irrlicht")
 endif()
 
@@ -37,7 +36,13 @@ foreach(PROGRAM ${DEMOS})
   add_executable(${PROGRAM} ${PROGRAM}.cpp)
   source_group("" FILES ${PROGRAM}.cpp)
 
-  set_target_properties(${PROGRAM} PROPERTIES COMPILE_FLAGS "${COMPILER_FLAGS}" LINK_FLAGS "${LINKER_FLAGS}")
+  set_target_properties(${PROGRAM} PROPERTIES LINK_FLAGS "${LINKER_FLAGS}")
+
+  target_compile_options(${PROGRAM}
+	  PRIVATE ${CH_CXX_FLAGS}
+	  PRIVATE ${SYN_CXX_FLAGS}
+	  PRIVATE ${irrlicht_CXX_FLAGS})
+
   set_property(TARGET ${PROGRAM} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROGRAM}>")
   
   target_link_libraries(${PROGRAM} ${LIBS})

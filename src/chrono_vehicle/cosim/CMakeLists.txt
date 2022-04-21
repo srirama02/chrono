@@ -64,7 +64,9 @@ list(APPEND LIBRARIES ChronoModels_robot)
 list(APPEND LIBRARIES "${MPI_CXX_LIBRARIES}")
 set(LINKER_FLAGS "${CH_LINKERFLAG_SHARED} ${MPI_CXX_LINK_FLAGS}")
 set(INCLUDES "${CH_INCLUDES};${MPI_CXX_INCLUDE_PATH}")
-set(CXX_FLAGS "${CH_CXX_FLAGS} ${MPI_CXX_COMPILE_FLAGS}")
+
+# Get a copy of the global compilation flags
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
 
 if(ENABLE_MODULE_MULTICORE)
   set(CV_COSIM_TERRAIN_FILES ${CV_COSIM_TERRAIN_FILES}
@@ -74,7 +76,7 @@ if(ENABLE_MODULE_MULTICORE)
       terrain/ChVehicleCosimTerrainNodeGranularOMP.cpp)
   source_group("terrain" FILES)
   set(INCLUDES "${INCLUDES};${CH_MULTICORE_INCLUDES}")
-  set(CXX_FLAGS "${CXX_FLAGS} ${CH_MULTICORE_CXX_FLAGS}")
+  set(multicore_CXX_FLAGS ${CH_MULTICORE_CXX_FLAGS})
   list(APPEND LIBRARIES ChronoEngine_multicore)
 endif()
 
@@ -91,7 +93,7 @@ if(ENABLE_MODULE_GPU)
       terrain/ChVehicleCosimTerrainNodeGranularGPU.h
       terrain/ChVehicleCosimTerrainNodeGranularGPU.cpp)
   set(INCLUDES "${INCLUDES};${CH_GPU_INCLUDES}")
-  set(CXX_FLAGS "${CXX_FLAGS} ${CH_GPU_CXX_FLAGS}")
+  set(gpu_CXX_FLAGS ${CH_GPU_CXX_FLAGS})
   list(APPEND LIBRARIES ChronoEngine_gpu)
 endif()
 
@@ -101,13 +103,13 @@ if(ENABLE_MODULE_DISTRIBUTED)
       terrain/ChVehicleCosimTerrainNodeGranularMPI.cpp)
   set(INCLUDES "${INCLUDES};${CH_DISTRIBUTED_INCLUDES}")
   list(APPEND LIBRARIES ChronoEngine_distributed)
-  set(CXX_FLAGS "${CXX_FLAGS} ${CH_DISTRIBUTED_CXX_FLAGS}")
+  set(distributed_CXX_FLAGS ${CH_DISTRIBUTED_CXX_FLAGS})
   set(LINKER_FLAGS "${LINKER_FLAGS} ${CH_DISTRIBUTED_LINK_FLAGS}")
 endif()
 
 if(ENABLE_MODULE_PARDISO_MKL)
   set(INCLUDES "${INCLUDES};${CH_MKL_INCLUDES}")
-  set(CXX_FLAGS "${CXX_FLAGS} ${CH_MKL_CXX_FLAGS}")
+  set(pardisomkl_CXX_FLAGS ${CH_MKL_CXX_FLAGS})
   set(LINKER_FLAGS "${LINKER_FLAGS} ${CH_MKL_LINK_FLAGS}")
   list(APPEND LIBRARIES ChronoEngine_pardisomkl)
 endif()
@@ -119,7 +121,7 @@ endif()
 
 if(ENABLE_MODULE_IRRLICHT)
   set(INCLUDES "${INCLUDES};${CH_IRRLICHTINC}")
-  set(CXX_FLAGS "${CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
+  set(irrlicht_CXX_FLAGS ${CH_IRRLICHT_CXX_FLAGS})
   list(APPEND LIBRARIES ChronoEngine_irrlicht)
 endif()
 
@@ -140,7 +142,7 @@ unset(CH_VEHCOSIM_LINKER_FLAGS CACHE)
 unset(CH_VEHCOSIM_LIBRARIES CACHE)
 
 set(CH_VEHCOSIM_INCLUDES "${INCLUDES}" CACHE INTERNAL "")
-set(CH_VEHCOSIM_CXX_FLAGS "${CXX_FLAGS}" CACHE INTERNAL "")
+set(CH_VEHCOSIM_CXX_FLAGS "" CACHE INTERNAL "")
 set(CH_VEHCOSIM_LINKER_FLAGS "${LINKER_FLAGS}" CACHE INTERNAL "")
 set(CH_VEHCOSIM_LIBRARIES "${LIBRARIES}" CACHE INTERNAL "")
 
@@ -167,8 +169,16 @@ add_library(ChronoEngine_vehicle_cosim SHARED
 include_directories(${INCLUDES})
 
 set_target_properties(ChronoEngine_vehicle_cosim PROPERTIES
-                      COMPILE_FLAGS "${CXX_FLAGS}"
                       LINK_FLAGS "${LINKER_FLAGS}")
+
+target_compile_options(ChronoEngine_vehicle_cosim
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${MPI_CXX_COMPILE_FLAGS}
+	PRIVATE ${multicore_CXX_FLAGS}
+	PRIVATE ${gpu_CXX_FLAGS}
+	PRIVATE ${distributed_CXX_FLAGS}
+	PRIVATE ${pardisomkl_CXX_FLAGS}
+	PRIVATE ${irrlicht_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_vehicle_cosim PRIVATE "CH_API_COMPILE_VEHICLE")
 target_compile_definitions(ChronoEngine_vehicle_cosim PRIVATE "CH_IGNORE_DEPRECATED")

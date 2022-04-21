@@ -36,8 +36,12 @@ foreach(PROGRAM ${DEMOS})
 
     set_target_properties(${PROGRAM} PROPERTIES
         FOLDER tests
-        COMPILE_FLAGS "${CH_CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}"
         LINK_FLAGS "${CH_LINKERFLAG_EXE}")
+
+	target_compile_options(${PROGRAM}
+		PRIVATE ${CH_CXX_FLAGS}
+		PRIVATE ${CH_IRRLICHT_CXX_FLAGS})
+
     if(APPLE)
       set_target_properties(${PROGRAM} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MACOSX_BUNDLE_INFO_PLIST})
     endif()

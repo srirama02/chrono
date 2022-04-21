@@ -6,6 +6,7 @@
 
 message(STATUS "==== Chrono Engine core module ====")
 
+
 #-----------------------------------------------------------------------------
 # Double precision support for Bullet
 #-----------------------------------------------------------------------------
@@ -26,6 +27,13 @@ set(CH_INCLUDES ${CH_INCLUDES} "${CMAKE_CURRENT_SOURCE_DIR}/../chrono_thirdparty
 set(CH_INCLUDES "${CH_INCLUDES}" PARENT_SCOPE)
 
 include_directories(${CH_INCLUDES})
+
+#-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------
+
+set (global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(global_CXX_FLAGS)
 
 #-----------------------------------------------------------------------------
 # Collect files in the main ChronoEngine library
@@ -1368,6 +1376,9 @@ endif()
 
 # Set some custom properties of this target
 set_target_properties(ChronoEngine PROPERTIES LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+# Set local compliation flags 
+target_compile_options(ChronoEngine PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine PRIVATE "CH_API_COMPILE")
 target_compile_definitions(ChronoEngine PRIVATE "CH_IGNORE_DEPRECATED")

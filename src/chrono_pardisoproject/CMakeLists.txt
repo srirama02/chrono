@@ -67,6 +67,12 @@ set(ChronoEngine_PARDISOPROJECT_SOURCES
 source_group("" FILES ${ChronoEngine_PARDISOPROJECT_HEADERS} ${ChronoEngine_PARDISOPROJECT_SOURCES})
 
 # ------------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ------------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+# ------------------------------------------------------------------------------
 # Add the ChronoEngine_pardisoproject library
 # ------------------------------------------------------------------------------
 
@@ -75,9 +81,9 @@ add_library(ChronoEngine_pardisoproject SHARED
             ${ChronoEngine_PARDISOPROJECT_HEADERS})
 
 set_target_properties(ChronoEngine_pardisoproject PROPERTIES
-                      COMPILE_FLAGS "${CH_CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED} ${CH_PARDISOPROJECT_LINK_FLAGS}")
 
+target_compile_options(ChronoEngine_pardisoproject PRIVATE ${global_CXX_FLAGS})
 target_compile_definitions(ChronoEngine_pardisoproject PRIVATE "CH_API_COMPILE_PARDISOPROJECT")
 target_compile_definitions(ChronoEngine_pardisoproject PRIVATE "CH_IGNORE_DEPRECATED")
 

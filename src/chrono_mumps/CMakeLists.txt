@@ -153,6 +153,13 @@ SOURCE_GROUP("" FILES ${ChronoEngine_MUMPS_HEADERS} ${ChronoEngine_MUMPS_SOURCES
 
 
 # ------------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ------------------------------------------------------------------------------
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(global_CXX_FLAGS)
+
+
+# ------------------------------------------------------------------------------
 # Add the ChronoEngine_mumps library
 # ------------------------------------------------------------------------------
 ADD_DEFINITIONS("-D_OPENMP_NOFORCE_MANIFEST")
@@ -163,9 +170,9 @@ ADD_LIBRARY(ChronoEngine_mumps SHARED
             ${ChronoEngine_MUMPS_HEADERS})
 
 SET_TARGET_PROPERTIES(ChronoEngine_mumps PROPERTIES
-                      COMPILE_FLAGS "${CH_CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED} ${CH_MUMPS_LINK_FLAGS}")
 
+target_compile_options(ChronoEngine_mumps PRIVATE ${global_CXX_FLAGS})
 target_compile_definitions(ChronoEngine_mumps PRIVATE "CH_API_COMPILE_MUMPS")
 target_compile_definitions(ChronoEngine_mumps PRIVATE "CH_IGNORE_DEPRECATED")
 

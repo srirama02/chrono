@@ -35,6 +35,14 @@ mark_as_advanced(CLEAR USE_MULTICORE_DOUBLE)
 mark_as_advanced(CLEAR USE_MULTICORE_SIMD)
 mark_as_advanced(CLEAR USE_MULTICORE_CUDA)
 
+
+# ------------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ------------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(global_CXX_FLAGS)
+
 # ------------------------------------------------------------------------------
 # Additional compiler flags
 # ------------------------------------------------------------------------------
@@ -420,6 +428,11 @@ ENDIF()
 if(MSVC)
     target_compile_options(ChronoEngine_multicore PUBLIC "/wd4146" )
 endif()
+
+target_compile_options(ChronoEngine_multicore 
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${CH_MULTICORE_CXX_FLAGS}
+	)
 
 SET_TARGET_PROPERTIES(ChronoEngine_multicore PROPERTIES
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")

@@ -63,13 +63,19 @@ SET (CH_MATLABLIB "${CH_MATLABLIB}" PARENT_SCOPE )
 
 INCLUDE_DIRECTORIES(${MATLAB_SDK_ROOT}/include)
 
+# Get a copy of the global compilation flags
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(global_CXX_FLAGS)
+
+
 ADD_LIBRARY(ChronoEngine_matlab SHARED 
             ${ChronoEngine_MATLAB_SOURCES}
             ${ChronoEngine_MATLAB_HEADERS})
             
 SET_TARGET_PROPERTIES(ChronoEngine_matlab PROPERTIES
-            COMPILE_FLAGS "${CH_CXX_FLAGS}"
             LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoEngine_matlab PRIVATE ${global_CXX_FLAGS})
                           
 target_compile_definitions(ChronoEngine_matlab PRIVATE "CH_API_COMPILE_MATLAB")
 target_compile_definitions(ChronoEngine_matlab PRIVATE "CH_IGNORE_DEPRECATED")

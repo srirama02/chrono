@@ -18,7 +18,6 @@ set(DEMOS
 # Include directories, compiler flags, libraries
 
 include_directories(${CH_IRRLICHTINC})
-set(COMPILER_FLAGS "${CH_CXX_FLAGS}  ${CH_IRRLICHT_CXX_FLAGS}")
 set(LINKER_FLAGS "${CH_LINKERFLAG_EXE}")
 list(APPEND LIBS "")
 
@@ -32,9 +31,13 @@ foreach(PROGRAM ${DEMOS})
     source_group("" FILES ${PROGRAM}.cpp)
 
     set_target_properties(${PROGRAM} PROPERTIES
-                          COMPILE_FLAGS "${COMPILER_FLAGS}"
                           LINK_FLAGS "${LINKER_FLAGS}")
-    if(APPLE)
+
+	target_compile_options(${PROGRAM}
+		PRIVATE ${CH_CXX_FLAGS}
+		PRIVATE ${CH_IRRLICHT_CXX_FLAGS})
+
+	if(APPLE)
       set_target_properties(${PROGRAM} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MACOSX_BUNDLE_INFO_PLIST})
     endif()
     set_property(TARGET ${PROGRAM} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROGRAM}>")

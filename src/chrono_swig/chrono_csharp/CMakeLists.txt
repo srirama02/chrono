@@ -75,6 +75,12 @@ else()
 endif()
 
 #-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+#-----------------------------------------------------------------------------
 # Wrapper for CORE Chrono module
 #-----------------------------------------------------------------------------
 
@@ -102,6 +108,8 @@ set_target_properties(${SWIG_MODULE_${MODULE_CORE}_REAL_NAME} PROPERTIES
                       OUTPUT_NAME   "${SWIG_MODULE_${MODULE_CORE}_REAL_NAME}"
                       LIBRARY_OUTPUT_DIRECTORY "${LIB_OUT_DIR}"
                       )
+
+target_compile_options(${SWIG_MODULE_${MODULE_CORE}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(${SWIG_MODULE_${MODULE_CORE}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
@@ -149,6 +157,7 @@ if(ENABLE_MODULE_VEHICLE)
                         LIBRARY_OUTPUT_DIRECTORY "${LIB_OUT_DIR}"
                         )
   
+  target_compile_options(${SWIG_MODULE_${MODULE_VEHICLE}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${MODULE_VEHICLE}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
   
   ADD_DEPENDENCIES(${SWIG_MODULE_${MODULE_VEHICLE}_REAL_NAME} ChronoEngine)

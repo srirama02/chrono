@@ -80,6 +80,11 @@ set(ChronoEngine_PardisoMKL_SOURCES
 source_group("" FILES ${ChronoEngine_PardisoMKL_HEADERS} ${ChronoEngine_PardisoMKL_SOURCES})
 
 # ------------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ------------------------------------------------------------------------------
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+# ------------------------------------------------------------------------------
 # Add the ChronoEngine_pardisomkl library
 # ------------------------------------------------------------------------------
 
@@ -88,8 +93,10 @@ add_library(ChronoEngine_pardisomkl SHARED
             ${ChronoEngine_PardisoMKL_HEADERS})
 
 set_target_properties(ChronoEngine_pardisomkl PROPERTIES
-                      COMPILE_FLAGS "${CH_CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED} ${CH_MKL_LINK_FLAGS}")
+
+
+target_compile_options(ChronoEngine_pardisomkl PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_pardisomkl PRIVATE "CH_API_COMPILE_PARDISOMKL")
 target_compile_definitions(ChronoEngine_pardisomkl PRIVATE "EIGEN_USE_MKL_ALL")

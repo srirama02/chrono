@@ -38,9 +38,7 @@ ENDIF()
 # Create the executables
 
 if(ENABLE_MODULE_IRRLICHT)
-  set(MY_CXX_FLAGS "${CH_CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
-else()
-  set(MY_CXX_FLAGS "${CH_CXX_FLAGS}")
+	set(irrlicht_CXX_FLAGS ${CH_IRRLICHT_CXX_FLAGS})
 endif()
 
 FOREACH(PROGRAM ${DEMOS})
@@ -50,8 +48,12 @@ FOREACH(PROGRAM ${DEMOS})
     SOURCE_GROUP("" FILES ${PROGRAM}.cpp)
 
     SET_TARGET_PROPERTIES(${PROGRAM} PROPERTIES 
-                          COMPILE_FLAGS "${MY_CXX_FLAGS}"
                           LINK_FLAGS "${CH_LINKERFLAG_EXE}")
+	
+	TARGET_COMPILE_OPTIONS(${PROGRAM}
+		PRIVATE ${CH_CXX_FLAGS}
+		PRIVATE ${irrlicht_CXX_FLAGS})
+
     if(APPLE)
       set_target_properties(${PROGRAM} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MACOSX_BUNDLE_INFO_PLIST})
     endif()

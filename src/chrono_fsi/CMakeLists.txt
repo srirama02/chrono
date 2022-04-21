@@ -153,10 +153,14 @@ set(ChronoEngine_FSI_UTILS_FILES
 source_group(utils FILES ${ChronoEngine_FSI_UTILS_FILES})
 
 #-----------------------------------------------------------------------------
-# Create the ChronoEngine_fsi library
+# Get a copy of the global compilation flags 
 #-----------------------------------------------------------------------------
 
-set(CXX_FLAGS ${CH_CXX_FLAGS})
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+#-----------------------------------------------------------------------------
+# Create the ChronoEngine_fsi library
+#-----------------------------------------------------------------------------
 
 cuda_add_library(ChronoEngine_fsi SHARED
     ${ChronoEngine_FSI_FILES}
@@ -166,8 +170,9 @@ cuda_add_library(ChronoEngine_fsi SHARED
 )
 
 set_target_properties(ChronoEngine_fsi PROPERTIES
-                      COMPILE_FLAGS "${CH_CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoEngine_fsi PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_fsi PRIVATE "CH_API_COMPILE_FSI")
 target_compile_definitions(ChronoEngine_fsi PRIVATE "CH_IGNORE_DEPRECATED")

@@ -114,10 +114,16 @@ SET(IRRLICHT_LIBRARY      "${IRRLICHT_LIBRARY}"      PARENT_SCOPE)
 set(CH_IRRLICHT_CXX_FLAGS "${CH_IRRLICHT_CXX_FLAGS}" PARENT_SCOPE)
 set(CH_IRRLICHT_C_FLAGS   "${CH_IRRLICHT_C_FLAGS}"   PARENT_SCOPE)
 
+
+#-------------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-------------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
 #-------------------------------------------------------------------------------
 # Create the ChronoEngine_irrlicht library
 
-set(COMPILER_FLAGS "${CH_CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
 set(LINKER_FLAGS "${CH_LINKERFLAG_SHARED}")
 set(LIBRARIES 
     ChronoEngine
@@ -140,9 +146,11 @@ ADD_LIBRARY(ChronoEngine_irrlicht SHARED
 )
 
 SET_TARGET_PROPERTIES(ChronoEngine_irrlicht PROPERTIES
-  COMPILE_FLAGS "${COMPILER_FLAGS}"
   LINK_FLAGS "${LINKER_FLAGS}")
 
+target_compile_options(ChronoEngine_irrlicht 
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${CH_IRRLICHT_CXX_FLAGS})
 target_compile_definitions(ChronoEngine_irrlicht PRIVATE "CH_API_COMPILE_IRRLICHT")
 target_compile_definitions(ChronoEngine_irrlicht PRIVATE "CH_IGNORE_DEPRECATED")
 target_compile_definitions(ChronoEngine_irrlicht PRIVATE "IGNORE_DEPRECATED_WARNING")

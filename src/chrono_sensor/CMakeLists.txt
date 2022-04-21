@@ -498,9 +498,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 endif()
 
 set_target_properties(ChronoEngine_sensor PROPERTIES
-                    COMPILE_FLAGS "${CH_CXX_FLAGS}"
                     LINK_FLAGS "${CH_LINKERFLAG_SHARED}"
 				  	COMPILE_DEFINITIONS "CH_API_COMPILE_SENSOR")
+
+target_compile_options(ChronoEngine_sensor PRIVATE ${CH_CXX_FLAGS})
 
 target_include_directories(ChronoEngine_sensor PUBLIC ${CH_SENSOR_INCLUDES})
 

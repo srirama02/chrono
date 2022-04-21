@@ -622,11 +622,18 @@ set(CVM_KRAZ_FILES
 )
 source_group("kraz" FILES ${CVM_KRAZ_FILES})
 
+
+# ----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ----------------------------------------------------------------------------
+set(vehicle_global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(vehicle_global_CXX_FLAGS)
+
 # ----------------------------------------------------------------------------
 # Add the Chrono_vehicle_models library
 # ----------------------------------------------------------------------------
 
-set(CXX_FLAGS ${CH_CXX_FLAGS})
+
 set(LIBRARIES ChronoEngine ChronoEngine_vehicle)
 
 add_library(ChronoModels_vehicle SHARED
@@ -648,8 +655,9 @@ add_library(ChronoModels_vehicle SHARED
  )
 
 set_target_properties(ChronoModels_vehicle PROPERTIES
-                      COMPILE_FLAGS "${CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoModels_vehicle PRIVATE ${vehicle_global_CXX_FLAGS})
 
 target_compile_definitions(ChronoModels_vehicle PRIVATE "CH_API_COMPILE_MODELS")
 target_compile_definitions(ChronoModels_vehicle PRIVATE "CH_IGNORE_DEPRECATED")

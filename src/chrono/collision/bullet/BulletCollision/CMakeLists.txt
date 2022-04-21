@@ -256,6 +256,10 @@ SET(BulletCollision_HDRS
 ADD_LIBRARY(BulletCollision ${BulletCollision_SRCS} ${BulletCollision_HDRS})
 SET_TARGET_PROPERTIES(BulletCollision PROPERTIES VERSION ${BULLET_VERSION})
 SET_TARGET_PROPERTIES(BulletCollision PROPERTIES SOVERSION ${BULLET_VERSION})
+
+# Get a copy of the global compilation flags
+target_compile_options(BulletCollision PRIVATE ${CH_CXX_FLAGS})
+
 IF (BUILD_SHARED_LIBS)
   TARGET_LINK_LIBRARIES(BulletCollision LinearMath)
 ENDIF (BUILD_SHARED_LIBS)

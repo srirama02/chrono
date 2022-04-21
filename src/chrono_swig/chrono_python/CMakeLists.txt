@@ -118,6 +118,12 @@ else()
 endif()
 
 #-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags 
+#-----------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+#-----------------------------------------------------------------------------
 # MODULE for the core wrapper, including most of the C::E
 #-----------------------------------------------------------------------------
 
@@ -158,6 +164,8 @@ set_target_properties(${SWIG_MODULE_${CHPY_CORE}_REAL_NAME} PROPERTIES
                       OUTPUT_NAME   "${SWIG_MODULE_${CHPY_CORE}_REAL_NAME}"
                       LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                       )
+
+target_compile_options(${SWIG_MODULE_${CHPY_CORE}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(${SWIG_MODULE_${CHPY_CORE}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
@@ -247,6 +255,7 @@ if(ENABLE_MODULE_POSTPROCESS)
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_POSTPROCESS}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${CHPY_POSTPROCESS}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_POSTPROCESS}_REAL_NAME} ChronoEngine)
@@ -316,6 +325,7 @@ SWIG_LINK_LIBRARIES(${CHPY_FEA} ${PYTHON_LIBRARY} ChronoEngine)
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_FEA}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${CHPY_FEA}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_FEA}_REAL_NAME} ChronoEngine)
@@ -386,6 +396,7 @@ if(ENABLE_MODULE_IRRLICHT)
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_IRRLICHT}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${CHPY_IRRLICHT}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
   target_compile_definitions(${SWIG_MODULE_${CHPY_IRRLICHT}_REAL_NAME} PRIVATE "IGNORE_DEPRECATED_WARNING")
 
@@ -461,6 +472,7 @@ if(ENABLE_MODULE_PARDISO_MKL)
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_MKL}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${CHPY_MKL}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_MKL}_REAL_NAME} ChronoEngine)
@@ -535,6 +547,7 @@ if(ENABLE_MODULE_CASCADE)
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_CASCADE}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${CHPY_CASCADE}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_CASCADE}_REAL_NAME} ChronoEngine)
@@ -619,6 +632,7 @@ if(ENABLE_MODULE_VEHICLE)
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_VEHICLE}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
   target_compile_definitions(${SWIG_MODULE_${CHPY_VEHICLE}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_VEHICLE}_REAL_NAME} ChronoEngine)
@@ -699,6 +713,8 @@ if(ENABLE_MODULE_SENSOR AND NUMPY_INCLUDE_DIR)
           LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
           )
 
+  target_compile_options(${SWIG_MODULE_${CHPY_SENSOR}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})
+
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_SENSOR}_REAL_NAME} ChronoEngine)
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_SENSOR}_REAL_NAME} ChronoEngine_sensor)
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_SENSOR}_REAL_NAME} ${SWIG_MODULE_${CHPY_CORE}_REAL_NAME})
@@ -776,6 +792,8 @@ endif()
                         OUTPUT_NAME   "${SWIG_MODULE_${CHPY_RS}_REAL_NAME}"
                         LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
                         )
+
+  target_compile_options(${SWIG_MODULE_${CHPY_RS}_REAL_NAME} PRIVATE ${global_CXX_FLAGS})  
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_RS}_REAL_NAME} ChronoEngine)
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_RS}_REAL_NAME} ChronoModels_robot)

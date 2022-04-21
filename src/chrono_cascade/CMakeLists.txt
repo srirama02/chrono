@@ -80,14 +80,18 @@ set(OpenCASCADE_LINKER_FLAGS "${OpenCASCADE_LINKER_FLAGS}" PARENT_SCOPE)
 set(OpenCASCADE_LIBRARIES "${OpenCASCADE_LIBRARIES}" PARENT_SCOPE)
 
 #-----------------------------------------------------------------------------	
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------	
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+#-----------------------------------------------------------------------------	
 # Add the ChronoEngine_cascade library
 
 include_directories(${OpenCASCADE_INCLUDE_DIR})
-set(CXX_FLAGS "${CH_CXX_FLAGS} ${OpenCASCADE_CXX_FLAGS}")
 set(LIBRARIES "ChronoEngine")
 
 if(ENABLE_MODULE_IRRLICHT)
-    set(CXX_FLAGS "${CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
+    set(irrlicht_FLAGS ${CH_IRRLICHT_CXX_FLAGS})
     list(APPEND LIBRARIES ${IRRLICHT_LIBRARY})
     include_directories(${CH_IRRLICHTINC})
 endif()
@@ -98,8 +102,12 @@ add_library(ChronoEngine_cascade SHARED
             ${ChronoEngine_CASCADE_HEADERS_IRRLICHT})
 
 set_target_properties(ChronoEngine_cascade PROPERTIES 
-                      COMPILE_FLAGS "${CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoEngine_cascade 
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${OpenCASCADE_CXX_FLAGS}
+	PRIVATE ${irrlicht_FLAGS})
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     add_definitions( "/DWNT" )

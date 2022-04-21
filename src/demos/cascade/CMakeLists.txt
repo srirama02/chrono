@@ -40,14 +40,17 @@ if(ENABLE_MODULE_IRRLICHT)
 
         set_target_properties(${PROGRAM} PROPERTIES 
             FOLDER demos
-            COMPILE_FLAGS "${CH_CXX_FLAGS} ${OpenCASCADE_CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}"
             LINK_FLAGS "${CH_LINKERFLAG_EXE} ${OpenCASCADE_LINKER_FLAGS}")
+		target_compile_options(${PROGRAM}
+			PRIVATE ${CH_CXX_FLAGS}
+			PRIVATE ${OpenCASCADE_CXX_FLAGS}
+			PRIVATE ${CH_IRRLICHT_CXX_FLAGS}
+			)
         set_property(TARGET ${PROGRAM} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROGRAM}>")
         target_link_libraries(${PROGRAM}
             ChronoEngine
             ChronoEngine_cascade
-            ChronoEngine_irrlicht)
-
+            ChronoEngine_irrlicht)	
         install(TARGETS ${PROGRAM} DESTINATION ${CH_INSTALL_DEMO}) 
     endforeach()
 

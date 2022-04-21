@@ -56,6 +56,12 @@ set(CH_PYTHONINC  "${CH_PYTHONINC}"  PARENT_SCOPE)
 set(CH_PYTHONLIB  "${CH_PYTHONLIB}"  PARENT_SCOPE)
 
 #-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+#-----------------------------------------------------------------------------
 # Create the ChronoEngine_pyparser library
 #-----------------------------------------------------------------------------
 
@@ -81,6 +87,8 @@ add_library(ChronoEngine_pyparser SHARED
 
 set_target_properties(ChronoEngine_pyparser PROPERTIES
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoEngine_pyparser PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_pyparser PRIVATE "CH_API_COMPILE_PYPARSER")
 target_compile_definitions(ChronoEngine_pyparser PRIVATE "CH_IGNORE_DEPRECATED")

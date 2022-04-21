@@ -22,8 +22,6 @@ endif()
 # Collect compiler flags required to build the Chrono libraries
 #-----------------------------------------------------------------------------
 
-set(CH_C_FLAGS "${CMAKE_C_FLAGS}")
-set(CH_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CH_LINKERFLAG_EXE "${CMAKE_EXE_LINKER_FLAGS}")
 set(CH_LINKERFLAG_SHARED "")
 
@@ -102,8 +100,6 @@ message(STATUS "  Thread library:      ${CMAKE_THREAD_LIBS_INIT}")
 message(STATUS "  Using Win32 threads? ${CMAKE_USE_WIN32_THREADS_INIT}")
 message(STATUS "  Using pthreads?      ${CMAKE_USE_PTHREADS_INIT}")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_THREAD_LIBS_INIT}")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_THREAD_LIBS_INIT}")
 set(CH_CXX_FLAGS "${CH_CXX_FLAGS} ${CMAKE_THREAD_LIBS_INIT}")
 set(CH_C_FLAGS "${CH_C_FLAGS} ${CMAKE_THREAD_LIBS_INIT}")
 
@@ -155,8 +151,6 @@ if(ENABLE_OPENMP)
   message(STATUS "  OpenMP includes:  ${OpenMP_CXX_INCLUDE_DIRS}")
   message(STATUS "  OpenMP library:   ${OpenMP_CXX_LIBRARY}")
   message(STATUS "  OpenMP libraries: ${OpenMP_CXX_LIBRARIES}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
   set(CH_CXX_FLAGS "${CH_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
   set(CH_C_FLAGS "${CH_C_FLAGS} ${OpenMP_C_FLAGS}")
   set(OPENMP_INCLUDE_DIR "${OpenMP_CXX_INCLUDE_DIRS}")
@@ -235,7 +229,6 @@ if(USE_SIMD)
    endif()
 
    # Add SIMD flags to Chrono compiler flags
-   # Note that these flags are already added to CMake compiler flags
    set(CH_C_FLAGS "${CH_C_FLAGS} ${SIMD_C_FLAGS}")
    set(CH_CXX_FLAGS "${CH_CXX_FLAGS} ${SIMD_CXX_FLAGS}")
 
@@ -529,14 +522,22 @@ endif()
 # Set the base compilation flags
 #-----------------------------------------------------------------------------
 
+# Convert space-separated flags to semicolons 
+separate_arguments(CH_CXX_FLAGS)
+separate_arguments(CH_C_FLAGS)
+separate_arguments(CH_LINKERFLAG_EXE)
+
 message(STATUS "Compiler and linker flags:")
 message(STATUS "  C++ compiler flags: ${CH_CXX_FLAGS}")
 message(STATUS "  C compiler flags:   ${CH_C_FLAGS}")
 message(STATUS "  Linker flags:       ${CH_LINKERFLAG_EXE}")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CH_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CH_CXX_FLAGS} -D_DEBUG -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CH_CXX_FLAGS} -DNDEBUG")
+# Globally define debug and NOT-debug macros based on build type 
+add_compile_definitions(
+	$<$<CONFIG:DEBUG>:DEBUG>
+	$<$<CONFIG:DEBUG>:_DEBUG>
+	$<$<CONFIG:RELEASE>:NDEBUG>
+)
 
 # For Bullet to use 32 bit math
 add_definitions( "-DBP_USE_FIXEDPOINT_INT_32" )

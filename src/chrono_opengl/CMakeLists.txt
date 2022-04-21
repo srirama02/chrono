@@ -263,7 +263,10 @@ ADD_LIBRARY(ChronoEngine_opengl SHARED
   ${CE_OpenGL_TINYOBJLOADER_FILES}
 ) 
 
-SET(CE_OpenGL_FLAGS "${CH_CXX_FLAGS}")
+# ------------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ------------------------------------------------------------------------------
+SET(CE_OpenGL_FLAGS ${CH_CXX_FLAGS})
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
   SET(CE_OpenGL_LIBRARIES 
@@ -280,14 +283,17 @@ ENDIF()
 
 if(ENABLE_MODULE_MULTICORE)
 	SET(CE_OpenGL_LIBRARIES ${CE_OpenGL_LIBRARIES} ChronoEngine_multicore)
-	SET(CE_OpenGL_FLAGS "${CE_OpenGL_FLAGS} ${CH_MULTICORE_CXX_FLAGS}")
+	SET(multicore_FLAGS ${CH_MULTICORE_CXX_FLAGS})
 endif()
 
 
-SET_TARGET_PROPERTIES(ChronoEngine_opengl PROPERTIES 
-  COMPILE_FLAGS "${CE_OpenGL_FLAGS}"
+SET_TARGET_PROPERTIES(ChronoEngine_opengl PROPERTIES
   LINK_FLAGS "${CE_OpenGL_LINK_FLAGS} ${CH_LINKERFLAG_SHARED}")
 
+target_compile_options(ChronoEngine_opengl
+					   PRIVATE ${CE_OpenGL_FLAGS}
+				   	   PRIVATE ${multicore_FLAGS})
+				   
 target_compile_definitions(ChronoEngine_opengl PRIVATE "CH_API_COMPILE_OPENGL")
 target_compile_definitions(ChronoEngine_opengl PRIVATE "GLM_ENABLE_EXPERIMENTAL")
 target_compile_definitions(ChronoEngine_opengl PRIVATE "CH_IGNORE_DEPRECATED")

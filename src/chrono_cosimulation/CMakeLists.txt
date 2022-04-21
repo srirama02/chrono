@@ -14,6 +14,13 @@ ENDIF()
 MESSAGE(STATUS "==== Chrono Cosimulation module ====")
 
 #-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(global_CXX_FLAGS)
+
+#-----------------------------------------------------------------------------
 #
 # LIST THE FILES THAT MAKE THE COSIMULATION LIBRARY
 # NOTE: to add a new source to this unit, just add its name
@@ -77,6 +84,8 @@ SET_TARGET_PROPERTIES(ChronoEngine_cosimulation PROPERTIES
 
 target_compile_definitions(ChronoEngine_cosimulation PRIVATE "CH_API_COMPILE_COSIMULATION")
 target_compile_definitions(ChronoEngine_cosimulation PRIVATE "CH_IGNORE_DEPRECATED")
+
+target_compile_options(ChronoEngine_cosimulation PRIVATE ${global_CXX_FLAGS})
 
 TARGET_LINK_LIBRARIES(ChronoEngine_cosimulation 
                       ChronoEngine

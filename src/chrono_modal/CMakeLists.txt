@@ -17,6 +17,13 @@ MESSAGE(STATUS "==== Chrono Modal module ====")
 MARK_AS_ADVANCED(CLEAR SPECTRA_INCLUDE_DIR)
 
 #-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+separate_arguments(global_CXX_FLAGS)
+
+
+#-----------------------------------------------------------------------------
 # LIST THE FILES THAT MAKE THE MODAL LIBRARY
 
 SET(ChronoEngine_MODAL_SOURCES 
@@ -58,8 +65,9 @@ ADD_LIBRARY(ChronoEngine_modal SHARED
 			${ChronoEngine_MODAL_HEADERS})
 
 SET_TARGET_PROPERTIES(ChronoEngine_modal PROPERTIES
-                      COMPILE_FLAGS "${CH_CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+				  
+target_compile_options(ChronoEngine_modal PRIVATE ${global_CXX_FLAGS})
                           
 target_compile_definitions(ChronoEngine_modal PRIVATE "CH_API_COMPILE_MODAL")
 target_compile_definitions(ChronoEngine_modal PRIVATE "CH_IGNORE_DEPRECATED")

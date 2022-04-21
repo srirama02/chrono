@@ -793,11 +793,17 @@ set(CV_STB_FILES
 )
 source_group("utils\\stb" FILES ${CV_STB_FILES})
 
+
+# ----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+# ----------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
 # ----------------------------------------------------------------------------
 # Add the ChronoEngine_vehicle library
 # ----------------------------------------------------------------------------
 
-set(CXX_FLAGS ${CH_CXX_FLAGS})
 set(COMPILE_DEFS "CH_API_COMPILE_VEHICLE")
 set(LINK_FLAGS ${CH_LINKERFLAG_SHARED})
 set(LIBRARIES "ChronoEngine")
@@ -858,8 +864,9 @@ add_library(ChronoEngine_vehicle SHARED
 message(STATUS "Add ChronoEngine_vehicle library")
 
 set_target_properties(ChronoEngine_vehicle PROPERTIES
-                      COMPILE_FLAGS "${CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoEngine_vehicle PRIVATE ${global_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_vehicle PRIVATE "CH_API_COMPILE_VEHICLE")
 target_compile_definitions(ChronoEngine_vehicle PRIVATE "CH_IGNORE_DEPRECATED")
@@ -881,7 +888,7 @@ install(TARGETS ChronoEngine_vehicle
 
 if(ENABLE_MODULE_IRRLICHT)
 
-set(CXX_FLAGS "${CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
+set(irrlicht_CXX_FLAGS ${CH_IRRLICHT_CXX_FLAGS})
 list(APPEND LIBRARIES ChronoEngine_vehicle)
 list(APPEND LIBRARIES ChronoEngine_irrlicht) 
 include_directories(${CH_IRRLICHTINC})
@@ -903,8 +910,11 @@ if(ENABLE_IRRKLANG)
 endif()
 
 set_target_properties(ChronoEngine_vehicle_irrlicht PROPERTIES
-                      COMPILE_FLAGS "${CXX_FLAGS}"
                       LINK_FLAGS "${CH_LINKERFLAG_SHARED}")
+
+target_compile_options(ChronoEngine_vehicle_irrlicht 
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${irrlicht_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_vehicle_irrlicht PRIVATE "CH_API_COMPILE_VEHICLE")
 target_compile_definitions(ChronoEngine_vehicle_irrlicht PRIVATE "CH_IGNORE_DEPRECATED")

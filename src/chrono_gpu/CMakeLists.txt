@@ -59,6 +59,12 @@ set(CH_GPU_LINKER_FLAGS "${CH_LINKERFLAG_SHARED}")
 set(CH_GPU_LINKED_LIBRARIES ChronoEngine ${CUDA_FRAMEWORK})
 
 # ------------------------------------------------------------------------------
+# Get a copy of the global compilation flags 
+# ------------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${global_CXX_FLAGS})
+
+# ------------------------------------------------------------------------------
 # Add optional run-time visualization support
 # ------------------------------------------------------------------------------
 
@@ -165,6 +171,10 @@ set_target_properties(ChronoEngine_gpu PROPERTIES
 #if(HDF5_FOUND)
 #target_compile_definitions(ChronoEngine_gpu PRIVATE ${HDF5_COMPILE_DEFS})
 #endif()
+
+target_compile_options(ChronoEngine_gpu 
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${CH_GPU_CXX_FLAGS})
 
 target_link_libraries(ChronoEngine_gpu ${CH_GPU_LINKED_LIBRARIES})
 target_include_directories(ChronoEngine_gpu PUBLIC "${CUB_INCLUDE_DIR}/../")

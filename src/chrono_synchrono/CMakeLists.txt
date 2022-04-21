@@ -26,7 +26,7 @@ if(NOT ENABLE_MODULE_VEHICLE)
     return()
 endif()
 
-set(SYN_CXX_FLAGS "${CH_CXX_FLAGS}")
+set(SYN_CXX_FLAGS "")
 set(SYN_LINKER_FLAGS "${CH_LINKERFLAG_SHARED}")
 set(SYN_LIBRARIES "")
 set(SYN_LIB_NAMES "ChronoEngine")
@@ -218,6 +218,12 @@ set(SYN_UTILS_FILES
 source_group("utils" FILES ${SYN_UTILS_FILES})
 
 #-----------------------------------------------------------------------------
+# Get a copy of the global compilation flags
+#-----------------------------------------------------------------------------
+
+set(global_CXX_FLAGS ${CH_CXX_FLAGS})
+
+#-----------------------------------------------------------------------------
 # Create the ChronoEngine_synchrono library
 #-----------------------------------------------------------------------------
 
@@ -230,7 +236,7 @@ if (ENABLE_MODULE_IRRLICHT)
   list(APPEND SYN_LIB_NAMES ChronoEngine_vehicle_irrlicht)
 
   set(SYN_INCLUDES  ${SYN_INCLUDES} ${CH_IRRLICHTINC})
-  set(SYN_CXX_FLAGS "${SYN_CXX_FLAGS} ${CH_IRRLICHT_CXX_FLAGS}")
+  set(irrlicht_CXX_FLAGS ${CH_IRRLICHT_CXX_FLAGS})
 endif()
 
 # Chrono::Vehicle is required
@@ -241,7 +247,7 @@ list(APPEND SYN_LIB_NAMES ChronoModels_vehicle)
 set(FASTDDS_FOUND "${FASTDDS_FOUND}" PARENT_SCOPE)
 set(SYN_INCLUDES  "${SYN_INCLUDES}"  PARENT_SCOPE)
 set(SYN_LIBRARIES "${SYN_LIBRARIES}" PARENT_SCOPE)
-set(SYN_CXX_FLAGS "${SYN_CXX_FLAGS}" PARENT_SCOPE)
+set(SYN_CXX_FLAGS ${SYN_CXX_FLAGS} PARENT_SCOPE)
 
 include_directories("${CMAKE_SOURCE_DIR}/src/chrono_thirdparty/flatbuffers/include")
 include_directories(${SYN_INCLUDES})
@@ -261,8 +267,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 endif()
 
 set_target_properties(ChronoEngine_synchrono PROPERTIES
-                      COMPILE_FLAGS "${SYN_CXX_FLAGS}"
                       LINK_FLAGS "${SYN_LINKER_FLAGS}")
+
+target_compile_options(ChronoEngine_synchrono
+	PRIVATE ${global_CXX_FLAGS}
+	PRIVATE ${irrlicht_CXX_FLAGS})
 
 target_compile_definitions(ChronoEngine_synchrono PRIVATE "SYN_API_COMPILE")
 
