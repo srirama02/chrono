@@ -46,7 +46,7 @@ endif()
 # Enable debugging CMake output
 #-----------------------------------------------------------------------------
 
-set(DBG_SCRIPT false)
+set(DBG_SCRIPT true)
 
 #-----------------------------------------------------------------------------
 # Find PYTHON
@@ -145,7 +145,7 @@ configure_file(${CMAKE_SOURCE_DIR}/contrib/packaging-python/__init__.py.in
 
 if(DEFINED PYCHRONO_DATA_PATH)
   message(STATUS "User provided path to Chrono data files: ${PYCHRONO_DATA_PATH}")
-  set (PYC_DATA_PATH "${PYCHRONO_DATA_PATH}")
+  set(PYC_DATA_PATH "${PYCHRONO_DATA_PATH}")
 else()
   # Default path to Chrono data files (in INSTALL tree)
   set(PYC_DATA_PATH "${CMAKE_INSTALL_PREFIX}/${CH_INSTALL_DATA}")
