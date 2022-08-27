@@ -52,13 +52,13 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DBUILD_GMOCK=OFF ^
  -DBUILD_BENCHMARKING=OFF ^
  -DENABLE_MODULE_CASCADE=ON ^
- -DCASCADE_INCLUDE_DIR="%PREFIX%"\Library\include\opencascade ^
- -DCASCADE_LIBDIR="%PREFIX%"\Library\lib ^
+ -DCASCADE_INCLUDE_DIR="%PREFIX%"/Library/include/opencascade ^
+ -DCASCADE_LIBDIR="%PREFIX%"/Library/lib ^
  -DENABLE_MODULE_PARDISO_MKL=ON ^
- -DMKL_INCLUDE_DIR="%PREFIX%"\Library\include ^
- -DMKL_RT_LIBRARY="%PREFIX%"\Library\lib\mkl_rt.lib ^
+ -DMKL_INCLUDE_DIR="%PREFIX%"/Library/include ^
+ -DMKL_RT_LIBRARY="%PREFIX%"/Library/lib/mkl_rt.lib ^
  -DIOMP5_LIBRARY="C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/compiler/lib/intel64_win/libiomp5md.lib" ^
- -DPYCHRONO_DATA_PATH="..\..\..\..\..\Library\data" ^
+ -DPYCHRONO_DATA_PATH="%PREFIX"/Library/data" ^
  .. >> "%LOG_DIR%"\cmakeconfiglog.txt 2>&1
 if errorlevel 1 exit 1
 mkdir cmake_ended
