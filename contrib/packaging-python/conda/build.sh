@@ -48,7 +48,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DMKL_INCLUDE_DIR=$BUILD_PREFIX/include \
  -DMKL_RT_LIBRARY=$BUILD_PREFIX/lib/libmkl_rt.so \
  -DEIGEN3_INCLUDE_DIR=/usr/include/eigen3 \
- -DPYCHRONO_DATA_PATH=$PREFIX/share/chrono/data \
+ -DPYCHRONO_DATA_PATH=../../../../../../share/chrono/data \
  -DOptiX_INSTALL_DIR=/opt/optix/7.2.0 \
  -DNUMPY_INCLUDE_DIR=$NP_INCL \
  -DUSE_CUDA_NVRTC=OFF \
@@ -56,6 +56,9 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DCUDA_ARCH_PTX=52 \
  -DCUDA_ARCH_BIN=5.2 \
  ./..
+
+# -DPYCHRONO_DATA_PATH=$PREFIX/share/chrono/data \
+
 # Build step
 # on linux travis, limit the number of concurrent jobs otherwise
 # gcc gets out of memory
