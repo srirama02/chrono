@@ -28,7 +28,9 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
  -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
  -DCMAKE_SYSTEM_PREFIX_PATH="%LIBRARY_PREFIX%" ^
+ -DCH_CONDA_INSTALL=ON ^
  -DCH_INSTALL_PYTHON_PACKAGE="%SP_DIR%" ^
+ -DCH_PYCHRONO_DATA_PATH="../../../Library/data" ^
  -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%" ^
  -DPYTHON_INCLUDE_DIR:PATH="%PREFIX%"/include ^
  -DPYTHON_LIBRARY:FILEPATH="%PREFIX%"/libs/python%MY_PY_VER%.lib ^
@@ -58,11 +60,8 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DMKL_INCLUDE_DIR="%PREFIX%"/Library/include ^
  -DMKL_RT_LIBRARY="%PREFIX%"/Library/lib/mkl_rt.lib ^
  -DIOMP5_LIBRARY="C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/compiler/lib/intel64_win/libiomp5md.lib" ^
- -DPYCHRONO_DATA_PATH="../../../../../Library/data" ^
  ..
- 
 REM .. >> "%LOG_DIR%"\cmakeconfiglog.txt 2>&1
-REM -DPYCHRONO_DATA_PATH="%PREFIX%"/Library/data ^
 
 if errorlevel 1 exit 1
 mkdir cmake_ended
