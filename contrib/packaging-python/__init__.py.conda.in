@@ -6,6 +6,9 @@
 import os
 import pathlib
 
+# Cache directory of this script.
+idir = pathlib.Path(__file__).parent.resolve()
+
 try:
     import _core
     import _fea
@@ -33,6 +36,9 @@ except:
     pass
 try:
     import _sensor
+    sdir = os.path.join(idir, '@PYC_SHADER_PATH@')
+    sdir = os.path.join(os.path.realpath(sdir), '')
+    _sensor.SetSensorShaderDir(sdir)
 except:
     pass
 try:
@@ -48,7 +54,6 @@ except:
 from .core import *
 
 # Infer path to Chrono data/ directory from path of __init__.py
-idir = pathlib.Path(__file__).parent.resolve()
 ddir = os.path.join(idir, '@PYC_DATA_PATH@')
 ddir = os.path.join(os.path.realpath(ddir), '')
 SetChronoDataPath(ddir)

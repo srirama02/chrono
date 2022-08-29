@@ -33,6 +33,10 @@ if(DEFINED CH_CONDA_INSTALL)
     message(FATAL_ERROR "Relative path to Chrono data/ directory not specified. Set CH_PYCHRONO_DATA_PATH")
   endif()
 
+  if (NOT DEFINED CH_PYCHRONO_SHADER_PATH)
+    message(FATAL_ERROR "Relative path to Chrono::Sensor shaders/ directory not specified. Set CH_PYCHRONO_SHADER_PATH")
+  endif()
+
 endif()
 
 #-----------------------------------------------------------------------------
@@ -150,6 +154,9 @@ endif()
 # Path to Chrono data/ directory (in SOURCE tree)
 set(PYC_DATA_PATH "${PROJECT_SOURCE_DIR}/data/")
 
+# Path to Chrono::Sensor shaders/ directory (in SOURCE tree)
+set(PYC_SHADER_PATH "${PROJECT_SOURCE_DIR}/src/chrono_sensor/optix/shaders/")
+
 # Generate the __init__.py file using substitution variables and place it in a temporary place
 configure_file(${CMAKE_SOURCE_DIR}/contrib/packaging-python/__init__.py.local.in
                ${PROJECT_BINARY_DIR}/chrono_python/__init__.py)
@@ -157,8 +164,11 @@ configure_file(${CMAKE_SOURCE_DIR}/contrib/packaging-python/__init__.py.local.in
 # ---------- Pychrono in INSTALL tree
 
 if (CH_CONDA_INSTALL)
-  # Use specified path to Chrono data/ directory (PYCHRONO_DATA_PATH) *relative* to __init__.py
+  # Use specified path to Chrono data/ directory (CH_PYCHRONO_DATA_PATH) *relative* to __init__.py
   set(PYC_DATA_PATH "${CH_PYCHRONO_DATA_PATH}")
+
+  # Use specified path to Chrono::Sensor shaders/ directory (CH_PYCHRONO_SHADER_PATH) *relative* to __init__.py
+  set(PYC_SHADER_PATH "${CH_PYCHRONO_SHADER_PATH}") 
 
   # Generate the __init__.py file using substitution variables and place it in a temporary place 
   configure_file(${CMAKE_SOURCE_DIR}/contrib/packaging-python/__init__.py.conda.in
@@ -166,6 +176,9 @@ if (CH_CONDA_INSTALL)
 else()
   # Default path to Chrono data/ directory (in INSTALL tree)
   set(PYC_DATA_PATH "${CMAKE_INSTALL_PREFIX}/${CH_INSTALL_DATA}/")
+
+  # Default path to Chrono::Sensor shaders/ directory (in INSTALL tree)
+  set(PYC_SHADER_PATH "${CMAKE_INSTALL_PREFIX}/include/chrono_sensor/optix/shaders/")
 
   # Generate the __init__.py file using substitution variables and place it in a temporary place
   configure_file(${CMAKE_SOURCE_DIR}/contrib/packaging-python/__init__.py.local.in

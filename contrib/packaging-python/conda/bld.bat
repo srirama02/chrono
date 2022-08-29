@@ -31,6 +31,7 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DCH_CONDA_INSTALL=ON ^
  -DCH_INSTALL_PYTHON_PACKAGE="%SP_DIR%" ^
  -DCH_PYCHRONO_DATA_PATH="../../../Library/data" ^
+ -DCH_PYCHRONO_SHADER_PATH="../../../Library/include/chrono_sensor/optix/shaders" ^
  -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%" ^
  -DPYTHON_INCLUDE_DIR:PATH="%PREFIX%"/include ^
  -DPYTHON_LIBRARY:FILEPATH="%PREFIX%"/libs/python%MY_PY_VER%.lib ^
