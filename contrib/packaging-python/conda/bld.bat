@@ -31,7 +31,7 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DCH_CONDA_INSTALL=ON ^
  -DCH_INSTALL_PYTHON_PACKAGE="%SP_DIR%" ^
  -DCH_PYCHRONO_DATA_PATH="../../../Library/data" ^
- -DCH_PYCHRONO_SHADER_PATH="../../../Library/include/chrono_sensor/optix/shaders" ^
+ -DCH_PYCHRONO_SHADER_PATH="../../../Library/lib/sensor_ptx" ^
  -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%" ^
  -DPYTHON_INCLUDE_DIR:PATH="%PREFIX%"/include ^
  -DPYTHON_LIBRARY:FILEPATH="%PREFIX%"/libs/python%MY_PY_VER%.lib ^
@@ -42,6 +42,10 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DENABLE_MODULE_VEHICLE=ON ^
  -DENABLE_MODULE_PYTHON=ON ^
  -DENABLE_MODULE_SENSOR=ON ^
+ -DUSE_CUDA_NVRTC=OFF ^
+ -DCUDA_ARCH_NAME=Manual ^
+ -DCUDA_ARCH_PTX=52 ^
+ -DCUDA_ARCH_BIN=5.2 ^
  -DNUMPY_INCLUDE_DIR="C:/Users/builder/miniconda3/envs/build-env/pkgs/numpy-base/Lib/site-packages/numpy/core/include/" ^
  -DOptiX_INSTALL_DIR="C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0" ^
  -DCUDA_TOOLKIT_ROOT_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7" ^
