@@ -42,10 +42,6 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DENABLE_MODULE_VEHICLE=ON ^
  -DENABLE_MODULE_PYTHON=ON ^
  -DENABLE_MODULE_SENSOR=ON ^
- -DUSE_CUDA_NVRTC=OFF ^
- -DCUDA_ARCH_NAME=Manual ^
- -DCUDA_ARCH_PTX=52 ^
- -DCUDA_ARCH_BIN=5.2 ^
  -DNUMPY_INCLUDE_DIR="C:/Users/builder/miniconda3/envs/build-env/pkgs/numpy-base/Lib/site-packages/numpy/core/include/" ^
  -DOptiX_INSTALL_DIR="C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0" ^
  -DCUDA_TOOLKIT_ROOT_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7" ^
@@ -65,15 +61,14 @@ cmake -G "Visual Studio 17 2022" -T "v142" ^
  -DMKL_INCLUDE_DIR="%PREFIX%"/Library/include ^
  -DMKL_RT_LIBRARY="%PREFIX%"/Library/lib/mkl_rt.lib ^
  -DIOMP5_LIBRARY="C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/compiler/lib/intel64_win/libiomp5md.lib" ^
+ -DPYCHRONO_DATA_PATH="..\..\..\..\..\Library\data" ^
  ..
-REM .. >> "%LOG_DIR%"\cmakeconfiglog.txt 2>&1
-
 if errorlevel 1 exit 1
 mkdir cmake_ended
 
 REM Build step 
 mkdir build_began
-cmake --build . --config Release >> "%LOG_DIR%"\cmakebuildlog.txt 2>&1
+cmake --build . --config Release
 if errorlevel 1 exit 1
 mkdir build_ended
 
