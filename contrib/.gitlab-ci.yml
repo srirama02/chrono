@@ -122,11 +122,6 @@ linux:doxygen:deploy:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: always
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/ci/staging
-
 
 linux:arch-llvm:build:
   stage: build
