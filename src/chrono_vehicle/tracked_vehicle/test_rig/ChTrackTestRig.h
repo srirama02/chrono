@@ -85,8 +85,11 @@ class CH_VEHICLE_API ChTrackTestRig : public ChVehicle {
     /// Set visualization type for the idler subsystem (default: PRIMITIVES).
     void SetIdlerVisualizationType(VisualizationType vis) { m_vis_idler = vis; }
 
-    /// Set visualization type for the road-wheel assembly subsystem (default: PRIMITIVES).
-    void SetRoadWheelAssemblyVisualizationType(VisualizationType vis) { m_vis_roadwheel_assembly = vis; }
+    /// Set visualization type for the track suspension subsystem (default: PRIMITIVES).
+    void SetSuspensionVisualizationType(VisualizationType vis) { m_vis_suspension = vis; }
+
+    /// Set visualization type for the idler-wheel subsystem (default: PRIMITIVES).
+    void SetIdlerWheelVisualizationType(VisualizationType vis) { m_vis_idlerwheel = vis; }
 
     /// Set visualization type for the road-wheel subsystem (default: PRIMITIVES).
     void SetRoadWheelVisualizationType(VisualizationType vis) { m_vis_roadwheel = vis; }
@@ -200,11 +203,10 @@ class CH_VEHICLE_API ChTrackTestRig : public ChVehicle {
     void CollectPlotData(double time);
 
     // Overrides of ChVehicle methods
+    virtual void InitializeInertiaProperties() override {}
+    virtual void UpdateInertiaProperties() override {}
     virtual std::string GetTemplateName() const override { return "TrackTestRig"; }
     virtual std::shared_ptr<ChShaft> GetDriveshaft() const override { return m_dummy_shaft; }
-    virtual double GetVehicleMass() const override { return GetMass(); }
-    virtual ChVector<> GetVehicleCOMPos() const override { return ChVector<>(0, 0, 0); }
-    virtual ChMatrix33<> GetVehicleInertia() const override { return ChMatrix33<>(1); }
     virtual std::string ExportComponentList() const override { return ""; }
     virtual void ExportComponentList(const std::string& filename) const override {}
     virtual void Initialize(const ChCoordsys<>& chassisPos, double chassisFwdVel = 0) override { Initialize(); }
@@ -221,16 +223,17 @@ class CH_VEHICLE_API ChTrackTestRig : public ChVehicle {
     std::vector<double> m_displ_input;      ///< current post displacement inputs
     std::string m_driver_logfile;           ///< name of optioinal driver log file
 
-    double m_ride_height;         ///< ride height
-    double m_displ_offset;        ///< post displacement offset (to set reference position)
-    double m_displ_delay;         ///< time interval for assuming reference position
-    double m_displ_limit;         ///< scale factor for post displacement
+    double m_ride_height;   ///< ride height
+    double m_displ_offset;  ///< post displacement offset (to set reference position)
+    double m_displ_delay;   ///< time interval for assuming reference position
+    double m_displ_limit;   ///< scale factor for post displacement
 
     double m_max_torque;  ///< maximum torque applied to sprocket
 
     VisualizationType m_vis_sprocket;
     VisualizationType m_vis_idler;
-    VisualizationType m_vis_roadwheel_assembly;
+    VisualizationType m_vis_suspension;
+    VisualizationType m_vis_idlerwheel;
     VisualizationType m_vis_roadwheel;
     VisualizationType m_vis_shoe;
 
@@ -244,7 +247,7 @@ class CH_VEHICLE_API ChTrackTestRig : public ChVehicle {
     double m_next_plot_output_time;
     utils::CSV_writer* m_csv;
 
-    friend class ChTrackTestRigIrrApp;
+    friend class ChTrackTestRigVisualSystemIrrlicht;
 };
 
 /// @} vehicle_tracked_test_rig

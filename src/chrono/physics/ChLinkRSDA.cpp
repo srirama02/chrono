@@ -21,7 +21,7 @@ CH_FACTORY_REGISTER(ChLinkRSDA)
 
 // -----------------------------------------------------------------------------
 
-ChLinkRSDA::ChLinkRSDA() : m_turns(0), m_auto_rest_angle(true), m_torque(0), m_k(0), m_r(0), m_t(0) {}
+ChLinkRSDA::ChLinkRSDA() : m_turns(0), m_auto_rest_angle(true), m_rest_angle(0), m_torque(0), m_k(0), m_r(0), m_t(0) {}
 
 ChLinkRSDA::ChLinkRSDA(const ChLinkRSDA& other) : ChLink(other), m_turns(0), m_torque(0) {
     Body1 = other.Body1;
@@ -120,7 +120,7 @@ ChCoordsys<> ChLinkRSDA::GetLinkRelativeCoords() {
     return m_csys2;
 }
 
-ChFrame<> ChLinkRSDA::GetAssetsFrame(unsigned int nclone) {
+ChFrame<> ChLinkRSDA::GetVisualModelFrame(unsigned int nclone) {
     return ChFrame<>(m_csys1 >> Body1->GetCoord());
 }
 
@@ -205,6 +205,9 @@ void ChLinkRSDA::Update(double time, bool update_assets) {
 }
 
 void ChLinkRSDA::IntLoadResidual_F(const unsigned int off, ChVectorDynamic<>& R, const double c) {
+    if (!IsActive())
+        return;
+
     // Applied torque in absolute frame
     ChVector<> torque = m_torque * m_axis;
 
@@ -218,6 +221,9 @@ void ChLinkRSDA::IntLoadResidual_F(const unsigned int off, ChVectorDynamic<>& R,
 }
 
 void ChLinkRSDA::ConstraintsFbLoadForces(double factor) {
+    if (!IsActive())
+        return;
+
     // Applied torque in absolute frame
     ChVector<> torque = m_torque * m_axis;
 

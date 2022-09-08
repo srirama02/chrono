@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cstdio>
 
-#include "chrono/assets/ChColorAsset.h"
 #include "chrono/assets/ChCylinderShape.h"
 
 #include "chrono_vehicle/ChVehicleModelData.h"
@@ -369,7 +368,7 @@ void ChSuspensionTestRig::Advance(double step) {
     ////std::cout << displ_left[0] << " " << displ_right[0] << std::endl;
 
     // Synchronize vehicle system
-    ChDriver::Inputs driver_inputs = {m_steering_input, 0, 0};
+    DriverInputs driver_inputs = {m_steering_input, 0, 0};
     m_vehicle->Synchronize(time, driver_inputs, *m_terrain);
 
     // Synchronize driver system
@@ -608,29 +607,31 @@ void ChSuspensionTestRigPlatform::InitializeRig() {
 
 void ChSuspensionTestRigPlatform::AddPostVisualization(std::shared_ptr<ChBody> post, const ChColor& color) {
     // Platform (on post body)
+    auto mat = chrono_types::make_shared<ChVisualMaterial>();
+    mat->SetDiffuseColor({color.R, color.G, color.B});
+
     auto base_cyl = chrono_types::make_shared<ChCylinderShape>();
     base_cyl->GetCylinderGeometry().rad = m_post_radius;
     base_cyl->GetCylinderGeometry().p1 = ChVector<>(0, 0, 0);
     base_cyl->GetCylinderGeometry().p2 = ChVector<>(0, 0, -2 * m_post_hheight);
-    post->AddAsset(base_cyl);
-
-    auto col = chrono_types::make_shared<ChColorAsset>();
-    col->SetColor(color);
-    post->AddAsset(col);
+    base_cyl->AddMaterial(mat);
+    post->AddVisualShape(base_cyl);
 
     // Piston (on post body)
     auto piston = chrono_types::make_shared<ChCylinderShape>();
     piston->GetCylinderGeometry().rad = m_post_radius / 6.0;
     piston->GetCylinderGeometry().p1 = ChVector<>(0, 0, -2 * m_post_hheight);
     piston->GetCylinderGeometry().p2 = ChVector<>(0, 0, -m_post_hheight * 20.0);
-    post->AddAsset(piston);
+    piston->AddMaterial(mat);
+    post->AddVisualShape(piston);
 
     // Post sleeve (on chassis/ground body)
     auto cyl = chrono_types::make_shared<ChCylinderShape>();
     cyl->GetCylinderGeometry().rad = m_post_radius / 4.0;
     cyl->GetCylinderGeometry().p1 = post->GetPos() - ChVector<>(0, 0, 16 * m_post_hheight);
     cyl->GetCylinderGeometry().p2 = post->GetPos() - ChVector<>(0, 0, 32 * m_post_hheight);
-    m_vehicle->GetChassisBody()->AddAsset(cyl);
+    cyl->AddMaterial(mat);
+    m_vehicle->GetChassisBody()->AddVisualShape(cyl);
 }
 
 double ChSuspensionTestRigPlatform::CalcDisplacementOffset(int axle) {
@@ -716,16 +717,16 @@ void ChSuspensionTestRigPushrod::InitializeRig() {
 
         auto linact_L = chrono_types::make_shared<ChLinkLinActuator>();
         linact_L->SetNameString("L_rod_actuator");
-        linact_L->Set_dist_funct(func_L);
+        linact_L->SetActuatorFunction(func_L);
         linact_L->Initialize(m_vehicle->GetChassisBody(), suspension->GetSpindle(LEFT), false, pos_gL, pos_sL);
-        linact_L->Set_lin_offset(m_rod_length);
+        linact_L->SetDistanceOffset(m_rod_length);
         sys->AddLink(linact_L);
 
         auto linact_R = chrono_types::make_shared<ChLinkLinActuator>();
         linact_R->SetNameString("R_rod_actuator");
-        linact_R->Set_dist_funct(func_R);
+        linact_R->SetActuatorFunction(func_R);
         linact_R->Initialize(m_vehicle->GetChassisBody(), suspension->GetSpindle(RIGHT), false, pos_gR, pos_sR);
-        linact_R->Set_lin_offset(m_rod_length);
+        linact_R->SetDistanceOffset(m_rod_length);
         sys->AddLink(linact_R);
 
         // Create the two rod bodies (used only for visualization)
@@ -754,8 +755,8 @@ void ChSuspensionTestRigPushrod::AddRodVisualization(std::shared_ptr<ChBody> rod
     cyl->GetCylinderGeometry().p1 = ChVector<>(0, 0, 0);
     cyl->GetCylinderGeometry().p2 = ChVector<>(0, 0, -m_rod_length);
     cyl->GetCylinderGeometry().rad = m_rod_radius;
-    rod->AddAsset(cyl);
-    rod->AddAsset(chrono_types::make_shared<ChColorAsset>(color));
+    cyl->SetColor(color);
+    rod->AddVisualShape(cyl);
 }
 
 double ChSuspensionTestRigPushrod::CalcDisplacementOffset(int axle) {
@@ -774,8 +775,8 @@ void ChSuspensionTestRigPushrod::UpdateActuators(std::vector<double> displ_left,
                                                  std::vector<double> displ_right,
                                                  std::vector<double> displ_speed_right) {
     for (int ia = 0; ia < m_naxles; ia++) {
-        auto func_L = std::static_pointer_cast<ChFunction_Setpoint>(m_linact_L[ia]->Get_dist_funct());
-        auto func_R = std::static_pointer_cast<ChFunction_Setpoint>(m_linact_R[ia]->Get_dist_funct());
+        auto func_L = std::static_pointer_cast<ChFunction_Setpoint>(m_linact_L[ia]->GetActuatorFunction());
+        auto func_R = std::static_pointer_cast<ChFunction_Setpoint>(m_linact_R[ia]->GetActuatorFunction());
         func_L->SetSetpointAndDerivatives(displ_left[ia], displ_speed_left[ia], 0.0);
         func_R->SetSetpointAndDerivatives(displ_right[ia], displ_speed_right[ia], 0.0);
 
@@ -788,8 +789,8 @@ void ChSuspensionTestRigPushrod::UpdateActuators(std::vector<double> displ_left,
 
 double ChSuspensionTestRigPushrod::GetActuatorDisp(int axle, VehicleSide side) {
     double time = m_vehicle->GetChTime();
-    return (side == LEFT) ? m_linact_L[axle]->Get_dist_funct()->Get_y(time)
-                          : m_linact_R[axle]->Get_dist_funct()->Get_y(time);
+    return (side == LEFT) ? m_linact_L[axle]->GetActuatorFunction()->Get_y(time)
+                          : m_linact_R[axle]->GetActuatorFunction()->Get_y(time);
 }
 
 double ChSuspensionTestRigPushrod::GetActuatorForce(int axle, VehicleSide side) {

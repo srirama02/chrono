@@ -31,7 +31,7 @@
 #include "chrono_vehicle/tracked_vehicle/ChSprocket.h"
 #include "chrono_vehicle/tracked_vehicle/ChTrackShoe.h"
 #include "chrono_vehicle/tracked_vehicle/ChIdler.h"
-#include "chrono_vehicle/tracked_vehicle/ChRoadWheel.h"
+#include "chrono_vehicle/tracked_vehicle/ChTrackWheel.h"
 
 namespace chrono {
 namespace vehicle {
@@ -121,8 +121,8 @@ class CH_VEHICLE_API ChTrackContactManager : public ChContactContainer::ReportCo
     std::list<ContactInfo> m_idler_L_contacts;     ///< list of contacts on left idler wheel
     std::list<ContactInfo> m_idler_R_contacts;     ///< list of contacts on right idler wheel
 
-    friend class ChTrackedVehicleIrrApp;
-    friend class ChTrackTestRigIrrApp;
+    friend class ChTrackedVehicleVisualSystemIrrlicht;
+    friend class ChTrackTestRigVisualSystemIrrlicht;
 };
 
 // -----------------------------------------------------------------------------

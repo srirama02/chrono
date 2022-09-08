@@ -71,8 +71,8 @@
 				"IRRLICHT_ROOT": "$env{HOMEBREW_PREFIX}/include/irrlicht",
 				"GLFW_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/include",
 				"PYTHON_EXECUTABLE": "$env{HOMEBREW_PREFIX}/bin",
-				"PYTHON_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/Cellar/python@3.9/3.9.10/Frameworks/Python.framework/Versions/3.9/include/python3.9",
-				"PYTHON_LIBRARY": "$env{HOMEBREW_PREFIX}/Cellar/python@3.9/3.9.10/Frameworks/Python.framework/Versions/3.9/lib/python3.9/config-3.9-darwin/libpython3.9.dylib",
+				"PYTHON_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/include/python$env{BREW_PY_MAJOR}",
+				"PYTHON_LIBRARY": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/lib/python$env{BREW_PY_MAJOR}/config-$env{BREW_PY_MAJOR}-darwin/libpython$env{BREW_PY_MAJOR}.dylib",
 				"ENABLE_MODULE_DISTRIBUTED": "OFF",
 				"ENABLE_MODULE_FSI": "OFF",
 				"ENABLE_MODULE_GPU": "OFF",
@@ -118,8 +118,11 @@
 			"cacheVariables": {
 				"ENABLE_MODULE_GPU": "ON",
 				"ENABLE_MODULE_FSI": "OFF",
-				"ENABLE_MODULE_SENSOR": "OFF",
-				"OptiX_INSTALL_DIR": "C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0"
+				"ENABLE_MODULE_SENSOR": "ON",
+				"DNUMPY_INCLUDE_DIR": "C:/Users/builder/miniconda3/envs/build-env/",
+				"OptiX_INSTALL_DIR": "C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0",
+				"CUDA_TOOLKIT_ROOT_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7",
+				"THRUST_INCLUDE_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7/include"
 			}
 		},
 		{
@@ -137,8 +140,10 @@
 				"ENABLE_MODULE_GPU": "OFF",
 				"ENABLE_MODULE_MULTICORE": "OFF",
 				"ENABLE_MODULE_FSI": "OFF",
-				"ENABLE_MODULE_SENSOR": "OFF",
-				"OptiX_INSTALL_DIR": "C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0"
+				"ENABLE_MODULE_SENSOR": "ON",
+				"OptiX_INSTALL_DIR": "C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0",
+				"CUDA_TOOLKIT_ROOT_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7",
+				"THRUST_INCLUDE_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7/include"
 			}
 		},
 		{

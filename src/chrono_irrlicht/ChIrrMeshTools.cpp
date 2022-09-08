@@ -56,7 +56,7 @@ createEllipticalMesh(f32 radiusH, f32 radiusV, f32 Ylow, f32 Yhigh, f32 offset, 
     buffer->Vertices.set_used(n_tot_verts);
     buffer->Indices.set_used(n_tot_indeces);
 
-    irr::video::SColor clr(100, 255, 255, 255);
+    irr::video::SColor clr(255, 255, 255, 255);
 
     u32 i = 0;
     u32 i_disc = 0;
@@ -537,15 +537,12 @@ IMesh* createCapsuleMesh(irr::f32 radius, irr::f32 hlen, irr::u32 numSegV, irr::
 // No shared normals between caps and hull
 // -----------------------------------------------------------------------------
 IMesh* createTruncatedConeMesh(f32 radius_top, f32 radius_low, f32 length, u32 tesselation) {
-    f32 oblique = 0;
     irr::video::SColor color(255, 255, 255, 255);
 
     SMeshBuffer* buffer = new SMeshBuffer();
 
     const f32 recTesselation = irr::core::reciprocal((f32)tesselation);
-    const f32 recTesselationHalf = recTesselation * 0.5f;
     const f32 angleStep = (irr::core::PI * 2.f) * recTesselation;
-    const f32 angleStepHalf = angleStep * 0.5f;
 
     // HULL
 

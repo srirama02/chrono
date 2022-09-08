@@ -12,7 +12,7 @@ if(NOT ENABLE_MODULE_CASCADE)
   return()
 endif()
 
-message(STATUS "==== Chrono Cascade module ====")
+message(STATUS "\n==== Chrono Cascade module ====\n")
 
 mark_as_advanced(CLEAR OpenCASCADE_DIR)
 
@@ -22,7 +22,8 @@ mark_as_advanced(CLEAR OpenCASCADE_DIR)
 set(ChronoEngine_CASCADE_SOURCES 
     ChCascadeMeshTools.cpp
     ChCascadeDoc.cpp
-    ChCascadeShapeAsset.cpp
+    ChCascadeVisualShape.cpp
+    ChCascadeBodyEasy.cpp
 )
 
 set(ChronoEngine_CASCADE_HEADERS
@@ -30,12 +31,12 @@ set(ChronoEngine_CASCADE_HEADERS
 	ChCascadeTriangulate.h
     ChCascadeMeshTools.h
     ChCascadeDoc.h
-    ChCascadeShapeAsset.h
-    ChBodyEasyCascade.h
+    ChCascadeVisualShape.h
+    ChCascadeBodyEasy.h
 )
 if(ENABLE_MODULE_IRRLICHT)
     set(ChronoEngine_CASCADE_HEADERS_IRRLICHT 
-        ChIrrCascadeMeshTools.h)
+        ChCascadeIrrMeshTools.h)
 else()
     set(ChronoEngine_CASCADE_HEADERS_IRRLICHT "")
 endif()
@@ -66,6 +67,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 message(STATUS "  OpenCASCADE include directory: ${OpenCASCADE_INCLUDE_DIR}")
+message(STATUS "  OpenCASCADE binary directory:  ${OpenCASCADE_BINARY_DIR}")
 message(STATUS "  OpenCASCADE library directory: ${OpenCASCADE_LIBRARY_DIR}")
 message(STATUS "  OpenCASCADE C flags:           ${OpenCASCADE_C_FLAGS}")
 message(STATUS "  OpenCASCADE C++ flags:         ${OpenCASCADE_CXX_FLAGS}")
@@ -75,6 +77,7 @@ message(STATUS "  OpenCASCADE libraries:         ${OpenCASCADE_LIBRARIES}")
 # Make variables visible also from outside this directory
 
 set(OpenCASCADE_INCLUDE_DIR "${OpenCASCADE_INCLUDE_DIR}" PARENT_SCOPE)
+set(OpenCASCADE_BINARY_DIR "${OpenCASCADE_BINARY_DIR}" PARENT_SCOPE)
 set(OpenCASCADE_CXX_FLAGS "${OpenCASCADE_CXX_FLAGS}" PARENT_SCOPE)
 set(OpenCASCADE_LINKER_FLAGS "${OpenCASCADE_LINKER_FLAGS}" PARENT_SCOPE)
 set(OpenCASCADE_LIBRARIES "${OpenCASCADE_LIBRARIES}" PARENT_SCOPE)
