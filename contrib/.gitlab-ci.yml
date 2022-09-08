@@ -642,7 +642,7 @@ freebsd:13.0:test:
   - export CTEST_OUTPUT_ON_FAILURE=1
   - ninja test
 
-.macos-intel:monterey:build:
+macos-intel:monterey:build:
   extends: .macos-monterey-build
   tags:
     - macos
@@ -742,8 +742,6 @@ macos-intel:monterey:macos-deploy-python3.8:
     - conda build ./contrib/packaging-python/conda -c intel -c conda-forge -c dlr-sc --no-remove-work-dir --dirty --python=3.8
     - anaconda -t $ANACONDA_TOKEN upload $HOME/miniconda/conda-bld/osx-64/pychrono*.bz2 -l develop --force
   when: manual
-<<<<<<< HEAD
-=======
   tags:
     - macos
     - monterey
@@ -778,4 +776,3 @@ macos-apple:monterey:macos-deploy-python3.10:
     - macos
     - monterey
     - apple
->>>>>>> feature/ci/staging
