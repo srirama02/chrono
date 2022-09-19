@@ -68,6 +68,3 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 cmake --build . --config "$CONFIGURATION"
 
 cmake --build . --config "$CONFIGURATION" --target install
-
-
-
