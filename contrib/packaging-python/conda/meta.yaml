@@ -37,13 +37,13 @@ requirements:
     - libxxf86vm-devel-cos7-x86_64 # [linux]
     - irrlicht
     - opencascade   # [osx and not arm64]
-    - numpy >=1.16
+    - numpy >=1.17
     - glew
     - glfw
     - eigen >=3.3.7
 
   run:
-    - numpy
+    - numpy >=1.17
     - irrlicht
     - pythonocc-core ==7.4.1
 
