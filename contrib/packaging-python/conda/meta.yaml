@@ -45,7 +45,7 @@ requirements:
   run:
     - numpy
     - irrlicht
-    - pythonocc-core 7.4.1
+    - pythonocc-core ==7.4.1
 
 test:
   requires:
