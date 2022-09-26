@@ -43,6 +43,10 @@ requirements:
     - eigen >=3.3.7
 
   run:
+    - python
+    - glew
+    - glfw
+    - mkl
     - numpy >=1.17
     - irrlicht
     - pythonocc-core ==7.4.1
