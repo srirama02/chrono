@@ -24,8 +24,7 @@ stages:
 
 .archlinux:
   tags:
-  - shell
-  - vm
+  - linux
   image:
     name: archlinux:base-devel
     entrypoint: ["/usr/bin/bash", "-c"]
