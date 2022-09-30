@@ -9,9 +9,9 @@ export NP_INCL=$(python $CI_PROJECT_DIR/contrib/packaging-python/conda/setvarnum
 # TODO: Check if this is needed since MacOS has its own deployment script
 
 if [ `uname` == Darwin ]; then
-    PY_LIB="libpython${MY_PY_VER}.dylib"
+    PY_LIB="libpython${PY_VER}.dylib"
 else
-    PY_LIB="libpython${MY_PY_VER}.so"
+    PY_LIB="libpython${PY_VER}.so"
 fi
 
 # set MKL vars
