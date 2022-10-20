@@ -74,8 +74,8 @@ double total_mass = 105.22;
 double m_rim_radius = 0.35;
 double m_height = 0.195;
 double m_thickness = 0.014;
-int m_div_circumference = 60;
-int m_div_width = 12;
+int m_div_circumference = 30;
+int m_div_width = 6;
 double m_alpha = 0.15;
 
 // Initial Position of wheel
@@ -112,6 +112,10 @@ int main(int argc, char* argv[]) {
         std::cerr << "Error creating directory " << out_dir + "/particles" << std::endl;
         return 1;
     }
+    if (!filesystem::create_directory(filesystem::path(out_dir + "/fsi"))) {
+        std::cerr << "Error creating directory " << out_dir + "/fsi" << std::endl;
+        return 1;
+    }
     if (!filesystem::create_directory(filesystem::path(out_dir + "/vtk"))) {
         std::cerr << "Error creating directory " << out_dir + "/vtk" << std::endl;
         return 1;
@@ -122,7 +126,7 @@ int main(int argc, char* argv[]) {
     ChSystemFsi sysFSI(sysMBS);
 
     // Use the default input file or you may enter your input parameters as a command line argument
-    std::string inputJson = GetChronoDataFile("fsi/input_json/demo_FSI_Flexible_Elements_Explicit.json");
+    std::string inputJson = GetChronoDataFile("fsi/input_json/demo_FSI_Flexible_Toroidal_Tire_Granular.json");
     if (argc == 1) {
         std::cout << "Use the default JSON file" << std::endl;
     } else if (argc == 2) {
@@ -130,7 +134,7 @@ int main(int argc, char* argv[]) {
         std::string my_inputJson = std::string(argv[1]);
         inputJson = my_inputJson;
     } else {
-        std::cout << "usage: ./demo_FSI_Flexible_Elements <json_file>" << std::endl;
+        std::cout << "usage: ./demo_FSI_Flexible_Toroidal_Tire_Granular <json_file>" << std::endl;
         return 1;
     }
     sysFSI.ReadParametersFromFile(inputJson);
@@ -142,8 +146,17 @@ int main(int argc, char* argv[]) {
     ChVector<> cMax = ChVector<>( 5 * bxDim,  byDim / 2.0 + initSpace0 / 2.0,  10 * bzDim );
     sysFSI.SetBoundaries(cMin, cMax);
 
-    // Setup the output directory for FSI data
-    sysFSI.SetOutputDirectory(out_dir);
+    // Set SPH discretization type, consistent or inconsistent
+    sysFSI.SetDiscreType(false, false);
+
+    // Set wall boundary condition
+    sysFSI.SetWallBC(BceVersion::ADAMI);
+
+    // Set rigid body boundary condition
+    sysFSI.SetRigidBodyBC(BceVersion::ADAMI);
+
+    // Set cohsion of the granular material
+    sysFSI.SetCohesionForce(2000.0);
 
     // Create SPH particles of fluid region
     chrono::utils::GridSampler<> sampler(initSpace0);
@@ -163,7 +176,7 @@ int main(int argc, char* argv[]) {
     // Create a run-tme visualizer
     ChVisualizationFsi fsi_vis(&sysFSI);
     if (render) {
-        fsi_vis.SetTitle("Chrono::FSI flexible element demo");
+        fsi_vis.SetTitle("Chrono::FSI Flexible Toroidal Tire Demo");
         fsi_vis.SetCameraPosition(ChVector<>(bxDim / 8, -3, 0.25), ChVector<>(bxDim / 8, 0.0, 0.25));
         fsi_vis.SetCameraMoveScale(1.0f);
         fsi_vis.EnableBoundaryMarkers(false);
@@ -188,8 +201,8 @@ int main(int argc, char* argv[]) {
     // Simulation loop
     double dT = sysFSI.GetStepSize();
 
-    unsigned int output_steps = (unsigned int)(1 / (out_fps * dT));
-    unsigned int render_steps = (unsigned int)(1 / (render_fps * dT));
+    unsigned int output_steps = (unsigned int)round(1 / (out_fps * dT));
+    unsigned int render_steps = (unsigned int)round(1 / (render_fps * dT));
 
     double time = 0.0;
     int current_step = 0;
@@ -202,6 +215,7 @@ int main(int argc, char* argv[]) {
         if (output && current_step % output_steps == 0) {
             std::cout << "-------- Output" << std::endl;
             sysFSI.PrintParticleToFile(out_dir + "/particles");
+            sysFSI.PrintFsiInfoToFile(out_dir + "/fsi", time);
             static int counter = 0;
             std::string filename = out_dir + "/vtk/flex_body." + std::to_string(counter++) + ".vtk";
             fea::ChMeshExporter::writeFrame(my_mesh, (char*)filename.c_str(), MESH_CONNECTIVITY);
@@ -231,51 +245,25 @@ void Create_MB_FE(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
     sysMBS.Set_G_acc(ChVector<>(0, 0, -9.81));
     sysFSI.Set_G_acc(ChVector<>(0, 0, -9.81));
     
-    // Set common material Properties
-    auto mysurfmaterial = chrono_types::make_shared<ChMaterialSurfaceSMC>();
-    mysurfmaterial->SetYoungModulus(6e4);
-    mysurfmaterial->SetFriction(0.3f);
-    mysurfmaterial->SetRestitution(0.2f);
-    mysurfmaterial->SetAdhesion(0);
-
     auto ground = chrono_types::make_shared<ChBody>();
     ground->SetIdentifier(-1);
     ground->SetBodyFixed(true);
-    ground->SetCollide(true);
-
-    ground->GetCollisionModel()->ClearModel();
-    auto initSpace0 = sysFSI.GetInitialSpacing();
-
-    // Bottom and top wall
-    ChVector<> size_XY(bxDim / 2 + 3 * initSpace0, byDim / 2 + 3 * initSpace0, 2 * initSpace0);
-    ChVector<> pos_zp(0, 0, bzDim + 2 * initSpace0);
-    ChVector<> pos_zn(0, 0, -2 * initSpace0);
-
-    // left and right Wall
-    ChVector<> size_YZ(2 * initSpace0, byDim / 2 + 3 * initSpace0, bzDim / 2);
-    ChVector<> pos_xp(bxDim / 2 + initSpace0, 0.0, bzDim / 2 + 1 * initSpace0);
-    ChVector<> pos_xn(-bxDim / 2 - 3 * initSpace0, 0.0, bzDim / 2 + 1 * initSpace0);
-
-    // Front and back Wall
-    ChVector<> size_XZ(bxDim / 2, 2 * initSpace0, bzDim / 2);
-    ChVector<> pos_yp(0, byDim / 2 + initSpace0, bzDim / 2 + 1 * initSpace0);
-    ChVector<> pos_yn(0, -byDim / 2 - 3 * initSpace0, bzDim / 2 + 1 * initSpace0);
-
-    // MBD representation of walls
-    chrono::utils::AddBoxGeometry(ground.get(), mysurfmaterial, size_XY, pos_zn, QUNIT, true);
-    chrono::utils::AddBoxGeometry(ground.get(), mysurfmaterial, size_YZ, pos_xp, QUNIT, true);
-    chrono::utils::AddBoxGeometry(ground.get(), mysurfmaterial, size_YZ, pos_xn, QUNIT, true);
-    // chrono::utils::AddBoxGeometry(ground.get(), mysurfmaterial, size_XZ, pos_yp, QUNIT, true);
-    // chrono::utils::AddBoxGeometry(ground.get(), mysurfmaterial, size_XZ, pos_yn, QUNIT, true);
     sysMBS.AddBody(ground);
 
+    // Bottom collision plate
+    auto cmaterial = chrono_types::make_shared<ChMaterialSurfaceSMC>();
+    cmaterial->SetYoungModulus(6e4);
+    cmaterial->SetFriction(0.3f);
+    cmaterial->SetRestitution(0.2f);
+    cmaterial->SetAdhesion(0);
+    ground->GetCollisionModel()->ClearModel();
+    chrono::utils::AddBoxContainer(ground, cmaterial, ChFrame<>(), ChVector<>(bxDim, byDim, bzDim), 0.1,
+                                   ChVector<int>(0, 0, -1), false);
+    ground->GetCollisionModel()->BuildModel();
+    ground->SetCollide(true);
+
     // Fluid representation of walls
-    sysFSI.AddBoxBCE(ground, pos_zn, QUNIT, size_XY, 12);
-    // sysFSI.AddBoxBCE(ground, pos_zp, QUNIT, size_XY, 12);
-    sysFSI.AddBoxBCE(ground, pos_xp, QUNIT, size_YZ, 23);
-    sysFSI.AddBoxBCE(ground, pos_xn, QUNIT, size_YZ, 23);
-    // sysFSI.AddBoxBCE(ground, pos_yp, QUNIT, size_XZ, 13);
-    // sysFSI.AddBoxBCE(ground, pos_yn, QUNIT, size_XZ, 13);
+    sysFSI.AddContainerBCE(ground, ChFrame<>(), ChVector<>(bxDim, byDim, bzDim), ChVector<int>(2, 0, -1));
 
     // ******************************* Rigid bodies ***********************************
     // set the abs orientation, position and velocity
@@ -388,12 +376,8 @@ void Create_MB_FE(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
         _2D_elementsNodes_mesh.resize(TotalNumElements);
         NodeNeighborElement_mesh.resize(TotalNumNodes);
 
-        // Element dimensions
+        // Element thickness
         double dz = m_thickness;
-        double dx = CH_C_2PI * (m_rim_radius + m_height) / (1 * m_div_circumference);
-        double dy = CH_C_PI * m_height / m_div_width;
-
-        std::cout << dx  << " dx dy: " << dy << std::endl;
 
         // Create the ANCF shell elements
         int num_elem = 0;
@@ -429,6 +413,12 @@ void Create_MB_FE(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
                 // Create the element and set its nodes.
                 auto element = chrono_types::make_shared<ChElementShellANCF_3423>();
                 element->SetNodes(node0, node1, node2, node3);
+
+                // Element dimensions
+                double dx =
+                    0.5 * ((node1->GetPos() - node0->GetPos()).Length() + (node3->GetPos() - node2->GetPos()).Length());
+                double dy = 
+                    0.5 * ((node2->GetPos() - node1->GetPos()).Length() + (node3->GetPos() - node0->GetPos()).Length());
 
                 // Set element dimensions
                 element->SetDimensions(dx, dy);

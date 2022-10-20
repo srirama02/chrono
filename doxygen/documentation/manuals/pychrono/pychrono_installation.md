@@ -43,10 +43,17 @@ To install a PyChrono conda module, do the following:
    ``` 
    conda install -c conda-forge pythonocc-core=7.4.1
    ```
-   - for using the Chrono::Sensor module, install the conda CUDA package:
-   ```
-   conda install -c conda-forge cudatoolkit-dev
-   ```
+   - for sensor support:
+     - requires NVIDIA graphics driver 515.xx +
+     - install cuda 11.7 from conda
+     ```
+     conda install -c nvidia/label/cuda-11.7.0 cuda-toolkit
+     ```
+     - install glfw 
+     ```
+     conda install -c conda-forge glfw
+     ```
+
 
 6. If you want the PyChrono package for the latest Chrono *code*, simply do
 ```
