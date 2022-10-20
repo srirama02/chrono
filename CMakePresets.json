@@ -155,7 +155,16 @@
 			"inherits": [
 				"unixci-base",
 				"genericci-base"
-			]
+			],
+			"cacheVariables": {
+				"ENABLE_MODULE_POSTPROCESS": "OFF",
+				"ENABLE_MODULE_PYTHON": "OFF",
+				"ENABLE_MODULE_MULTICORE": "OFF",
+				"ENABLE_MODULE_OPENGL": "OFF",
+				"ENABLE_MODULE_SYNCHRONO": "OFF",
+				"ENABLE_MODULE_CSHARP": "OFF",
+				"ENABLE_MODULE_COSIMULATION": "OFF"
+			}
 		}
 	]
 }
