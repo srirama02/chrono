@@ -557,6 +557,7 @@ windows:vs2019:deploy-python3.10:
     - freebsd
     - shell
     - vm
+    - benchmarking
   before_script:
   - uname -a
   - git submodule init
