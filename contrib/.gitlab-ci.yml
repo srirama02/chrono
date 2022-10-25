@@ -555,13 +555,15 @@ windows:vs2019:deploy-python3.10:
 .freebsd:
   tags:
     - freebsd
+    - shell
+    - vm
   before_script:
   - uname -a
   - git submodule init
   - git submodule update
   - mkdir -p build
   
-freebsd:13.0:build:
+freebsd:13.1:build:
   stage: build
   extends: .freebsd
   script:
@@ -573,11 +575,11 @@ freebsd:13.0:build:
     paths:
       - build/
 
-freebsd:13.0:test:
+freebsd:13.1:test:
   stage: test
   extends: .freebsd
-  needs: ["freebsd:13.0:build"]
-  dependencies: ["freebsd:13.0:build"]
+  needs: ["freebsd:13.1:build"]
+  dependencies: ["freebsd:13.1:build"]
   script:
     - cd build
     - ninja test
