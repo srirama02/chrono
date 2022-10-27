@@ -69,6 +69,7 @@ set(DBG_SCRIPT true)
 # Find PYTHON
 #-----------------------------------------------------------------------------
 
+message("${CMAKE_SYSTEM_NAME}")
 message(STATUS "...find Python")
 
 set(Python_ADDITIONAL_VERSIONS 3.4)
