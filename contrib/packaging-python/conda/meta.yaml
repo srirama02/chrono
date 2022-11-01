@@ -44,11 +44,11 @@ requirements:
 
   run:
     - python
-    - mkl
-    - numpy
+    - mkl # [not arm64]
+    - numpy # [not osx]
     - glew
     - glfw
-    - pythonocc-core ==7.4.1
+    - pythonocc-core ==7.4.1 # [not arm64]
 
 test:
   requires:
