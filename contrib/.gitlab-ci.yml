@@ -658,7 +658,7 @@ macos-apple:monterey:test:
     name: pychrono-macos
     url: https://anaconda.org/projectchrono/pychrono
 
-.macos-intel-deploy:
+.macos-intel-deploy-base:
   extends: .macos-deploy-base
   tags:
     - intel
@@ -668,7 +668,7 @@ macos-apple:monterey:test:
     name: pychrono-macos
     url: https://anaconda.org/projectchrono/pychrono
 
-.macos-apple-deploy:
+.macos-apple-deploy-base:
   extends: .macos-deploy-base
   tags:
     - apple
@@ -679,7 +679,7 @@ macos-apple:monterey:test:
 macos-intel:macos-deploy-python3.8:
   stage: deploy
   needs: []
-  extends: .macos-intel-deploy
+  extends: .macos-intel-deploy-base
   script:
     - echo "Build PyChrono 3.8 and deploy via Anaconda..."
     - conda build purge-all
@@ -693,21 +693,21 @@ macos-intel:macos-deploy-python3.8:
 macos-intel:macos-deploy-python3.9:
   stage: deploy
   needs: []
-  extends: .macos-intel-deploy
+  extends: .macos-intel-deploy-base
   script:
     - echo "Build PyChrono 3.9 and deploy via Anaconda..."
     - conda build purge-all
     - conda build ./contrib/packaging-python/conda --no-remove-work-dir --dirty --python=3.9
     - anaconda -t $ANACONDA_TOKEN upload $HOME/miniconda/conda-bld/osx-64/pychrono*.bz2 -l main --force
   when: manual
-    tags:
+  tags:
     - macos
     - monterey
     - intel
 macos-intel:macos-deploy-python3.10:
   stage: deploy
   needs: []
-  extends: .macos-intel-deploy
+  extends: .macos-intel-deploy-base
   script:
     - echo "Build PyChrono 3.10 and deploy via Anaconda..."
     - conda build purge-all
