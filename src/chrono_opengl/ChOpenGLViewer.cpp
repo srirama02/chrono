@@ -78,8 +78,8 @@ ChOpenGLViewer::ChOpenGLViewer(ChVisualSystemOpenGL* vis) : m_vis(vis) {
     view_help = false;
     view_grid = false;
     use_vsync = false;
-    render_mode = SOLID;
-    particle_render_mode = POINTS;
+    render_mode = RenderMode::SOLID;
+    particle_render_mode = RenderMode::POINTS;
     particle_radius = 0.1f;
     time_total = old_time = current_time = 0;
     time_text = time_geometry = 0;
@@ -204,14 +204,14 @@ void ChOpenGLViewer::Render(bool render_stats) {
     sphere_shader.SetViewport(window_size);
 
 #ifndef __EMSCRIPTEN__
-    if (render_mode == WIREFRAME) {
+    if (render_mode == RenderMode::WIREFRAME) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 #endif
 
-    if (render_mode != POINTS) {
+    if (render_mode != RenderMode::POINTS) {
         model_box.clear();
         model_sphere.clear();
         model_cone.clear();
@@ -267,7 +267,7 @@ void ChOpenGLViewer::Render(bool render_stats) {
         }
     }
 
-    if (render_mode == POINTS) {
+    if (render_mode == RenderMode::POINTS) {
         cloud.Update(cloud_data);
         glm::mat4 model(10);
         cloud.Draw(projection, view * model);
@@ -581,7 +581,7 @@ void ChOpenGLViewer::RenderFluid() {
 
     fluid_data.resize(num_fluid_bodies);
 
-    if (render_mode != POINTS) {
+    if (render_mode != RenderMode::POINTS) {
         fluid.AttachShader(&sphere_shader);
     } else {
         fluid.AttachShader(&dot_shader);
@@ -631,7 +631,7 @@ void ChOpenGLViewer::RenderParticles() {
 
     particle_data.resize(num_particles);
 
-    if (render_mode != SOLID || particle_render_mode == POINTS)
+    if (render_mode != RenderMode::SOLID || particle_render_mode == RenderMode::POINTS)
         particles.AttachShader(&dot_shader);
     else
         particles.AttachShader(&sphere_shader);
@@ -841,13 +841,13 @@ void ChOpenGLViewer::HandleInput(unsigned char key, int x, int y) {
             render_camera.Move(UP);
             break;
         case '1':
-            render_mode = POINTS;
+            render_mode = RenderMode::POINTS;
             break;
         case '2':
-            render_mode = WIREFRAME;
+            render_mode = RenderMode::WIREFRAME;
             break;
         case '3':
-            render_mode = SOLID;
+            render_mode = RenderMode::SOLID;
             break;
         case 'C':
             view_contacts = !view_contacts;

@@ -553,7 +553,7 @@ int main(int argc, char* argv[]) {
     vis.AttachSystem(sys);
     vis.SetWindowTitle("Demo motors");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::SOLID);
+    vis.SetRenderMode(opengl::RenderMode::SOLID);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(1, 3, -7), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Y);

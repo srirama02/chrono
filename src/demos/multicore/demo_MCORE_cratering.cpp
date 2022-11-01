@@ -487,7 +487,7 @@ int main(int argc, char* argv[]) {
     vis.AttachSystem(sys);
     vis.SetWindowTitle("Crater Test");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::WIREFRAME);
+    vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(0, -10 * hDimY, hDimZ), ChVector<>(0, 0, hDimZ));
     vis.SetCameraVertical(CameraVerticalDir::Z);

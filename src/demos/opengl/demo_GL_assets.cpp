@@ -226,8 +226,8 @@ int main(int argc, char* argv[]) {
     vis.AttachSystem(&sys);
     vis.SetWindowTitle("OpenGL assets");
     vis.SetWindowSize(1600, 900);
-    vis.SetRenderMode(opengl::SOLID);
-    vis.SetParticleRenderMode(0.05f, opengl::POINTS);
+    vis.SetRenderMode(opengl::RenderMode::SOLID);
+    vis.SetParticleRenderMode(0.05f, opengl::RenderMode::POINTS);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(-2.0, 3.0, -4.0), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Y);

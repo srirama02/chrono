@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     vis.AttachSystem(&sys);
     vis.SetWindowTitle("OpenGL Shapes");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::WIREFRAME);
+    vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(6, -10, 0), ChVector<>(6, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Z);

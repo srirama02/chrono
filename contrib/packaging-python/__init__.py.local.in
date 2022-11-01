@@ -20,6 +20,10 @@ try:
 except:
     pass
 try:
+    import _opengl
+except:
+    pass
+try:
     import _vehicle
 except:
     pass

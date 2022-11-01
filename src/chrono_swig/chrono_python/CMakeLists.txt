@@ -496,6 +496,79 @@ if(ENABLE_MODULE_IRRLICHT)
 
 endif()
 
+#-----------------------------------------------------------------------------
+# MODULE for the OpenGL python wrapper.
+#-----------------------------------------------------------------------------
+
+if(ENABLE_MODULE_OPENGL)
+
+  message(STATUS "...add python OPENGL module")
+
+  # Python module name
+  set(CHPY_OPENGL opengl)
+
+  # Interface files
+  set(CHPY_OPENGL_MODULE_FILE
+      ../interface/opengl/ChModuleOpenGL.i
+      )
+
+  include_directories(${CH_OPENGL_INCLUDES})
+
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set_source_files_properties(${CHPY_OPENGL_MODULE_FILE} PROPERTIES COMPILE_FLAGS "-D_WIN32")
+  endif()
+  set_source_files_properties(${CHPY_OPENGL_MODULE_FILE} PROPERTIES CPLUSPLUS ON)
+
+  # Create the SWIG module.
+  if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
+    SWIG_ADD_MODULE(${CHPY_OPENGL} python ${CHPY_OPENGL_MODULE_FILE})
+  else()
+    SWIG_ADD_LIBRARY(${CHPY_OPENGL} LANGUAGE python SOURCES ${CHPY_OPENGL_MODULE_FILE})
+  endif()
+  SWIG_LINK_LIBRARIES(${CHPY_OPENGL} ${PYTHON_LIBRARY} ChronoEngine ChronoEngine_opengl)
+
+  # Ensure that the PYD library file is generated in the bin/ directory.
+  set_target_properties(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} PROPERTIES
+                        PROJECT_LABEL "ChronoEngine_python_${CHPY_OPENGL}"
+                        OUTPUT_NAME   "${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME}"
+                        LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
+                        )
+
+  target_compile_definitions(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
+  target_compile_definitions(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} PRIVATE "IGNORE_DEPRECATED_WARNING")
+
+  ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} ChronoEngine)
+  ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} ChronoEngine_opengl)
+  ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} ${SWIG_MODULE_${CHPY_CORE}_REAL_NAME})
+
+  # Copy PY file in a package dir
+  set(CHPY_OPENGL_PY_FILE "${CMAKE_SWIG_OUTDIR}/${CHPY_OPENGL}.py")
+  get_target_property(CHPY_OPENGL_PYD_FILE ${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} LOCATION)
+  get_filename_component(CHPY_OPENGL_PYD_PATH "${CHPY_OPENGL_PYD_FILE}" PATH)
+  add_custom_command(TARGET ${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E make_directory ${CHPY_OPENGL_PYD_PATH}/${CHPY_PACKAGENAME})
+  add_custom_command(TARGET ${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME}
+                     POST_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy ${CHPY_OPENGL_PY_FILE} ${CHPY_OPENGL_PYD_PATH}/${CHPY_PACKAGENAME})
+
+  # Install .pyd binary module (.so on linux)
+  install(TARGETS ${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME}
+          RUNTIME DESTINATION "${CH_INSTALL_PYTHON}"
+          LIBRARY DESTINATION "${CH_INSTALL_PYTHON}"
+          ARCHIVE DESTINATION "${CH_INSTALL_PYTHON}")
+  # Install .py module wrapper
+  install(FILES "${CHPY_OPENGL_PY_FILE}" DESTINATION "${CH_INSTALL_PYTHON}/${CHPY_PACKAGENAME}")
+
+  if (DBG_SCRIPT)
+    message("Module name:     ${CHPY_OPENGL}")
+    message("SWIG_REAL_NAME:  ${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME}")
+    message("PY file:         ${CHPY_OPENGL_PY_FILE}")
+    message("PYD file:        ${CHPY_OPENGL_PYD_FILE}")
+    message("PYD path:        ${CHPY_OPENGL_PYD_PATH}")
+  endif()
+
+endif()
 
 #-----------------------------------------------------------------------------
 # MODULE for the Pardiso mkl python wrapper.

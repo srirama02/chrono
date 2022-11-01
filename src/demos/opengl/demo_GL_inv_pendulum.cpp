@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
     vis.AttachSystem(&sys);
     vis.SetWindowTitle("Inverted Pendulum");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::WIREFRAME);
+    vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(0, 0, 5), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Y);

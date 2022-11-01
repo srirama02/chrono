@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
     vis.AttachSystem(&sys);
     vis.SetWindowTitle("Balls NSC");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::WIREFRAME);
+    vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(0, -6, 0), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Z);

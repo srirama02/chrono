@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
     vis.AttachSystem(&sys);
     vis.SetWindowTitle("Demo cohesion");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::SOLID);
+    vis.SetRenderMode(opengl::RenderMode::SOLID);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(0, 0, -10), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Y);
