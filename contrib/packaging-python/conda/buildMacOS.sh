@@ -20,14 +20,15 @@ if [ `uname` == Darwin ]; then
 fi
 export LDFLAGS="-Wl,-undefined,dynamic_lookup $LDFLAGS"
 
-#Setting MKL directory values
-export MKL_INCLUDE_DIR=`cd $HOME/miniconda/pkgs/mkl-include-*/; pwd`
-export MKL_LIB_DIR=`cd $HOME/miniconda/pkgs/mkl-2022*/; pwd`
-CONFIGURATION=Release
-
 export PARDISO_MKL_ENABLE="OFF"
-if [`uname -m` == x86_64]; then
+export MKL_INCLUDE_DIR=""
+export MKL_LIB_DIR=""
+
+if [ `uname -m` == x86_64 ]; then
     PARDISO_MKL_ENABLE="ON"
+    #Setting MKL directory values
+    MKL_INCLUDE_DIR=`cd $HOME/miniconda/pkgs/mkl-include-*/; pwd`
+    MKL_LIB_DIR=`cd $HOME/miniconda/pkgs/mkl-2022*/; pwd`
 fi
 
 # Configure step
@@ -40,7 +41,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DPYTHON_EXECUTABLE:FILEPATH=$PYTHON \
  -DPYTHON_INCLUDE_DIR:PATH=$PREFIX/include/python$MY_PY_VER \
  -DPYTHON_LIBRARY:FILEPATH=$PREFIX/lib/${PY_LIB} \
- -DCMAKE_BUILD_TYPE=$CONFIGURATION \
+ -DCMAKE_BUILD_TYPE=RELEASE \
  -DENABLE_MODULE_IRRLICHT=ON \
  -DENABLE_MODULE_POSTPROCESS=ON \
  -DENABLE_MODULE_VEHICLE=ON \
@@ -62,6 +63,6 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 # Build step
 # on linux travis, limit the number of concurrent jobs otherwise
 # gcc gets out of memory
-cmake --build . --config "$CONFIGURATION"
+cmake --build . --config RELEASE
 
-cmake --build . --config "$CONFIGURATION" --target install
+cmake --build . --config RELEASE --target install
