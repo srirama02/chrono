@@ -179,7 +179,7 @@ TEST(ChronoMulticore, bodyauxref) {
         vis.AttachSystem(sys);
         vis.SetWindowTitle("BodyAuxRef");
         vis.SetWindowSize(1280, 720);
-        vis.SetRenderMode(opengl::WIREFRAME);
+        vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
         vis.Initialize();
         vis.SetCameraPosition(ChVector<>(6, -6, 1), ChVector<>(0, 0, 0));
         vis.SetCameraVertical(CameraVerticalDir::Z);

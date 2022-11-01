@@ -40,8 +40,8 @@ ChVisualizationFsi::ChVisualizationFsi(ChSystemFsi* sysFSI)
     m_vsys->SetWindowTitle("");
     m_vsys->SetWindowSize(1280, 720);
     m_vsys->SetCameraProperties(0.1f);
-    m_vsys->SetRenderMode(opengl::WIREFRAME);
-    m_vsys->SetParticleRenderMode(sysFSI->GetInitialSpacing() / 2, opengl::POINTS);
+    m_vsys->SetRenderMode(opengl::RenderMode::WIREFRAME);
+    m_vsys->SetParticleRenderMode(sysFSI->GetInitialSpacing() / 2, opengl::RenderMode::POINTS);
     m_vsys->SetCameraPosition(ChVector<>(0, -3, 0), ChVector<>(0, 0, 0));
     m_vsys->SetCameraVertical(ChVector<>(0, 0, 1));
     m_vsys->EnableStats(false);
@@ -69,8 +69,8 @@ ChVisualizationFsi::ChVisualizationFsi(ChSystemFsi* sysFSI, opengl::ChVisualSyst
     m_vsys->SetWindowTitle("");
     m_vsys->SetWindowSize(1280, 720);
     m_vsys->SetCameraProperties(0.1f);
-    m_vsys->SetRenderMode(opengl::WIREFRAME);
-    m_vsys->SetParticleRenderMode(sysFSI->GetInitialSpacing() / 2, opengl::POINTS);
+    m_vsys->SetRenderMode(opengl::RenderMode::WIREFRAME);
+    m_vsys->SetParticleRenderMode(sysFSI->GetInitialSpacing() / 2, opengl::RenderMode::POINTS);
     m_vsys->SetCameraPosition(ChVector<>(0, -3, 0), ChVector<>(0, 0, 0));
     m_vsys->SetCameraVertical(ChVector<>(0, 0, 1));
     m_vsys->EnableStats(false);
@@ -117,7 +117,7 @@ void ChVisualizationFsi::SetCameraMoveScale(float scale) {
 
 void ChVisualizationFsi::SetParticleRenderMode(double radius, RenderMode mode) {
 #ifdef CHRONO_OPENGL
-    opengl::RenderMode gl_mode = (mode == RenderMode::SOLID) ? opengl::SOLID : opengl::POINTS;
+    opengl::RenderMode gl_mode = (mode == RenderMode::SOLID) ? opengl::RenderMode::SOLID : opengl::RenderMode::POINTS;
     m_vsys->SetParticleRenderMode(radius, gl_mode);
 #endif
 }
@@ -126,13 +126,13 @@ void ChVisualizationFsi::SetRenderMode(RenderMode mode) {
 #ifdef CHRONO_OPENGL
     switch (mode) {
         case RenderMode::SOLID:
-            m_vsys->SetRenderMode(opengl::SOLID);
+            m_vsys->SetRenderMode(opengl::RenderMode::SOLID);
             break;
         case RenderMode::WIREFRAME:
-            m_vsys->SetRenderMode(opengl::WIREFRAME);
+            m_vsys->SetRenderMode(opengl::RenderMode::WIREFRAME);
             break;
         case RenderMode::POINTS:
-            m_vsys->SetRenderMode(opengl::POINTS);
+            m_vsys->SetRenderMode(opengl::RenderMode::POINTS);
             break;
     }
 #endif

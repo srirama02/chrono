@@ -223,8 +223,6 @@ class CH_MULTICORE_API ChSystemMulticoreNSC : public ChSystemMulticore {
     virtual void SetContactContainer(std::shared_ptr<ChContactContainer> container) override;
 
     void CalculateContactForces() override;
-    real CalculateKineticEnergy();
-    real CalculateDualObjective();
 
     virtual real3 GetBodyContactForce(uint body_id) const override;
     virtual real3 GetBodyContactTorque(uint body_id) const override;

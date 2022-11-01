@@ -235,7 +235,7 @@ int main(int argc, char* argv[]) {
         vis.AttachSystem(msystem_mpr);
         vis.SetWindowTitle("");
         vis.SetWindowSize(1280, 720);
-        vis.SetRenderMode(opengl::WIREFRAME);
+        vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
         vis.Initialize();
         vis.SetCameraPosition(ChVector<>(6, -6, 1), ChVector<>(0, 0, 0));
         vis.SetCameraVertical(CameraVerticalDir::Z);

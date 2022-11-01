@@ -419,7 +419,7 @@ void ChVehicleCosimTerrainNodeGranularGPU::Construct() {
         m_vsys->AttachSystem(m_system);
         m_vsys->SetWindowTitle("Terrain Node (GranularGPU)");
         m_vsys->SetWindowSize(1280, 720);
-        m_vsys->SetRenderMode(opengl::WIREFRAME);
+        m_vsys->SetRenderMode(opengl::RenderMode::WIREFRAME);
         m_vsys->Initialize();
         m_vsys->SetCameraPosition(ChVector<>(0, -3, 0), ChVector<>(0, 0, 0));
         m_vsys->SetCameraProperties(0.05f);

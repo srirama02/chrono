@@ -140,7 +140,7 @@ int main() {
     vis.AttachSystem(&sys);
     vis.SetWindowTitle("Granular terrain demo");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::SOLID);
+    vis.SetRenderMode(opengl::RenderMode::SOLID);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(0, 3, 0), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Z);

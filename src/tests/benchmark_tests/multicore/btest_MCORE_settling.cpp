@@ -145,7 +145,7 @@ void SettlingSMC::SimulateVis() {
     vis.AttachSystem(m_system);
     vis.SetWindowTitle("Settling test");
     vis.SetWindowSize(1280, 720);
-    vis.SetRenderMode(opengl::WIREFRAME);
+    vis.SetRenderMode(opengl::RenderMode::WIREFRAME);
     vis.Initialize();
     vis.SetCameraPosition(ChVector<>(0, -6, 0), ChVector<>(0, 0, 0));
     vis.SetCameraVertical(CameraVerticalDir::Z);
