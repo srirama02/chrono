@@ -31,13 +31,13 @@ requirements:
     - llvm-openmp   # [linux and osx]
     - libglvnd-glx-cos7-x86_64 # [linux]
     - swig >=4.0.0
-    - mkl
-    - mkl-devel
+    - mkl # [not arm64]
+    - mkl-devel # [not arm64]
     - freeglut # [linux]
     - libxxf86vm-devel-cos7-x86_64 # [linux]
     - irrlicht
-    - opencascade 
-    - numpy
+    - opencascade # [not osx]
+    - numpy # [not osx]
     - glew
     - glfw
     - eigen >=3.3.7
