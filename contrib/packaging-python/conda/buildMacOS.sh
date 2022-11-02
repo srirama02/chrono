@@ -23,12 +23,14 @@ export LDFLAGS="-Wl,-undefined,dynamic_lookup $LDFLAGS"
 export PARDISO_MKL_ENABLE="OFF"
 export MKL_INCLUDE_DIR=""
 export MKL_LIB_DIR=""
+export EIGEN3_INCLUDE_DIR="/opt/homebrew/include/eigen3"
 
 if [ `uname -m` == x86_64 ]; then
     PARDISO_MKL_ENABLE="ON"
     #Setting MKL directory values
     MKL_INCLUDE_DIR=`cd $HOME/miniconda/pkgs/mkl-include-*/; pwd`
     MKL_LIB_DIR=`cd $HOME/miniconda/pkgs/mkl-2022*/; pwd`
+    EIGEN3_INCLUDE_DIR="/usr/local/include/eigen3"
 fi
 
 # Configure step
@@ -57,7 +59,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DENABLE_MODULE_PARDISO_MKL=$(PARDISO_MKL_ENABLE) \
  -DMKL_INCLUDE_DIR=$MKL_INCLUDE_DIR/include \
  -DMKL_RT_LIBRARY=$MKL_LIB_DIR/lib/libmkl_rt.dylib \
- -DEIGEN3_INCLUDE_DIR="/opt/homebrew/include/eigen3" "$HOME/miniconda/include" \
+ -DEIGEN3_INCLUDE_DIR=$EIGEN3_INCLUDE_DIR "$HOME/miniconda/include" \
  -DPYCHRONO_DATA_PATH=../../../../../../share/chrono/data/ \
  ./..
 # Build step
