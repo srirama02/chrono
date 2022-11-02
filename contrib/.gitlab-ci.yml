@@ -442,7 +442,6 @@ windows:vs2019:test:
     #Activate conda environment
     - conda activate build-env
     #Conda install dependencies
-    - conda install --yes anaconda-client
     - conda install conda-build
     - conda update conda --yes
     #- cd C:\Users\builder\miniconda3\pkgs\anaconda-client-1.10.0-py37*\Lib\site-packages\binstar_client\commands\
@@ -463,10 +462,10 @@ windows:vs2019:deploy-python3.6:
   script:
     # Building pyChrono for python v3.6
     - conda build .\contrib\packaging-python\conda -c conda-forge -c dlr-sc -c intel --python=3.6 --no-remove-work-dir
+    - conda install --yes anaconda-client
     - anaconda --token "$Env:ANACONDA_TOKEN" upload "$Env:CONDA_INSTALL_LOCN\envs\build-env\conda-bld\win-64\pychrono*.bz2" --force --label main
   after_script:
     # Get rid of the build environment
-    - conda deactivate build-env
     - Remove-Item $Env:CONDA_INSTALL_LOCN\envs\build-env -Recurse -Force
     # Get rid of the downloaded numpy package to prevent conflicts
     - Remove-Item $Env:CONDA_ISNTALL_LOCN\pkgs\numpy* -Recurse -Force
@@ -486,10 +485,10 @@ windows:vs2019:deploy-python3.8:
   script:
     # Building pyChrono for python v3.8
     - conda build .\contrib\packaging-python\conda -c conda-forge -c dlr-sc -c intel --python=3.8 --no-remove-work-dir
+    - conda install --yes anaconda-client
     - anaconda --token "$Env:ANACONDA_TOKEN" upload "$Env:CONDA_INSTALL_LOCN\envs\build-env\conda-bld\win-64\pychrono*.bz2" --force --label main
   after_script:
     # Get rid of the build environment
-    - conda deactivate build-env
     - Remove-Item $Env:CONDA_INSTALL_LOCN\envs\build-env -Recurse -Force
     # Get rid of the downloaded numpy package to prevent conflicts
     - Remove-Item $Env:CONDA_ISNTALL_LOCN\pkgs\numpy* -Recurse -Force
@@ -509,10 +508,10 @@ windows:vs2019:deploy-python3.9:
   script:
     # Building pyChrono for python v3.9
     - conda build .\contrib\packaging-python\conda -c conda-forge -c dlr-sc -c intel --python=3.9 --no-remove-work-dir
+    - conda install --yes anaconda-client
     - anaconda --token "$Env:ANACONDA_TOKEN" upload "$Env:CONDA_INSTALL_LOCN\envs\build-env\conda-bld\win-64\pychrono*.bz2" --force --label main
   after_script:
     # Get rid of the build environment
-    - conda deactivate build-env
     - Remove-Item $Env:CONDA_INSTALL_LOCN\envs\build-env -Recurse -Force
     # Get rid of the downloaded numpy package to prevent conflicts
     - Remove-Item $Env:CONDA_ISNTALL_LOCN\pkgs\numpy* -Recurse -Force
@@ -532,10 +531,10 @@ windows:vs2019:deploy-python3.10:
   script:
     # Building pyChrono for python v3.10
     - conda build .\contrib\packaging-python\conda -c conda-forge -c dlr-sc -c intel --python=3.10 --no-remove-work-dir
+    - conda install --yes anaconda-client
     - anaconda --token "$Env:ANACONDA_TOKEN" upload "$Env:CONDA_INSTALL_LOCN\envs\build-env\conda-bld\win-64\pychrono*.bz2" --force --label main
   after_script:
     # Get rid of the build environment
-    - conda deactivate build-env
     - Remove-Item $Env:CONDA_INSTALL_LOCN\envs\build-env -Recurse -Force
     # Get rid of the downloaded numpy package to prevent conflicts
     - Remove-Item $Env:CONDA_ISNTALL_LOCN\pkgs\numpy* -Recurse -Force
