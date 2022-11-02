@@ -661,7 +661,7 @@ macos-apple:monterey:test:
   extends: .macos-deploy-base
   tags:
     - intel
-  before_script:
+  script:
     - conda config --add channels intel
   environment:
     name: pychrono-macos
