@@ -623,10 +623,7 @@ macos-apple:monterey:test:
   needs: ["macos-apple:monterey:build"]
   dependencies: ["macos-apple:monterey:build"]
 
-
-#------------------------#
-# macOS Conda Deployment #
-#------------------------#
+# macOS Conda Deployment
 
 .macos-deploy-base:
   extends: .macos
