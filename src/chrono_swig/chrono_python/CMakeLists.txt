@@ -291,7 +291,7 @@ install(FILES "${PROJECT_BINARY_DIR}/chrono_python/__init__.py.install"
 
 if(ENABLE_MODULE_POSTPROCESS)
 
-  message(STATUS "...add python POSTPROCESS module")
+  message(STATUS "...add python POSTPROCESS module:  pychrono.postprocess")
 
   # Python module name
   set(CHPY_POSTPROCESS postprocess)
@@ -360,7 +360,7 @@ endif()
 # MODULE for the fea python wrapper.
 #-----------------------------------------------------------------------------
 
-  message(STATUS "...add python FEA module")
+  message(STATUS "...add python FEA module:  pychrono.fea")
 
   # Python module name
   set(CHPY_FEA fea)
@@ -428,7 +428,7 @@ SWIG_LINK_LIBRARIES(${CHPY_FEA} ${PYTHON_LIBRARY} ChronoEngine)
 
 if(ENABLE_MODULE_IRRLICHT)
 
-  message(STATUS "...add python IRRLICHT module")
+  message(STATUS "...add python IRRLICHT module:  pychrono.irrlicht")
 
   # Python module name
   set(CHPY_IRRLICHT irrlicht)
@@ -502,7 +502,7 @@ endif()
 
 if(ENABLE_MODULE_OPENGL)
 
-  message(STATUS "...add python OPENGL module")
+  message(STATUS "...add python OPENGL module:  pychrono.opengl")
 
   # Python module name
   set(CHPY_OPENGL opengl)
@@ -535,7 +535,6 @@ if(ENABLE_MODULE_OPENGL)
                         )
 
   target_compile_definitions(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
-  target_compile_definitions(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} PRIVATE "IGNORE_DEPRECATED_WARNING")
 
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} ChronoEngine)
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_OPENGL}_REAL_NAME} ChronoEngine_opengl)
@@ -827,7 +826,7 @@ endif()
 #-----------------------------------------------------------------------------
 
 if(ENABLE_MODULE_SENSOR)
-  message(STATUS "...add python SENSOR module")
+  message(STATUS "...add python SENSOR module:  pychrono.sensor")
 
   set(NUMPY_INCLUDE_DIR "${NUMPY_INCLUDE_DIR}" CACHE PATH "")
 
@@ -915,19 +914,19 @@ endif()
   set(CHPY_RS robot)
 
   # Interface files
-  set(CHPY_ROBOT_MODULE_FILE 
+  set(CHPY_RS_MODULE_FILE 
       ../interface/robot/ChModuleRobot.i
       )
 
   #include_directories(${VEHICLE_INCLUDE_DIR})
 
-  set_source_files_properties(${CHPY_ROBOT_MODULE_FILE} PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties(${CHPY_RS_MODULE_FILE} PROPERTIES CPLUSPLUS ON)
 
   # Create the SWIG module.
   if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
-    SWIG_ADD_MODULE(${CHPY_RS} python ${CHPY_ROBOT_MODULE_FILE})
+    SWIG_ADD_MODULE(${CHPY_RS} python ${CHPY_RS_MODULE_FILE})
   else()
-    SWIG_ADD_LIBRARY(${CHPY_RS} LANGUAGE python SOURCES ${CHPY_ROBOT_MODULE_FILE})
+    SWIG_ADD_LIBRARY(${CHPY_RS} LANGUAGE python SOURCES ${CHPY_RS_MODULE_FILE})
   endif()
   SWIG_LINK_LIBRARIES(${CHPY_RS} ${PYTHON_LIBRARY} ChronoEngine ChronoModels_robot)
 
@@ -954,15 +953,15 @@ endif()
   ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_RS}_REAL_NAME} ${SWIG_MODULE_${CHPY_CORE}_REAL_NAME})
 
   # Copy PY file in a package dir 
-  set(CHPY_VEHICLE_PY_FILE "${CMAKE_SWIG_OUTDIR}/${CHPY_RS}.py")
+  set(CHPY_RS_PY_FILE "${CMAKE_SWIG_OUTDIR}/${CHPY_RS}.py")
   get_target_property(CHPY_RS_PYD_FILE ${SWIG_MODULE_${CHPY_RS}_REAL_NAME} LOCATION)
-  get_filename_component(CHPY_VEHICLE_PYD_PATH "${CHPY_RS_PYD_FILE}" PATH)
+  get_filename_component(CHPY_RS_PYD_PATH "${CHPY_RS_PYD_FILE}" PATH)
   add_custom_command(TARGET ${SWIG_MODULE_${CHPY_RS}_REAL_NAME}
                    POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E make_directory ${CHPY_VEHICLE_PYD_PATH}/${CHPY_PACKAGENAME})
+                   COMMAND ${CMAKE_COMMAND} -E make_directory ${CHPY_RS_PYD_PATH}/${CHPY_PACKAGENAME})
   add_custom_command(TARGET ${SWIG_MODULE_${CHPY_RS}_REAL_NAME}
                      POST_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E copy ${CHPY_VEHICLE_PY_FILE} ${CHPY_VEHICLE_PYD_PATH}/${CHPY_PACKAGENAME})
+                     COMMAND ${CMAKE_COMMAND} -E copy ${CHPY_RS_PY_FILE} ${CHPY_RS_PYD_PATH}/${CHPY_PACKAGENAME})
 
   # Install .pyd binary module (.so on linux)
   install(TARGETS ${SWIG_MODULE_${CHPY_RS}_REAL_NAME}
@@ -970,7 +969,15 @@ endif()
           LIBRARY DESTINATION "${CH_INSTALL_PYTHON}"
           ARCHIVE DESTINATION "${CH_INSTALL_PYTHON}")
   # Install .py module wrapper
-  install(FILES "${CHPY_VEHICLE_PY_FILE}" DESTINATION "${CH_INSTALL_PYTHON}/${CHPY_PACKAGENAME}")
+  install(FILES "${CHPY_RS_PY_FILE}" DESTINATION "${CH_INSTALL_PYTHON}/${CHPY_PACKAGENAME}")
+
+  if (DBG_SCRIPT)
+    message("Module name:     ${CHPY_RS}")
+    message("SWIG_REAL_NAME:  ${SWIG_MODULE_${CHPY_RS}_REAL_NAME}")
+    message("PY file:         ${CHPY_RS_PY_FILE}")
+    message("PYD file:        ${CHPY_RS_PYD_FILE}")
+    message("PYD path:        ${CHPY_RS_PYD_PATH}")
+  endif()
 
 #-----------------------------------------------------------------------------
 # Display information about setting the PYTHONPATH environment variable
