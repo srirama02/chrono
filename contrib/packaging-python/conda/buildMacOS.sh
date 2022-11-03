@@ -24,6 +24,7 @@ export PARDISO_MKL_ENABLE="OFF"
 export MKL_INCLUDE_DIR=""
 export MKL_LIB_DIR=""
 export EIGEN3_INCLUDE_DIR="/opt/homebrew/include/eigen3"
+export IRRLICHT_ROOT="/opt/homebrew/include/irrlicht"
 
 if [ `uname -m` == x86_64 ]; then
     PARDISO_MKL_ENABLE="ON"
@@ -31,6 +32,7 @@ if [ `uname -m` == x86_64 ]; then
     MKL_INCLUDE_DIR=`cd $HOME/miniconda/pkgs/mkl-include-*/; pwd`
     MKL_LIB_DIR=`cd $HOME/miniconda/pkgs/mkl-2022*/; pwd`
     EIGEN3_INCLUDE_DIR="/usr/local/include/eigen3"
+    IRRLICHT_ROOT="/usr/local/include/irrlicht"
 fi
 
 # Configure step
@@ -58,6 +60,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DCASCADE_LIBDIR=$HOME/miniconda/lib \
  -DENABLE_MODULE_PARDISO_MKL=$(PARDISO_MKL_ENABLE) \
  -DMKL_INCLUDE_DIR=$MKL_INCLUDE_DIR/include \
+ -DIRRLICHT_ROOT=$IRRLICHT_ROOT \
  -DMKL_RT_LIBRARY=$MKL_LIB_DIR/lib/libmkl_rt.dylib \
  -DEIGEN3_INCLUDE_DIR=$EIGEN3_INCLUDE_DIR "$HOME/miniconda/include" \
  -DPYCHRONO_DATA_PATH=../../../../../../share/chrono/data/ \
