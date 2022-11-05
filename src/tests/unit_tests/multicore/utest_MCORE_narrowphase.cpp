@@ -107,14 +107,14 @@ void SetupSystem(ChSystemMulticoreNSC* msystem) {
     msystem->Set_G_acc(ChVector<>(0, 0, -9.81));
 
     msystem->GetSettings()->solver.tolerance = tolerance;
-    msystem->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    msystem->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     msystem->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     msystem->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     msystem->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
     msystem->GetSettings()->solver.alpha = 0;
     msystem->GetSettings()->solver.contact_recovery_speed = contact_recovery_speed;
     msystem->SetMaxPenetrationRecoverySpeed(contact_recovery_speed);
-    msystem->ChangeSolverType(SolverType::APGD);
+    msystem->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
     msystem->GetSettings()->collision.collision_envelope = 0;
     msystem->GetSettings()->collision.bins_per_axis = vec3(10, 10, 10);
 

@@ -100,11 +100,11 @@ int main(int argc, char* argv[]) {
     ChSystemMulticoreNSC sys;
     sys.Set_G_acc(ChVector<>(0, -10, 0));
 
-    sys.GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys.GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys.GetSettings()->solver.max_iteration_sliding = 500;
     sys.GetSettings()->solver.contact_recovery_speed = 0;
     sys.GetSettings()->collision.collision_envelope = 0.005;
-    sys.ChangeSolverType(SolverType::BB);
+    sys.ChangeSolverType(ChSolverSettingsMulticore::Type::BB);
     
     // Create a contact material, shared among all bodies
     auto material = chrono_types::make_shared<ChMaterialSurfaceNSC>();

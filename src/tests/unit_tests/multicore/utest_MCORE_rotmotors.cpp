@@ -48,7 +48,7 @@ class RotMotors : public ::testing::TestWithParam<Options> {
         system = new ChSystemMulticoreNSC();
         system->Set_G_acc(ChVector<>(0, 0, -9.81));
         system->GetSettings()->solver.tolerance = 1e-5;
-        system->ChangeSolverType(SolverType::BB);
+        system->ChangeSolverType(ChSolverSettingsMulticore::Type::BB);
 
         auto ground = std::shared_ptr<ChBody>(system->NewBody());
         ground->SetBodyFixed(true);

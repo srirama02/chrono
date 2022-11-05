@@ -27,9 +27,6 @@ ChSystemMulticoreSMC::ChSystemMulticoreSMC() : ChSystemMulticore() {
 
     data_manager->settings.collision.collision_envelope = 0;
 
-    // Set this so that the CD can check what type of system it is (needed for narrowphase)
-    data_manager->settings.system_type = SystemType::SYSTEM_SMC;
-
     data_manager->system_timer.AddTimer("ChIterativeSolverMulticoreSMC_ProcessContact");
 }
 

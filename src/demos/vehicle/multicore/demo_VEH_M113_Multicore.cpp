@@ -273,13 +273,13 @@ int main(int argc, char* argv[]) {
     sys->GetSettings()->solver.tolerance = tolerance;
 
 #ifndef USE_SMC
-    sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     sys->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     sys->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
     sys->GetSettings()->solver.alpha = 0;
     sys->GetSettings()->solver.contact_recovery_speed = contact_recovery_speed;
-    sys->ChangeSolverType(SolverType::APGD);
+    sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
     sys->GetSettings()->collision.collision_envelope = 0.1 * r_g;
 #else
     sys->GetSettings()->solver.contact_force_model = ChSystemSMC::PlainCoulomb;

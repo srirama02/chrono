@@ -39,8 +39,8 @@ using namespace chrono;
 using namespace chrono::collision;
 
 struct Options {
-    SolverMode mode;
-    SolverType type;
+    ChSolverSettingsMulticore::Mode mode;
+    ChSolverSettingsMulticore::Type type;
 
     uint max_iter_bilateral;
     uint max_iter_normal;
@@ -192,15 +192,15 @@ TEST_P(JointsDVI, simulate) {
 }
 
 std::vector<Options> options{
-    {SolverMode::NORMAL, SolverType::APGDREF, 100, 1000, 0},
-    {SolverMode::NORMAL, SolverType::APGDREF, 0, 1000, 0},
-    {SolverMode::SLIDING, SolverType::APGDREF, 100, 0, 1000},
-    {SolverMode::SLIDING, SolverType::APGDREF, 0, 0, 1000},
+    {ChSolverSettingsMulticore::Mode::NORMAL, ChSolverSettingsMulticore::Type::APGDREF, 100, 1000, 0},
+    {ChSolverSettingsMulticore::Mode::NORMAL, ChSolverSettingsMulticore::Type::APGDREF, 0, 1000, 0},
+    {ChSolverSettingsMulticore::Mode::SLIDING, ChSolverSettingsMulticore::Type::APGDREF, 100, 0, 1000},
+    {ChSolverSettingsMulticore::Mode::SLIDING, ChSolverSettingsMulticore::Type::APGDREF, 0, 0, 1000},
 
-    ////{SolverMode::NORMAL, SolverType::APGD, 100, 1000, 0},
-    ////{SolverMode::NORMAL, SolverType::APGD, 0, 1000, 0},
-    ////{SolverMode::SLIDING, SolverType::APGD, 100, 0, 1000},
-    ////{SolverMode::SLIDING, SolverType::APGD, 0, 0, 1000}
+    ////{ChSolverSettingsMulticore::Mode::NORMAL, ChSolverSettingsMulticore::Type::APGD, 100, 1000, 0},
+    ////{ChSolverSettingsMulticore::Mode::NORMAL, ChSolverSettingsMulticore::Type::APGD, 0, 1000, 0},
+    ////{ChSolverSettingsMulticore::Mode::SLIDING, ChSolverSettingsMulticore::Type::APGD, 100, 0, 1000},
+    ////{ChSolverSettingsMulticore::Mode::SLIDING, ChSolverSettingsMulticore::Type::APGD, 0, 0, 1000}
 };
 
 INSTANTIATE_TEST_SUITE_P(ChronoMulticore, JointsDVI, ::testing::ValuesIn(options));

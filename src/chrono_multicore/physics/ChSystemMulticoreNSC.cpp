@@ -27,9 +27,6 @@ ChSystemMulticoreNSC::ChSystemMulticoreNSC() : ChSystemMulticore() {
 
     solver = chrono_types::make_shared<ChIterativeSolverMulticoreNSC>(data_manager);
 
-    // Set this so that the CD can check what type of system it is (needed for narrowphase)
-    data_manager->settings.system_type = SystemType::SYSTEM_NSC;
-
     data_manager->system_timer.AddTimer("ChSolverMulticore_solverA");
     data_manager->system_timer.AddTimer("ChSolverMulticore_solverB");
     data_manager->system_timer.AddTimer("ChSolverMulticore_solverC");
@@ -50,7 +47,7 @@ ChSystemMulticoreNSC::ChSystemMulticoreNSC(const ChSystemMulticoreNSC& other) : 
     //// TODO
 }
 
-void ChSystemMulticoreNSC::ChangeSolverType(SolverType type) {
+void ChSystemMulticoreNSC::ChangeSolverType(ChSolverSettingsMulticore::Type type) {
     std::static_pointer_cast<ChIterativeSolverMulticoreNSC>(solver)->ChangeSolverType(type);
 }
 

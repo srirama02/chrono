@@ -21,7 +21,6 @@
 #include <thread>
 
 #include "chrono_multicore/ChConfigMulticore.h"
-#include "chrono_multicore/ChMulticoreDefines.h"
 #include "chrono_multicore/physics/ChMPMSettings.h"
 
 #include "chrono/multicore_math/ChMulticoreMath.h"

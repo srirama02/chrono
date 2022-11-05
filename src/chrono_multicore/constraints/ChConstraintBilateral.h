@@ -28,6 +28,7 @@ namespace chrono {
 /// Bilateral (joint) constraints.
 class CH_MULTICORE_API ChConstraintBilateral {
   public:
+
     ChConstraintBilateral() {}
     ~ChConstraintBilateral() {}
 
@@ -46,6 +47,19 @@ class CH_MULTICORE_API ChConstraintBilateral {
     void GenerateSparsity();
 
     ChMulticoreDataManager* data_manager;  ///< Pointer to the system's data manager.
+
+  private:
+    /// Enumeration for bilateral constraint types.
+    enum Type {
+        BODY_BODY,          ///< constraints between two rigid bodies
+        SHAFT_SHAFT,        ///< constraints between two 1-D shaft elements
+        SHAFT_SHAFT_SHAFT,  ///< constraints involving 3 1-D shaft elements
+        SHAFT_BODY,         ///< constraints between a shaft and a rigid body
+        SHAFT_SHAFT_BODY,   ///< constraints involving two shafts and one rigid body
+        UNKNOWN             ///< unknow constraint type
+    };
+
+    friend class ChSystemMulticore;
 };
 
 /// @} multicore_constraint

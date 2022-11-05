@@ -92,8 +92,8 @@ int main(int argc, char* argv[]) {
     switch (contact_method) {
         case ChContactMethod::NSC: {
             auto sysNSC = new ChSystemMulticoreNSC();
-            sysNSC->ChangeSolverType(SolverType::APGD);
-            sysNSC->GetSettings()->solver.solver_mode = SolverMode::SPINNING;
+            sysNSC->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
+            sysNSC->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SPINNING;
             sysNSC->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
             sysNSC->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
             sysNSC->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;

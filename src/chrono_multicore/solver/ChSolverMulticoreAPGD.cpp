@@ -93,13 +93,13 @@ uint ChSolverMulticoreAPGD::Solve(ChShurProduct& ShurProduct,
     temp = gamma - one;
     real norm_temp = Sqrt((real)(temp, temp));
     if (data_manager->settings.solver.cache_step_length == true) {
-        if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL) {
+        if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
             L = data_manager->measures.solver.normal_apgd_step_length;
-        } else if (data_manager->settings.solver.solver_mode == SolverMode::SLIDING) {
+        } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
             L = data_manager->measures.solver.sliding_apgd_step_length;
-        } else if (data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+        } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
             L = data_manager->measures.solver.spinning_apgd_step_length;
-        } else if (data_manager->settings.solver.solver_mode == SolverMode::BILATERAL) {
+        } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::BILATERAL) {
             L = data_manager->measures.solver.bilateral_apgd_step_length;
         } else {
             L = 1.0;
@@ -215,13 +215,13 @@ uint ChSolverMulticoreAPGD::Solve(ChShurProduct& ShurProduct,
             UpdateR();
         }
     }
-    if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
         data_manager->measures.solver.normal_apgd_step_length = L;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::SLIDING) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
         data_manager->measures.solver.sliding_apgd_step_length = L;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         data_manager->measures.solver.spinning_apgd_step_length = L;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::BILATERAL) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::BILATERAL) {
         data_manager->measures.solver.bilateral_apgd_step_length = L;
     }
     gamma = gamma_hat;

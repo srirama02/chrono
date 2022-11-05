@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
     sys.Set_G_acc(ChVector<>(0, 0, -gravity));
 
     // Set solver parameters
-    sys.GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys.GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys.GetSettings()->solver.max_iteration_normal = 0;
     sys.GetSettings()->solver.max_iteration_sliding = 40;
     sys.GetSettings()->solver.max_iteration_spinning = 0;
@@ -185,7 +185,7 @@ int main(int argc, char* argv[]) {
     sys.GetSettings()->solver.use_full_inertia_tensor = false;
     sys.GetSettings()->solver.contact_recovery_speed = 100;
     sys.GetSettings()->solver.cache_step_length = true;
-    sys.ChangeSolverType(SolverType::BB);
+    sys.ChangeSolverType(ChSolverSettingsMulticore::Type::BB);
     sys.GetSettings()->collision.narrowphase_algorithm = ChNarrowphase::Algorithm::HYBRID;
 
     AddMPMContainer(&sys);

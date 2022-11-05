@@ -83,13 +83,13 @@ uint ChSolverMulticoreBB::Solve(ChShurProduct& ShurProduct,
 
     real alpha = 0.0001;
     if (data_manager->settings.solver.cache_step_length == true) {
-        if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL) {
+        if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
             alpha = data_manager->measures.solver.normal_apgd_step_length;
-        } else if (data_manager->settings.solver.solver_mode == SolverMode::SLIDING) {
+        } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
             alpha = data_manager->measures.solver.sliding_apgd_step_length;
-        } else if (data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+        } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
             alpha = data_manager->measures.solver.spinning_apgd_step_length;
-        } else if (data_manager->settings.solver.solver_mode == SolverMode::BILATERAL) {
+        } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::BILATERAL) {
             alpha = data_manager->measures.solver.bilateral_apgd_step_length;
         } else {
             alpha = 0.0001;
@@ -210,13 +210,13 @@ uint ChSolverMulticoreBB::Solve(ChShurProduct& ShurProduct,
         // t4.stop();
     }
     // printf("TIME: [%f %f %f %f]\n", t1(), t2(), t3(), t4());
-    if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
         data_manager->measures.solver.normal_apgd_step_length = alpha;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::SLIDING) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
         data_manager->measures.solver.sliding_apgd_step_length = alpha;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         data_manager->measures.solver.spinning_apgd_step_length = alpha;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::BILATERAL) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::BILATERAL) {
         data_manager->measures.solver.bilateral_apgd_step_length = alpha;
     }
     gamma = ml_candidate;

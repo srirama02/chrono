@@ -111,7 +111,7 @@ void ChContactContainerMulticore::ReportAllContacts(std::shared_ptr<ReportContac
                 double f_n = (double)(gamma_u[i] / data_manager->settings.step_size);
                 double f_u = 0;
                 double f_v = 0;
-                if (mode == SolverMode::SLIDING || mode == SolverMode::SPINNING) {
+                if (mode == ChSolverSettingsMulticore::Mode::SLIDING || mode == ChSolverSettingsMulticore::Mode::SPINNING) {
                     f_u = (double)(gamma_u[cd_data->num_rigid_contacts + 2 * i + 0] / data_manager->settings.step_size);
                     f_v = (double)(gamma_u[cd_data->num_rigid_contacts + 2 * i + 1] / data_manager->settings.step_size);
                 }
@@ -119,7 +119,7 @@ void ChContactContainerMulticore::ReportAllContacts(std::shared_ptr<ReportContac
                 double t_n = 0;
                 double t_u = 0;
                 double t_v = 0;
-                if (mode == SolverMode::SPINNING) {
+                if (mode == ChSolverSettingsMulticore::Mode::SPINNING) {
                     t_n = (double)(gamma_u[3 * cd_data->num_rigid_contacts + 3 * i + 0] /
                                    data_manager->settings.step_size);
                     t_u = (double)(gamma_u[3 * cd_data->num_rigid_contacts + 3 * i + 1] /

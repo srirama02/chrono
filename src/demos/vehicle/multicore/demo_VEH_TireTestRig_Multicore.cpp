@@ -37,7 +37,7 @@ int main() {
     ChSystemMulticoreNSC sys;
     double step_size = 5e-3;
     double tire_step_size = 1e-4;
-    sys.ChangeSolverType(SolverType::APGD);
+    sys.ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
 
     ////ChSystemMulticoreSMC sys;
     ////double step_size = 1e-4;
@@ -46,7 +46,7 @@ int main() {
     sys.SetNumThreads(8);
 
     sys.GetSettings()->solver.tolerance = 1e-5;
-    sys.GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys.GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys.GetSettings()->solver.max_iteration_normal = 0;
     sys.GetSettings()->solver.max_iteration_sliding = 150;
     sys.GetSettings()->solver.max_iteration_spinning = 0;

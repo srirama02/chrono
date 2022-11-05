@@ -76,24 +76,24 @@ int ChMulticoreDataManager::OutputBlazeMatrix(CompressedMatrix<real> src, std::s
 
 int ChMulticoreDataManager::ExportCurrentSystem(std::string output_dir) {
     int offset = 0;
-    if (settings.solver.solver_mode == SolverMode::NORMAL) {
+    if (settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
         offset = cd_data->num_rigid_contacts;
-    } else if (settings.solver.solver_mode == SolverMode::SLIDING) {
+    } else if (settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
         offset = 3 * cd_data->num_rigid_contacts;
-    } else if (settings.solver.solver_mode == SolverMode::SPINNING) {
+    } else if (settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         offset = 6 * cd_data->num_rigid_contacts;
     }
 
     // fill in the information for constraints and friction
     DynamicVector<real> fric(num_constraints, -2.0);
     for (unsigned int i = 0; i < cd_data->num_rigid_contacts; i++) {
-        if (settings.solver.solver_mode == SolverMode::NORMAL) {
+        if (settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
             fric[i] = host_data.fric_rigid_rigid[i].x;
-        } else if (settings.solver.solver_mode == SolverMode::SLIDING) {
+        } else if (settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
             fric[3 * i] = host_data.fric_rigid_rigid[i].x;
             fric[3 * i + 1] = -1;
             fric[3 * i + 2] = -1;
-        } else if (settings.solver.solver_mode == SolverMode::SPINNING) {
+        } else if (settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
             fric[6 * i] = host_data.fric_rigid_rigid[i].x;
             fric[6 * i + 1] = -1;
             fric[6 * i + 2] = -1;

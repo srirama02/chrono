@@ -78,11 +78,11 @@ TEST(ChronoMulticore, bodyauxref) {
     sys->GetSettings()->solver.clamp_bilaterals = clamp_bilaterals;
     sys->GetSettings()->solver.bilateral_clamp_speed = bilateral_clamp_speed;
 
-    sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     sys->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     sys->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
-    sys->ChangeSolverType(SolverType::APGD);
+    sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
 
     // Define a couple of rotations for later use
     ChQuaternion<> y2x;

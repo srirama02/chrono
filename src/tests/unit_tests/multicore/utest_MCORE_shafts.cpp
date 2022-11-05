@@ -64,11 +64,11 @@ class ChShaftTest : public ::testing::TestWithParam<ChContactMethod> {
 
         if (GetParam() == ChContactMethod::NSC) {
             ChSystemMulticoreNSC* systemNSC = static_cast<ChSystemMulticoreNSC*>(system);
-            systemNSC->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+            systemNSC->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
             systemNSC->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
             systemNSC->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
             systemNSC->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
-            systemNSC->ChangeSolverType(SolverType::APGD);
+            systemNSC->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
         }
     }
 

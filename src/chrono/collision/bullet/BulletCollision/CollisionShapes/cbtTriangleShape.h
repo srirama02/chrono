@@ -141,10 +141,10 @@ public:
 				cbtVector3 edge = pb - pa;
 				cbtVector3 edgeNormal = edge.cross(normal);
 				edgeNormal.normalize();
-				cbtScalar dist = pt.dot(edgeNormal);
+				cbtScalar dist2 = pt.dot(edgeNormal);
 				cbtScalar edgeConst = pa.dot(edgeNormal);
-				dist -= edgeConst;
-				if (dist < -tolerance)
+				dist2 -= edgeConst;
+				if (dist2 < -tolerance)
 					return false;
 			}
 

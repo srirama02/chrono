@@ -84,11 +84,11 @@ ContactForceTest::ContactForceTest() : sys(nullptr) {
         }
         case ChContactMethod::NSC: {
             ChSystemMulticoreNSC* sysNSC = new ChSystemMulticoreNSC;
-            sysNSC->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+            sysNSC->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
             sysNSC->GetSettings()->solver.max_iteration_normal = 0;
             sysNSC->GetSettings()->solver.max_iteration_sliding = 100;
             sysNSC->GetSettings()->solver.max_iteration_spinning = 0;
-            sysNSC->ChangeSolverType(SolverType::APGD);
+            sysNSC->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
             sys = sysNSC;
 
             auto mat = chrono_types::make_shared<ChMaterialSurfaceNSC>();

@@ -31,7 +31,7 @@
 
 #include "chrono/collision/bullet/LinearMath/cbtPoolAllocator.h"
 
-#include "chrono_multicore/ChMulticoreDefines.h"
+#include "chrono_multicore/ChApiMulticore.h"
 
 namespace chrono {
 

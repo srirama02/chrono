@@ -315,7 +315,7 @@ int main(int argc, char* argv[]) {
     // --------------------
 
     sys->GetSettings()->solver.tolerance = tolerance;
-    sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     sys->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     sys->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
@@ -326,7 +326,7 @@ int main(int argc, char* argv[]) {
     sys->GetSettings()->solver.use_full_inertia_tensor = false;
     sys->GetSettings()->solver.contact_recovery_speed = contact_recovery_speed;
     sys->GetSettings()->solver.bilateral_clamp_speed = 1e8;
-    sys->ChangeSolverType(SolverType::BB);
+    sys->ChangeSolverType(ChSolverSettingsMulticore::Type::BB);
 
     sys->GetSettings()->collision.collision_envelope = envelope;
     sys->GetSettings()->collision.narrowphase_algorithm = ChNarrowphase::Algorithm::HYBRID;

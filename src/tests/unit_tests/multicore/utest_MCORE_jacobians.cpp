@@ -104,13 +104,13 @@ void SetupSystem(ChSystemMulticoreNSC* sys) {
     double tolerance = 1e-2;
 
     sys->GetSettings()->solver.tolerance = tolerance;
-    sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     sys->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     sys->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
     sys->GetSettings()->solver.alpha = 0;
     sys->GetSettings()->solver.contact_recovery_speed = contact_recovery_speed;
-    sys->ChangeSolverType(SolverType::APGD);
+    sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
     sys->GetSettings()->collision.collision_envelope = 0.00;
     sys->GetSettings()->collision.bins_per_axis = vec3(10, 10, 10);
 

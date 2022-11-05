@@ -21,7 +21,6 @@
 
 #include "chrono/solver/ChIterativeSolverVI.h"
 
-#include "chrono_multicore/ChMulticoreDefines.h"
 #include "chrono_multicore/ChDataManager.h"
 
 #include "chrono_multicore/physics/Ch3DOFContainer.h"
@@ -88,7 +87,7 @@ class CH_MULTICORE_API ChIterativeSolverMulticoreNSC : public ChIterativeSolverM
     /// This function computes an initial guess for each contact.
     void PreSolve();
     /// This function is used to change the solver algorithm.
-    void ChangeSolverType(SolverType type);
+    void ChangeSolverType(ChSolverSettingsMulticore::Type type);
 
   private:
     ChShurProduct ShurProductFull;

@@ -34,16 +34,14 @@
 
 #include "chrono/multicore_math/ChMulticoreMath.h"
 
+#include "chrono_multicore/ChApiMulticore.h"
 #include "chrono_multicore/physics/Ch3DOFContainer.h"
+#include "chrono_multicore/constraints/ChConstraintBilateral.h"
 #include "chrono_multicore/ChDataManager.h"
-#include "chrono_multicore/ChMulticoreDefines.h"
 #include "chrono_multicore/ChSettings.h"
 #include "chrono_multicore/ChMeasures.h"
 
 namespace chrono {
-
-class ChMulticoreDataManager;
-class settings_container;
 
 /// @addtogroup multicore_physics
 /// @{
@@ -156,7 +154,7 @@ class CH_MULTICORE_API ChSystemMulticore : public ChSystem {
     /// at any time where reporting of contact torques is desired.
     real3 GetBodyContactTorque(std::shared_ptr<ChBody> body) const { return GetBodyContactTorque(body->GetId()); }
 
-    settings_container* GetSettings();
+    ChSettingsMulticore* GetSettings();
 
     /// Set the number of OpenMP threads used by Chrono itself, Eigen, and the collision detection system.
     /// <pre>
@@ -194,6 +192,8 @@ class CH_MULTICORE_API ChSystemMulticore : public ChSystem {
     std::vector<ChLink*>::iterator it;
 
   private:
+    static ChConstraintBilateral::Type GetBilateralType(ChPhysicsItem* item);
+
     std::vector<ChLinkMotorLinearSpeed*> linmotorlist;
     std::vector<ChLinkMotorRotationSpeed*> rotmotorlist;
 };
@@ -210,7 +210,7 @@ class CH_MULTICORE_API ChSystemMulticoreNSC : public ChSystemMulticore {
     /// "Virtual" copy constructor (covariant return type).
     virtual ChSystemMulticoreNSC* Clone() const override { return new ChSystemMulticoreNSC(*this); }
 
-    void ChangeSolverType(SolverType type);
+    void ChangeSolverType(ChSolverSettingsMulticore::Type type);
     void Initialize();
 
     virtual ChContactMethod GetContactMethod() const override { return ChContactMethod::NSC; }

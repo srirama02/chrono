@@ -503,7 +503,7 @@ int main(int argc, char* argv[]) {
     switch (method) {
         case chrono::ChContactMethod::NSC: {
             auto sysNSC = new ChSystemMulticoreNSC;
-            sysNSC->ChangeSolverType(SolverType::BB);
+            sysNSC->ChangeSolverType(ChSolverSettingsMulticore::Type::BB);
             sysNSC->GetSettings()->collision.collision_envelope = 0.005;
             sys = sysNSC;
             auto materialNSC = chrono_types::make_shared<ChMaterialSurfaceNSC>();

@@ -423,6 +423,79 @@ SWIG_LINK_LIBRARIES(${CHPY_FEA} ${PYTHON_LIBRARY} ChronoEngine)
   endif()
 
 #-----------------------------------------------------------------------------
+# MODULE for the multicore python wrapper.
+#-----------------------------------------------------------------------------
+
+if(ENABLE_MODULE_MULTICORE)
+
+  message(STATUS "...add python MULTICORE module:  pychrono.mcore")
+
+  # Python module name
+  set(CHPY_MULTICORE mcore)
+
+  # Interface files
+  set(CHPY_MULTICORE_MODULE_FILE
+      ../interface/multicore/ChModuleMulticore.i
+      )
+
+  include_directories(${CH_MULTICORE_INCLUDES})
+
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set_source_files_properties(${CHPY_MULTICORE_MODULE_FILE} PROPERTIES COMPILE_FLAGS "-D_WIN32")
+  endif()
+  set_source_files_properties(${CHPY_MULTICORE_MODULE_FILE} PROPERTIES CPLUSPLUS ON)
+
+  # Create the SWIG module.
+  if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
+    SWIG_ADD_MODULE(${CHPY_MULTICORE} python ${CHPY_MULTICORE_MODULE_FILE})
+  else()
+    SWIG_ADD_LIBRARY(${CHPY_MULTICORE} LANGUAGE python SOURCES ${CHPY_MULTICORE_MODULE_FILE})
+  endif()
+  SWIG_LINK_LIBRARIES(${CHPY_MULTICORE} ${PYTHON_LIBRARY} ChronoEngine ChronoEngine_multicore)
+
+  # Ensure that the PYD library file is generated in the bin/ directory.
+  set_target_properties(${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME} PROPERTIES
+                        PROJECT_LABEL "ChronoEngine_python_${CHPY_MULTICORE}"
+                        OUTPUT_NAME   "${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME}"
+                        LIBRARY_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
+                        )
+
+  target_compile_definitions(${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME} PRIVATE "CH_IGNORE_DEPRECATED")
+
+  ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME} ChronoEngine)
+  ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME} ChronoEngine_multicore)
+  ADD_DEPENDENCIES(${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME} ${SWIG_MODULE_${CHPY_CORE}_REAL_NAME})
+
+  # Copy PY file in a package dir
+  set(CHPY_MULTICORE_PY_FILE "${CMAKE_SWIG_OUTDIR}/${CHPY_MULTICORE}.py")
+  get_target_property(CHPY_MULTICORE_PYD_FILE ${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME} LOCATION)
+  get_filename_component(CHPY_MULTICORE_PYD_PATH "${CHPY_MULTICORE_PYD_FILE}" PATH)
+  add_custom_command(TARGET ${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E make_directory ${CHPY_MULTICORE_PYD_PATH}/${CHPY_PACKAGENAME})
+  add_custom_command(TARGET ${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME}
+                     POST_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy ${CHPY_MULTICORE_PY_FILE} ${CHPY_MULTICORE_PYD_PATH}/${CHPY_PACKAGENAME})
+
+  # Install .pyd binary module (.so on linux)
+  install(TARGETS ${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME}
+          RUNTIME DESTINATION "${CH_INSTALL_PYTHON}"
+          LIBRARY DESTINATION "${CH_INSTALL_PYTHON}"
+          ARCHIVE DESTINATION "${CH_INSTALL_PYTHON}")
+  # Install .py module wrapper
+  install(FILES "${CHPY_MULTICORE_PY_FILE}" DESTINATION "${CH_INSTALL_PYTHON}/${CHPY_PACKAGENAME}")
+
+  if (DBG_SCRIPT)
+    message("Module name:     ${CHPY_MULTICORE}")
+    message("SWIG_REAL_NAME:  ${SWIG_MODULE_${CHPY_MULTICORE}_REAL_NAME}")
+    message("PY file:         ${CHPY_MULTICORE_PY_FILE}")
+    message("PYD file:        ${CHPY_MULTICORE_PYD_FILE}")
+    message("PYD path:        ${CHPY_MULTICORE_PYD_PATH}")
+  endif()
+
+endif()
+
+#-----------------------------------------------------------------------------
 # MODULE for the irrlicht python wrapper.
 #-----------------------------------------------------------------------------
 

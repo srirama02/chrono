@@ -40,11 +40,11 @@ void ChConstraintRigidRigid::func_Project_normal(int index, const vec2* ids, con
 
     gamma[index * 1 + 0] = (gamma_x < -coh) ? -coh : gamma_x;
     switch (data_manager->settings.solver.solver_mode) {
-        case SolverMode::SLIDING:
+        case ChSolverSettingsMulticore::Mode::SLIDING:
             gamma[num_rigid_contacts + index * 2 + 0] = 0;
             gamma[num_rigid_contacts + index * 2 + 1] = 0;
             break;
-        case SolverMode::SPINNING:
+        case ChSolverSettingsMulticore::Mode::SPINNING:
             gamma[num_rigid_contacts + index * 2 + 0] = 0;
             gamma[num_rigid_contacts + index * 2 + 1] = 0;
             gamma[3 * num_rigid_contacts + index * 3 + 0] = 0;
@@ -158,15 +158,15 @@ void ChConstraintRigidRigid::func_Project_spinning(int index, const vec2* ids, c
 void ChConstraintRigidRigid::host_Project_single(int index, vec2* ids, real3* friction, real* cohesion, real* gamma) {
     // always project normal
     switch (data_manager->settings.solver.local_solver_mode) {
-        case SolverMode::NORMAL: {
+        case ChSolverSettingsMulticore::Mode::NORMAL: {
             func_Project_normal(index, ids, cohesion, gamma);
         } break;
 
-        case SolverMode::SLIDING: {
+        case ChSolverSettingsMulticore::Mode::SLIDING: {
             func_Project_sliding(index, ids, friction, cohesion, gamma);
         } break;
 
-        case SolverMode::SPINNING: {
+        case ChSolverSettingsMulticore::Mode::SPINNING: {
             func_Project_sliding(index, ids, friction, cohesion, gamma);
             func_Project_spinning(index, ids, friction, gamma);
         } break;
@@ -230,21 +230,21 @@ void ChConstraintRigidRigid::Project(real* gamma) {
     const custom_vector<real>& cohesion = data_manager->host_data.coh_rigid_rigid;
 
     switch (data_manager->settings.solver.local_solver_mode) {
-        case SolverMode::NORMAL: {
+        case ChSolverSettingsMulticore::Mode::NORMAL: {
 #pragma omp parallel for
             for (int index = 0; index < (signed)num_rigid_contacts; index++) {
                 func_Project_normal(index, bids.data(), cohesion.data(), gamma);
             }
         } break;
 
-        case SolverMode::SLIDING: {
+        case ChSolverSettingsMulticore::Mode::SLIDING: {
 #pragma omp parallel for
             for (int index = 0; index < (signed)num_rigid_contacts; index++) {
                 func_Project_sliding(index, bids.data(), friction.data(), cohesion.data(), gamma);
             }
         } break;
 
-        case SolverMode::SPINNING: {
+        case ChSolverSettingsMulticore::Mode::SPINNING: {
 #pragma omp parallel for
             for (int index = 0; index < (signed)num_rigid_contacts; index++) {
                 func_Project_sliding(index, bids.data(), friction.data(), cohesion.data(), gamma);
@@ -264,14 +264,14 @@ void ChConstraintRigidRigid::Project_Single(int index, real* gamma) {
     // host_Project_single(index, bids.data(), friction.data(), cohesion.data(), gamma);
 
     switch (data_manager->settings.solver.local_solver_mode) {
-        case SolverMode::NORMAL: {
+        case ChSolverSettingsMulticore::Mode::NORMAL: {
             func_Project_normal(index, bids.data(), cohesion.data(), gamma);
         } break;
-        case SolverMode::SLIDING: {
+        case ChSolverSettingsMulticore::Mode::SLIDING: {
             func_Project_sliding(index, bids.data(), friction.data(), cohesion.data(), gamma);
         } break;
 
-        case SolverMode::SPINNING: {
+        case ChSolverSettingsMulticore::Mode::SPINNING: {
             func_Project_sliding(index, bids.data(), friction.data(), cohesion.data(), gamma);
             func_Project_spinning(index, bids.data(), friction.data(), gamma);
         } break;
@@ -312,7 +312,7 @@ void ChConstraintRigidRigid::Build_s() {
         return;
     }
 
-    if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
         return;
     }
 
@@ -370,7 +370,7 @@ void ChConstraintRigidRigid::Build_E() {
     if (num_rigid_contacts <= 0) {
         return;
     }
-    SolverMode solver_mode = data_manager->settings.solver.solver_mode;
+    ChSolverSettingsMulticore::Mode solver_mode = data_manager->settings.solver.solver_mode;
     DynamicVector<real>& E = data_manager->host_data.E;
     uint num_contacts = num_rigid_contacts;
     const custom_vector<real4>& compliance = data_manager->host_data.compliance_rigid_rigid;
@@ -385,10 +385,10 @@ void ChConstraintRigidRigid::Build_E() {
         real compliance_spinning = compliance[index].w;
 
         E[index * 1 + 0] = inv_hhpa * compliance_normal;
-        if (solver_mode == SolverMode::SLIDING) {
+        if (solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
             E[num_contacts + index * 2 + 0] = inv_hhpa * compliance_sliding;
             E[num_contacts + index * 2 + 1] = inv_hhpa * compliance_sliding;
-        } else if (solver_mode == SolverMode::SPINNING) {
+        } else if (solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
             E[3 * num_contacts + index * 3 + 0] = inv_hhpa * compliance_spinning;
             E[3 * num_contacts + index * 3 + 1] = inv_hhpa * compliance_rolling;
             E[3 * num_contacts + index * 3 + 2] = inv_hhpa * compliance_rolling;
@@ -403,7 +403,7 @@ void ChConstraintRigidRigid::Build_D() {
 
     CompressedMatrix<real>& D_T = data_manager->host_data.D_T;
 
-    SolverMode solver_mode = data_manager->settings.solver.solver_mode;
+    ChSolverSettingsMulticore::Mode solver_mode = data_manager->settings.solver.solver_mode;
 
 #pragma omp parallel for
     for (int index = 0; index < (signed)num_rigid_contacts; index++) {
@@ -435,7 +435,7 @@ void ChConstraintRigidRigid::Build_D() {
         SetRow6Check(D_T, off + row * 1 + 0, body_id.x * 6, -U, T3);
         SetRow6Check(D_T, off + row * 1 + 0, body_id.y * 6, U, -T6);
 
-        if (solver_mode == SolverMode::SLIDING || solver_mode == SolverMode::SPINNING) {
+        if (solver_mode == ChSolverSettingsMulticore::Mode::SLIDING || solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
             off = num_rigid_contacts;
 
             real3 V_A = Rotate(V, q_a);
@@ -454,7 +454,7 @@ void ChConstraintRigidRigid::Build_D() {
             SetRow6Check(D_T, off + row * 2 + 0, body_id.y * 6, V, -T7);
             SetRow6Check(D_T, off + row * 2 + 1, body_id.y * 6, W, -T8);
 
-            if (solver_mode == SolverMode::SPINNING) {
+            if (solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
                 off = 3 * num_rigid_contacts;
 
                 SetRow3Check(D_T, off + row * 3 + 0, body_id.x * 6 + 3, -U_A);
@@ -471,7 +471,7 @@ void ChConstraintRigidRigid::Build_D() {
 
 void ChConstraintRigidRigid::GenerateSparsity() {
     const auto num_rigid_contacts = data_manager->cd_data->num_rigid_contacts;
-    SolverMode solver_mode = data_manager->settings.solver.solver_mode;
+    ChSolverSettingsMulticore::Mode solver_mode = data_manager->settings.solver.solver_mode;
 
     CompressedMatrix<real>& D_T = data_manager->host_data.D_T;
 
@@ -488,7 +488,7 @@ void ChConstraintRigidRigid::GenerateSparsity() {
         D_T.finalize(off + row * 1 + 0);
     }
 
-    if (solver_mode == SolverMode::SLIDING || solver_mode == SolverMode::SPINNING) {
+    if (solver_mode == ChSolverSettingsMulticore::Mode::SLIDING || solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         for (int index = 0; index < (signed)num_rigid_contacts; index++) {
             const vec2& body_id = ids[index];
             int row = index;
@@ -506,7 +506,7 @@ void ChConstraintRigidRigid::GenerateSparsity() {
         }
     }
 
-    if (solver_mode == SolverMode::SPINNING) {
+    if (solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         for (int index = 0; index < (signed)num_rigid_contacts; index++) {
             const vec2& body_id = ids[index];
             int row = index;

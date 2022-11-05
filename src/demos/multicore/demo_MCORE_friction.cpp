@@ -53,9 +53,9 @@ int main(int argc, char** argv) {
     sys.SetNumThreads(1);
 
     // Set solver settings
-    sys.ChangeSolverType(SolverType::APGD);
+    sys.ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
 
-    sys.GetSettings()->solver.solver_mode = SolverMode::SPINNING;
+    sys.GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SPINNING;
     sys.GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     sys.GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     sys.GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;

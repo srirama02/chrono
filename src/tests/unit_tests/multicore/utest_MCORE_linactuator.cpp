@@ -97,11 +97,11 @@ ChLinActuatorTest::ChLinActuatorTest() : animate(false) {
 
     if (cm == ChContactMethod::NSC) {
         ChSystemMulticoreNSC* msystemNSC = static_cast<ChSystemMulticoreNSC*>(sys);
-        msystemNSC->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+        msystemNSC->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
         msystemNSC->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
         msystemNSC->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
         msystemNSC->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
-        msystemNSC->ChangeSolverType(SolverType::APGD);
+        msystemNSC->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
     }
 
     // Create the ground body.

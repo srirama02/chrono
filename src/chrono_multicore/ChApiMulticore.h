@@ -28,6 +28,14 @@
 #define CH_MULTICORE_API ChApiIMPORT
 #endif
 
+#ifdef __CDT_PARSER__
+    #define BLAZE_SERIAL_SECTION
+    #define CH_MULTICORE_API
+    #define custom_vector std::vector
+#else
+    #define custom_vector std::vector
+#endif
+
 // Macros for specifying type alignment
 #if (defined __GNUC__) || (defined __INTEL_COMPILER)
 #define CHRONO_ALIGN_16 __attribute__((aligned(16)))

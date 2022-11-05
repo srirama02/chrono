@@ -200,7 +200,7 @@ int main(int argc, char* argv[]) {
             auto my_sys = new ChSystemMulticoreNSC;
             cout << "System type: NSC" << endl;
 
-            my_sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+            my_sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
             my_sys->GetSettings()->solver.max_iteration_normal = 0;
             my_sys->GetSettings()->solver.max_iteration_sliding = 100;
             my_sys->GetSettings()->solver.max_iteration_spinning = 0;
@@ -209,7 +209,7 @@ int main(int argc, char* argv[]) {
             my_sys->GetSettings()->solver.contact_recovery_speed = 1000;
             my_sys->GetSettings()->collision.collision_envelope = 0.01;
 
-            my_sys->ChangeSolverType(SolverType::APGD);
+            my_sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
 
             sys = my_sys;
             break;

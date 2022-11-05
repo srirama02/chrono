@@ -175,7 +175,6 @@ SET(CH_MULTICORE_INCLUDES "${CH_MULTICORE_INCLUDES}" PARENT_SCOPE)
 
 SET(ChronoEngine_Multicore_BASE
     ChApiMulticore.h
-    ChMulticoreDefines.h
     ChSettings.h
     ChMeasures.h
     ChDataManager.h

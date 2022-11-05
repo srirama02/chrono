@@ -93,14 +93,14 @@ ChVehicleCosimTerrainNodeGranularOMP::ChVehicleCosimTerrainNodeGranularOMP(doubl
         }
         case ChContactMethod::NSC: {
             ChSystemMulticoreNSC* sys = new ChSystemMulticoreNSC;
-            sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+            sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
             sys->GetSettings()->solver.max_iteration_normal = 0;
             sys->GetSettings()->solver.max_iteration_sliding = 200;
             sys->GetSettings()->solver.max_iteration_spinning = 0;
             sys->GetSettings()->solver.alpha = 0;
             sys->GetSettings()->solver.contact_recovery_speed = -1;
             sys->GetSettings()->collision.collision_envelope = 0.001;
-            sys->ChangeSolverType(SolverType::APGD);
+            sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
             m_system = sys;
 
             break;
@@ -145,14 +145,14 @@ ChVehicleCosimTerrainNodeGranularOMP::ChVehicleCosimTerrainNodeGranularOMP(ChCon
         }
         case ChContactMethod::NSC: {
             ChSystemMulticoreNSC* sys = new ChSystemMulticoreNSC;
-            sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+            sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
             sys->GetSettings()->solver.max_iteration_normal = 0;
             sys->GetSettings()->solver.max_iteration_sliding = 200;
             sys->GetSettings()->solver.max_iteration_spinning = 0;
             sys->GetSettings()->solver.alpha = 0;
             sys->GetSettings()->solver.contact_recovery_speed = -1;
             sys->GetSettings()->collision.collision_envelope = 0.001;
-            sys->ChangeSolverType(SolverType::APGD);
+            sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGD);
             m_system = sys;
 
             break;

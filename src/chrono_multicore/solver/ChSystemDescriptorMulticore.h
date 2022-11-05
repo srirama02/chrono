@@ -16,7 +16,6 @@
 
 #include "chrono/solver/ChSystemDescriptor.h"
 
-#include "chrono_multicore/ChMulticoreDefines.h"
 #include "chrono_multicore/solver/ChIterativeSolverMulticore.h"
 #include "chrono/multicore_math/ChMulticoreMath.h"
 

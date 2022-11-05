@@ -397,13 +397,13 @@ int main(int argc, char* argv[]) {
     sys->GetSettings()->solver.contact_force_model = contact_force_model;
     sys->GetSettings()->solver.tangential_displ_mode = tangential_displ_mode;
 #else
-    sys->GetSettings()->solver.solver_mode = SolverMode::SLIDING;
+    sys->GetSettings()->solver.solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
     sys->GetSettings()->solver.max_iteration_normal = max_iteration_normal;
     sys->GetSettings()->solver.max_iteration_sliding = max_iteration_sliding;
     sys->GetSettings()->solver.max_iteration_spinning = max_iteration_spinning;
     sys->GetSettings()->solver.alpha = 0;
     sys->GetSettings()->solver.contact_recovery_speed = contact_recovery_speed;
-    sys->ChangeSolverType(SolverType::APGDREF);
+    sys->ChangeSolverType(ChSolverSettingsMulticore::Type::APGDREF);
 
     sys->GetSettings()->collision.collision_envelope = 0.05 * r_g;
 #endif

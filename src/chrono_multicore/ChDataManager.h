@@ -27,8 +27,8 @@
 #include "chrono/multicore_math/ChMulticoreMath.h"
 #include "chrono/collision/chrono/ChCollisionData.h"
 
+#include "chrono_multicore/ChApiMulticore.h"
 #include "chrono_multicore/ChTimerMulticore.h"
-#include "chrono_multicore/ChMulticoreDefines.h"
 #include "chrono_multicore/ChSettings.h"
 #include "chrono_multicore/ChMeasures.h"
 
@@ -38,9 +38,9 @@
 #include <blaze/math/CompressedMatrix.h>
 #include <blaze/math/DynamicVector.h>
 #if BLAZE_MAJOR_VERSION == 2
-#include <blaze/math/DenseSubvector.h>
+    #include <blaze/math/DenseSubvector.h>
 #elif BLAZE_MAJOR_VERSION == 3
-#include <blaze/math/Subvector.h>
+    #include <blaze/math/Subvector.h>
 #endif
 
 using blaze::CompressedMatrix;
@@ -302,14 +302,14 @@ struct host_container {
     DynamicVector<real> hf;      ///< This vector holds h*forces, h is time step
 
     /// Contact impulses. These are the unknowns solved for in the NSC formulation.
-    /// Depending on the selected SolverMode, gamma is organized as follows (N is the number of rigid contacts):
+    /// Depending on the selected ChSolverSettingsMulticore::Mode, gamma is organized as follows (N is the number of rigid contacts):
     /// \li NORMAL [size(gamma) = N]\n
     ///     n1 n2 ... nN
     /// \li SLIDING [size(gamma) = 3N]\n
     ///     n1 n2 ... nN | u1 v1 u2 v2 ... uN vN
     /// \li SPINNING [size(gamma) = 6N]\n
     ///     n1 n2 ... nN | u1 v1 u2 v2 ... uN vN | tn1 tu1 tv1 tn2 tu2 tv2 ... tnN tuN tvN
-    /// 
+    ///
     /// If there are any bilateral constraints, the corresponding impulses are stored at the end of `gamma`.
     DynamicVector<real> gamma;
 
@@ -317,7 +317,7 @@ struct host_container {
     /// Note that E is a diagonal matrix and hence stored in a vector.
     DynamicVector<real> E;
 
-    DynamicVector<real> Fc; ///< Contact forces (NSC)
+    DynamicVector<real> Fc;  ///< Contact forces (NSC)
 };
 
 /// Global data manager for Chrono::Multicore.
@@ -326,7 +326,7 @@ class CH_MULTICORE_API ChMulticoreDataManager {
     ChMulticoreDataManager();
     ~ChMulticoreDataManager();
 
-    host_container host_data;    ///< Structure of data arrays (state, contact, etc)
+    host_container host_data;  ///< Structure of data arrays (state, contact, etc)
 
     /// Used by the bilarerals for computing the Jacobian and other terms.
     std::shared_ptr<ChSystemDescriptor> system_descriptor;
@@ -336,7 +336,7 @@ class CH_MULTICORE_API ChMulticoreDataManager {
     ChConstraintRigidRigid* rigid_rigid;  ///< methods for unilateral constraints
     ChConstraintBilateral* bilateral;     ///< methods for bilateral constraints
 
-    std::shared_ptr<collision::ChCollisionData> cd_data; ///< shared data for the Chrono collision system
+    std::shared_ptr<collision::ChCollisionData> cd_data;  ///< shared data for the Chrono collision system
 
     // These pointers are used to compute the mass matrix instead of filling a temporary data structure
     std::vector<std::shared_ptr<ChBody>>* body_list;                  ///< List of bodies
@@ -344,24 +344,24 @@ class CH_MULTICORE_API ChMulticoreDataManager {
     std::vector<std::shared_ptr<ChPhysicsItem>>* other_physics_list;  ///< List to other items
 
     // Indexing variables
-    uint num_rigid_bodies;             ///< The number of rigid bodies in a system
-    uint num_fluid_bodies;             ///< The number of fluid bodies in the system
-    uint num_shafts;                   ///< The number of shafts in a system
-    uint num_motors;                   ///< The number of motor links with 1 state variable
-    uint num_linmotors;                ///< The number of linear speed motors
-    uint num_rotmotors;                ///< The number of rotation speed motors
-    uint num_dof;                      ///< The number of degrees of freedom in the system
-    uint num_unilaterals;              ///< The number of contact constraints
-    uint num_bilaterals;               ///< The number of bilateral constraints
-    uint num_constraints;              ///< Total number of constraints
-    uint nnz_bilaterals;               ///< The number of non-zero entries in the bilateral Jacobian
+    uint num_rigid_bodies;  ///< The number of rigid bodies in a system
+    uint num_fluid_bodies;  ///< The number of fluid bodies in the system
+    uint num_shafts;        ///< The number of shafts in a system
+    uint num_motors;        ///< The number of motor links with 1 state variable
+    uint num_linmotors;     ///< The number of linear speed motors
+    uint num_rotmotors;     ///< The number of rotation speed motors
+    uint num_dof;           ///< The number of degrees of freedom in the system
+    uint num_unilaterals;   ///< The number of contact constraints
+    uint num_bilaterals;    ///< The number of bilateral constraints
+    uint num_constraints;   ///< Total number of constraints
+    uint nnz_bilaterals;    ///< The number of non-zero entries in the bilateral Jacobian
 
     /// Flag indicating whether or not the contact forces are current (NSC only).
     bool Fc_current;
     /// Container for all timers for the system.
     ChTimerMulticore system_timer;
     /// Container for all settings for the system, collision detection, and solver.
-    settings_container settings;
+    ChSettingsMulticore settings;
     /// Container for various statistics for collision detection and solver.
     measures_container measures;
 

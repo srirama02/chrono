@@ -485,7 +485,7 @@ void ChSystemMulticore::UpdateLinks() {
         link->InjectConstraints(*descriptor);
 
         for (int j = 0; j < link->GetDOC_c(); j++)
-            data_manager->host_data.bilateral_type.push_back(BilateralType::BODY_BODY);
+            data_manager->host_data.bilateral_type.push_back(ChConstraintBilateral::Type::BODY_BODY);
     }
 }
 
@@ -494,26 +494,26 @@ void ChSystemMulticore::UpdateLinks() {
 // specified physics item. Return UNKNOWN if the item has no associated
 // bilateral constraints or if it is unsupported.
 //
-BilateralType GetBilateralType(ChPhysicsItem* item) {
+ChConstraintBilateral::Type ChSystemMulticore::GetBilateralType(ChPhysicsItem* item) {
     if (item->GetDOC_c() == 0)
-        return BilateralType::UNKNOWN;
+        return ChConstraintBilateral::Type::UNKNOWN;
 
     if (dynamic_cast<ChShaftsCouple*>(item))
-        return BilateralType::SHAFT_SHAFT;
+        return ChConstraintBilateral::Type::SHAFT_SHAFT;
 
     if (dynamic_cast<ChShaftsPlanetary*>(item))
-        return BilateralType::SHAFT_SHAFT_SHAFT;
+        return ChConstraintBilateral::Type::SHAFT_SHAFT_SHAFT;
 
     if (dynamic_cast<ChShaftsGearbox*>(item) || dynamic_cast<ChShaftsGearboxAngled*>(item))
-        return BilateralType::SHAFT_SHAFT_BODY;
+        return ChConstraintBilateral::Type::SHAFT_SHAFT_BODY;
 
     if (dynamic_cast<ChShaftsBody*>(item))
-        return BilateralType::SHAFT_BODY;
+        return ChConstraintBilateral::Type::SHAFT_BODY;
 
     // Debug check - do we ignore any constraints?
     assert(item->GetDOC_c() == 0);
 
-    return BilateralType::UNKNOWN;
+    return ChConstraintBilateral::Type::UNKNOWN;
 }
 
 //
@@ -543,9 +543,9 @@ void ChSystemMulticore::UpdateOtherPhysics() {
         item->VariablesFbLoadForces(GetStep());
         item->VariablesQbLoadSpeed();
 
-        BilateralType type = GetBilateralType(item.get());
+        ChConstraintBilateral::Type type = GetBilateralType(item.get());
 
-        if (type == BilateralType::UNKNOWN)
+        if (type == ChConstraintBilateral::Type::UNKNOWN)
             continue;
 
         item->InjectConstraints(*descriptor);
@@ -567,19 +567,19 @@ void ChSystemMulticore::UpdateBilaterals() {
         if (mconstraints[ic]->IsActive()) {
             data_manager->host_data.bilateral_mapping.push_back(ic);
             switch (data_manager->host_data.bilateral_type[ic]) {
-                case BilateralType::BODY_BODY:
+                case ChConstraintBilateral::Type::BODY_BODY:
                     data_manager->nnz_bilaterals += 12;
                     break;
-                case BilateralType::SHAFT_SHAFT:
+                case ChConstraintBilateral::Type::SHAFT_SHAFT:
                     data_manager->nnz_bilaterals += 2;
                     break;
-                case BilateralType::SHAFT_SHAFT_SHAFT:
+                case ChConstraintBilateral::Type::SHAFT_SHAFT_SHAFT:
                     data_manager->nnz_bilaterals += 3;
                     break;
-                case BilateralType::SHAFT_BODY:
+                case ChConstraintBilateral::Type::SHAFT_BODY:
                     data_manager->nnz_bilaterals += 7;
                     break;
-                case BilateralType::SHAFT_SHAFT_BODY:
+                case ChConstraintBilateral::Type::SHAFT_SHAFT_BODY:
                     data_manager->nnz_bilaterals += 8;
                     break;
             }
@@ -779,7 +779,7 @@ double ChSystemMulticore::GetTimerCollision() const {
     return data_manager->system_timer.GetTime("collision");
 }
 
-settings_container* ChSystemMulticore::GetSettings() {
+ChSettingsMulticore* ChSystemMulticore::GetSettings() {
     return &(data_manager->settings);
 }
 

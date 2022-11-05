@@ -24,19 +24,20 @@
 #include "chrono/utils/ChOpenMP.h"
 #include "chrono/collision/chrono/ChBroadphase.h"
 #include "chrono/collision/chrono/ChNarrowphase.h"
-#include "chrono_multicore/ChMulticoreDefines.h"
 #include "chrono/multicore_math/ChMulticoreMath.h"
+
+#include "chrono_multicore/ChApiMulticore.h"
 
 namespace chrono {
 
 /// @addtogroup multicore_module
 /// @{
 
-/// Chrono::Multicore collision_settings.
+/// Chrono::Multicore collision settings.
 /// This structure that contains all settings associated with the collision detection phase.
-class collision_settings {
+class CH_MULTICORE_API ChCollisionSettingsMulticore {
   public:
-    collision_settings()
+    ChCollisionSettingsMulticore()
         : use_aabb_active(false),
           collision_envelope(0),
           bins_per_axis(vec3(10, 10, 10)),
@@ -86,11 +87,38 @@ class collision_settings {
     collision::ChNarrowphase::Algorithm narrowphase_algorithm;
 };
 
-/// Chrono::Multicore solver_settings.
+/// Chrono::Multicore solver settings.
 /// This structure contains all settings associated with the Chrono::Multicore solver.
-class solver_settings {
+class CH_MULTICORE_API ChSolverSettingsMulticore {
   public:
-    solver_settings() {
+    /// Iterative solver type.
+    enum class Type {
+        STEEPEST_DESCENT,            ///< steepest descent
+        GRADIENT_DESCENT,            ///< gradient descent
+        CONJUGATE_GRADIENT,          ///< conjugate gradient
+        CONJUGATE_GRADIENT_SQUARED,  ///< conjugate gradient squared
+        BICONJUGATE_GRADIENT,        ///< BiCG
+        BICONJUGATE_GRADIENT_STAB,   ///< BiCGStab
+        MINIMUM_RESIDUAL,            ///< MINRES (minimum residual)
+        QUASI_MINIMUM_RESIDUAL,      ///< Quasi MINRES
+        APGD,                        ///< Accelerated Projected Gradient Descent
+        APGDREF,                     ///< reference implementation for APGD
+        JACOBI,                      ///< Jacobi
+        GAUSS_SEIDEL,                ///< Gauss-Seidel
+        PDIP,                        ///< Primal-Dual Interior Point
+        BB,                          ///< Barzilai-Borwein
+        SPGQP                        ///< Spectral Projected Gradient (QP projection)
+    };
+
+    /// Enumeration for solver mode.
+    enum class Mode {
+        NORMAL,    ///< solve only normal contact impulses
+        SLIDING,   ///< solve for contact and sliding friction impulses
+        SPINNING,  ///< solve for rolling resistance impulses
+        BILATERAL  ///< solve for bilateral Lagrange multipliers
+    };
+
+    ChSolverSettingsMulticore() {
         tolerance = 1e-4;
         tol_speed = 1e-4;
         tolerance_objective = 1e-6;
@@ -108,9 +136,9 @@ class solver_settings {
         max_iteration_sliding = 100;
         max_iteration_spinning = 0;
         max_iteration_bilateral = 100;
-        solver_type = SolverType::APGD;
-        solver_mode = SolverMode::SLIDING;
-        local_solver_mode = SolverMode::NORMAL;
+        solver_type = Type::APGD;
+        solver_mode = Mode::SLIDING;
+        local_solver_mode = Mode::NORMAL;
 
         contact_force_model = ChSystemSMC::Hertz;
         adhesion_force_model = ChSystemSMC::Constant;
@@ -130,7 +158,7 @@ class solver_settings {
 
     /// The solver type variable defines name of the solver that will be used to
     /// solve the NSC problem
-    SolverType solver_type;
+    Type solver_type;
     /// There are three possible solver modes
     /// NORMAL will only solve for the normal and bilateral constraints.
     /// SLIDING will only solve for the normal, sliding and bilateral constraints.
@@ -140,11 +168,11 @@ class solver_settings {
     /// friction and sliding friction so this is how you can improve performance
     /// when you know that you don't need spinning/rolling friction or want to solve
     /// a problem frictionless.
-    SolverMode solver_mode;
+    Mode solver_mode;
 
     /// This should not be set by the user, depending on how the iterations are set
     /// The variable is used to specify what type of solve is currently being done.
-    SolverMode local_solver_mode;
+    Mode local_solver_mode;
 
     /// This parameter is a constant used when solving a problem with compliance.
     real alpha;
@@ -216,9 +244,9 @@ class solver_settings {
 };
 
 /// Aggregate of all settings for Chrono::Multicore.
-class settings_container {
+class CH_MULTICORE_API ChSettingsMulticore {
   public:
-    settings_container() {
+    ChSettingsMulticore() {
         min_threads = 1;
 #ifdef _OPENMP
         max_threads = omp_get_num_procs();
@@ -226,12 +254,11 @@ class settings_container {
         max_threads = 1;
 #endif
         perform_thread_tuning = false;
-        system_type = SystemType::SYSTEM_NSC;
         step_size = 0.01;
     }
 
-    collision_settings collision;  ///< settings for collision detection
-    solver_settings solver;        ///< settings for iterative solver
+    ChCollisionSettingsMulticore collision;  ///< settings for collision detection
+    ChSolverSettingsMulticore solver;  ///< settings for iterative solver
 
     real step_size;  ///< current integration step size
     real3 gravity;   ///< gravitational acceleration vector
@@ -240,7 +267,6 @@ class settings_container {
     bool perform_thread_tuning;  ///< dynamically tune number of threads
     int min_threads;             ///< lower bound for number of threads (if dynamic tuning)
     int max_threads;             ///< maximum bound for number of threads (if dynamic tuning)
-    SystemType system_type;      ///< system type (NSC or SMC)
 
     friend class ChSystemMulticore;
     friend class ChSystemMulticoreNSC;

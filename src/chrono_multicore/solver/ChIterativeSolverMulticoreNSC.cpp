@@ -35,13 +35,13 @@ void ChIterativeSolverMulticoreNSC::RunTimeStep() {
     // Compute the offsets and number of constrains depending on the solver mode
     const auto num_rigid_contacts = data_manager->cd_data->num_rigid_contacts;
 
-    if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL) {
         data_manager->rigid_rigid->offset = 1;
         data_manager->num_unilaterals = 1 * num_rigid_contacts;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::SLIDING) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING) {
         data_manager->rigid_rigid->offset = 3;
         data_manager->num_unilaterals = 3 * num_rigid_contacts;
-    } else if (data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+    } else if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         data_manager->rigid_rigid->offset = 6;
         data_manager->num_unilaterals = 6 * num_rigid_contacts;
     }
@@ -102,11 +102,11 @@ void ChIterativeSolverMulticoreNSC::RunTimeStep() {
 
     PerformStabilization();
 
-    if (data_manager->settings.solver.solver_mode == SolverMode::NORMAL ||
-        data_manager->settings.solver.solver_mode == SolverMode::SLIDING ||
-        data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::NORMAL ||
+        data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING ||
+        data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         if (data_manager->settings.solver.max_iteration_normal > 0) {
-            data_manager->settings.solver.local_solver_mode = SolverMode::NORMAL;
+            data_manager->settings.solver.local_solver_mode = ChSolverSettingsMulticore::Mode::NORMAL;
             SetR();
             data_manager->measures.solver.total_iteration +=
                 solver->Solve(ShurProductFull,                                     //
@@ -117,10 +117,10 @@ void ChIterativeSolverMulticoreNSC::RunTimeStep() {
                               data_manager->host_data.gamma);                      //
         }
     }
-    if (data_manager->settings.solver.solver_mode == SolverMode::SLIDING ||
-        data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SLIDING ||
+        data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         if (data_manager->settings.solver.max_iteration_sliding > 0) {
-            data_manager->settings.solver.local_solver_mode = SolverMode::SLIDING;
+            data_manager->settings.solver.local_solver_mode = ChSolverSettingsMulticore::Mode::SLIDING;
             SetR();
             data_manager->measures.solver.total_iteration +=
                 solver->Solve(ShurProductFull,                                      //
@@ -131,9 +131,9 @@ void ChIterativeSolverMulticoreNSC::RunTimeStep() {
                               data_manager->host_data.gamma);                       //
         }
     }
-    if (data_manager->settings.solver.solver_mode == SolverMode::SPINNING) {
+    if (data_manager->settings.solver.solver_mode == ChSolverSettingsMulticore::Mode::SPINNING) {
         if (data_manager->settings.solver.max_iteration_spinning > 0) {
-            data_manager->settings.solver.local_solver_mode = SolverMode::SPINNING;
+            data_manager->settings.solver.local_solver_mode = ChSolverSettingsMulticore::Mode::SPINNING;
             SetR();
             data_manager->measures.solver.total_iteration +=
                 solver->Solve(ShurProductFull,                                       //
@@ -215,16 +215,16 @@ void ChIterativeSolverMulticoreNSC::ComputeD() {
     int num_rows = num_bilaterals + num_fluid_fluid;
 
     switch (data_manager->settings.solver.solver_mode) {
-        case SolverMode::NORMAL:
+        case ChSolverSettingsMulticore::Mode::NORMAL:
             nnz_total += nnz_normal;
             num_rows += num_normal;
             break;
-        case SolverMode::SLIDING:
+        case ChSolverSettingsMulticore::Mode::SLIDING:
             nnz_total += nnz_normal + nnz_tangential;
             num_rows += num_normal + num_tangential;
 
             break;
-        case SolverMode::SPINNING:
+        case ChSolverSettingsMulticore::Mode::SPINNING:
             nnz_total += nnz_normal + nnz_tangential + nnz_spinning;
             num_rows += num_normal + num_tangential + num_spinning;
             break;
@@ -338,20 +338,20 @@ void ChIterativeSolverMulticoreNSC::SetR() {
             subvector(R_full, num_unilaterals + num_bilaterals + num_rigid_fluid, num_fluid_bodies);
 
         switch (data_manager->settings.solver.local_solver_mode) {
-            case SolverMode::BILATERAL: {
+            case ChSolverSettingsMulticore::Mode::BILATERAL: {
             } break;
 
-            case SolverMode::NORMAL: {
+            case ChSolverSettingsMulticore::Mode::NORMAL: {
                 subvector(R, 0, num_rigid_contacts) = subvector(R_full, 0, num_rigid_contacts);
             } break;
 
-            case SolverMode::SLIDING: {
+            case ChSolverSettingsMulticore::Mode::SLIDING: {
                 subvector(R, 0, num_rigid_contacts) = subvector(R_full, 0, num_rigid_contacts);
                 subvector(R, num_rigid_contacts, num_rigid_contacts * 2) =
                     subvector(R_full, num_rigid_contacts, num_rigid_contacts * 2);
             } break;
 
-            case SolverMode::SPINNING: {
+            case ChSolverSettingsMulticore::Mode::SPINNING: {
                 subvector(R, 0, num_rigid_contacts) = subvector(R_full, 0, num_rigid_contacts);
                 subvector(R, num_rigid_contacts, num_rigid_contacts * 2) =
                     subvector(R_full, num_rigid_contacts, num_rigid_contacts * 2);
@@ -383,29 +383,29 @@ void ChIterativeSolverMulticoreNSC::PreSolve() {
     // Currently not supported, might be added back in the future
 }
 
-void ChIterativeSolverMulticoreNSC::ChangeSolverType(SolverType type) {
+void ChIterativeSolverMulticoreNSC::ChangeSolverType(ChSolverSettingsMulticore::Type type) {
     data_manager->settings.solver.solver_type = type;
 
     if (this->solver) {
         delete (this->solver);
     }
     switch (type) {
-        case SolverType::APGD:
+        case ChSolverSettingsMulticore::Type::APGD:
             solver = new ChSolverMulticoreAPGD();
             break;
-        case SolverType::APGDREF:
+        case ChSolverSettingsMulticore::Type::APGDREF:
             solver = new ChSolverMulticoreAPGDREF();
             break;
-        case SolverType::BB:
+        case ChSolverSettingsMulticore::Type::BB:
             solver = new ChSolverMulticoreBB();
             break;
-        case SolverType::SPGQP:
+        case ChSolverSettingsMulticore::Type::SPGQP:
             solver = new ChSolverMulticoreSPGQP();
             break;
-        case SolverType::JACOBI:
+        case ChSolverSettingsMulticore::Type::JACOBI:
             solver = new ChSolverMulticoreJacobi();
             break;
-        case SolverType::GAUSS_SEIDEL:
+        case ChSolverSettingsMulticore::Type::GAUSS_SEIDEL:
             solver = new ChSolverMulticoreGS();
             break;
         default:
