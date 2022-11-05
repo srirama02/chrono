@@ -56,9 +56,9 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DCASCADE_LIBDIR=$HOME/miniconda/lib \
  -DENABLE_MODULE_PARDISO_MKL=$(PARDISO_MKL_ENABLE) \
  -DMKL_INCLUDE_DIR=$MKL_INCLUDE_DIR/include \
- -DIRRLICHT_ROOT="$HOME/miniconda/include/irrlicht" \
+ -DIRRLICHT_ROOT=$HOME/miniconda/include/irrlicht \
  -DMKL_RT_LIBRARY=$MKL_LIB_DIR/lib/libmkl_rt.dylib \
- -DEIGEN3_INCLUDE_DIR="$HOME/miniconda/include/eigen3" \
+ -DEIGEN3_INCLUDE_DIR=$HOME/miniconda/include/eigen3 \
  -DPYCHRONO_DATA_PATH=../../../../../../share/chrono/data/ \
  ./..
 # Build step
