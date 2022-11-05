@@ -11,6 +11,10 @@ try:
 except:
     pass
 try:
+    import _mcore
+except:
+    pass
+try:
     @ADD_OCC_DLL@
     import _cascade
 except:

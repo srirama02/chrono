@@ -15,6 +15,10 @@ try:
 except:
     pass
 try:
+    import _mcore
+except:
+    pass
+try:
     import _cascade
 except:
     pass
