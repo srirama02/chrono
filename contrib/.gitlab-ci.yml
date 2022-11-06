@@ -641,9 +641,6 @@ macos-apple:monterey:test:
     - conda install --yes conda-build anaconda-client conda-verify
     - conda config --add channels conda-forge
     - conda config --add channels dlr-sc
-    #
-    - conda install --yes irrlicht
-    - conda install --yes eigen
     #- conda install -c dlr-sc opencascade --yes
     #- conda install -c intel mkl-devel --yes
     - ls $HOME/miniconda/lib/
