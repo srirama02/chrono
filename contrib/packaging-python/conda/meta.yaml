@@ -47,7 +47,6 @@ requirements:
     - numpy >=1.22.0 # [not osx]
     - glew
     - glfw
-    - pythonocc-core # [not arm64]
 
 test:
   requires:
