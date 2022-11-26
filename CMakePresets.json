@@ -100,6 +100,7 @@
 				"IRRLICHT_ROOT": "C:/Users/builder/Documents/irrlicht-1.8.5",
 				"PYTHON_EXECUTABLE": "C:/Users/builder/miniconda3/python.exe",
 				"SWIG_EXECUTABLE": "C:/Users/builder/Documents/swigwin-4.0.2/swig.exe",
+				"MPIEXEC_EXECUTABLE": "C:/Program Files/Microsoft MPI/Bin/mpiexec.exe",
 				"USE_MULTICORE_CUDA": "OFF",
 				"ENABLE_HDF5": "OFF"
 			}
@@ -122,9 +123,7 @@
 				"DNUMPY_INCLUDE_DIR": "C:/Users/builder/miniconda3/envs/build-env/",
 				"OptiX_INSTALL_DIR": "C:/Program Files/NVIDIA Corporation/OptiX SDK 7.2.0",
 				"CUDA_TOOLKIT_ROOT_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7",
-				"THRUST_INCLUDE_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7/include",
-				"MPIEXEC_EXECUTABLE": "C:/Program Files/Microsoft MPI/Bin/",
-				"MPI_HOME": "C:/Program Files/Microsoft MPI/"
+				"THRUST_INCLUDE_DIR": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.7/include"
 			}
 		},
 		{
