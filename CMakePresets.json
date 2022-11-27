@@ -100,7 +100,6 @@
 				"IRRLICHT_ROOT": "C:/Users/builder/Documents/irrlicht-1.8.5",
 				"PYTHON_EXECUTABLE": "C:/Users/builder/miniconda3/python.exe",
 				"SWIG_EXECUTABLE": "C:/Users/builder/Documents/swigwin-4.0.2/swig.exe",
-				"MPIEXEC_EXECUTABLE": "C:/Program Files/Microsoft MPI/Bin/mpiexec.exe",
 				"USE_MULTICORE_CUDA": "OFF",
 				"ENABLE_HDF5": "OFF"
 			}
