@@ -52,7 +52,7 @@ namespace vehicle {
 
 /// Concrete class for a (rigid) road loaded from an OpenCRG file.
 /// This type of terrain can be used in conjunction with tire models that perform their own collision detection
-/// (e.g. ChPacejkaTire, ChFiala, and ChLugreTire).
+/// (e.g., ChTMeasy ChPac89, ChPac02, ChFiala).
 class CH_VEHICLE_API CRGTerrain : public ChTerrain {
   public:
     /// Construct a default CRGTerrain.
@@ -119,6 +119,9 @@ class CH_VEHICLE_API CRGTerrain : public ChTerrain {
     /// Get the start position (location and orientation).
     /// This is the (x,y,z) road location at CRG parameters u=v=0.
     ChCoordsys<> GetStartPosition();
+
+    /// Get ground body (carries visualization assets).
+    std::shared_ptr<ChBody> GetGround() const { return m_ground; }
 
     /// Generate roadside posts left and right (optional)
     void SetRoadsidePostDistance(double dist) { m_post_distance = ChClamp(dist, 0.0, 100.0); };
