@@ -356,8 +356,7 @@ linux:almalinux:test:
   tags:
   - windows11
   before_script:
-  - set PATH=c
-  - echo %PATH% 
+  - $env:path -split ";"
   - '& "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\Launch-VsDevShell.ps1"'
   - $env:CONDA_INSTALL_LOCN="C:\Users\builder\miniconda3"
   - echo $CI_PROJECT_DIR
