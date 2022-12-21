@@ -35,7 +35,7 @@ requirements:
     - freeglut # [linux]
     - libxxf86vm-devel-cos7-x86_64 # [linux]
     - irrlicht
-    - opencascade # [not osx]
+    - occt
     - numpy >=1.22.0 # [not osx]
     - glew
     - glfw
