@@ -36,7 +36,7 @@ requirements:
     - libxxf86vm-devel-cos7-x86_64 # [linux]
     - irrlicht ==1.8.5
     - occt ==7.4.0
-    - numpy >=1.22.0
+    - numpy >=1.24.0
     - glew
     - glfw
     - eigen ==3.4.0
@@ -45,7 +45,7 @@ requirements:
     - python
     - pythonocc-core ==7.4.0
     - mkl ==2023.0.0 # [not arm64]
-    - numpy >=1.22.0
+    - numpy >=1.24.0
     - irrlicht ==1.8.5
     - glew
     - glfw
