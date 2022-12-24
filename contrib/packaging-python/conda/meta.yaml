@@ -39,7 +39,7 @@ requirements:
     - numpy ==1.24.0
     - glew
     - glfw
-    - eigen ==3.3.4
+    - eigen ==3.4.0
 
   run:
     - python
