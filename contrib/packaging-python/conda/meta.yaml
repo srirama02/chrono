@@ -24,27 +24,29 @@ build:
 requirements:
   build:
     - python
-    - cmake          # [not win]
+    - cmake   # [not win]
     - ninja   # [linux or osx]
     - pip     # [linux]
     - jinja2  # [linux]
     - libglvnd-glx-cos7-x86_64 # [linux]
     - swig
-    - mkl # [not arm64]
-    - mkl-devel # [not arm64]
+    - mkl ==2023.0.0 # [not arm64]
+    - mkl-devel ==2023.0.0 # [not arm64]
     - freeglut # [linux]
     - libxxf86vm-devel-cos7-x86_64 # [linux]
-    - irrlicht
-    - opencascade
-    - numpy >=1.24.0
+    - irrlicht ==1.8.5
+    - occt ==7.4.0
+    - numpy ==1.24.0
     - glew
     - glfw
-    - eigen
+    - eigen ==3.3.4
 
   run:
     - python
-    - mkl # [not arm64]
-    - numpy >=1.24.0
+    - pythonocc-core ==7.4.0
+    - mkl ==2023.0.0 # [not arm64]
+    - numpy ==1.24.0
+    - irrlicht ==1.8.5
     - glew
     - glfw
 
