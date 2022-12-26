@@ -20,9 +20,8 @@ requirements:
     - cmake   # [not win]
     - ninja   # [linux or osx]
     - swig
-    - mkl ==2023.0.0 # [not arm64]
-    - mkl-devel ==2023.0.0 # [not arm64]
-    - irrlicht ==1.8.5
+    - mkl-devel # [not arm64]
+    - irrlicht
     - occt ==7.4.0
     - numpy >=1.24.0
     - glew
@@ -32,12 +31,13 @@ requirements:
   run:
     - python
     - pythonocc-core ==7.4.0
-    - mkl ==2023.0.0 # [not arm64]
+    - mkl # [not arm64]
     - numpy >=1.24.0
-    - irrlicht ==1.8.5
+    - irrlicht
     - glew
     - glfw
-
+    - eigen ==3.4.0
+    
 test:
   requires:
     - wxpython          [py27]
