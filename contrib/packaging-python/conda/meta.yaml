@@ -26,7 +26,7 @@ requirements:
     - swig
     - mkl-devel ==2020.0.0 # [not arm64]
     - irrlicht
-    - occt ==7.4.0
+    - occt ==7.4.0 # [not arm64]
     - numpy >=1.24.0
     - glew
     - glfw
@@ -34,7 +34,7 @@ requirements:
 
   run:
     - python
-    - pythonocc-core ==7.4.0 # [py<=39]
+    - pythonocc-core ==7.4.0 # [py<=39 and not arm64]
     - mkl ==2020.0.0 # [not arm64]
     - numpy >=1.24.0
     - irrlicht
