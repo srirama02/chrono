@@ -28,7 +28,7 @@ if [ `uname -m` == x86_64 ]; then
     PARDISO_MKL_ENABLE="ON"
     #Setting MKL directory values
     MKL_INCLUDE_DIR=`cd $HOME/miniconda/pkgs/mkl-include-*/; pwd`
-    MKL_LIB_DIR=`cd $HOME/miniconda/pkgs/mkl-2022*/; pwd`
+    MKL_LIB_DIR=`cd $HOME/miniconda/pkgs/mkl-2020*/; pwd`
 fi
 
 # Configure step
@@ -54,7 +54,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DENABLE_MODULE_CASCADE=ON \
  -DCASCADE_INCLUDE_DIR=$HOME/miniconda/include/opencascade \
  -DCASCADE_LIBDIR=$HOME/miniconda/lib \
- -DENABLE_MODULE_PARDISO_MKL=$(PARDISO_MKL_ENABLE) \
+ -DENABLE_MODULE_PARDISO_MKL=$PARDISO_MKL_ENABLE \
  -DMKL_INCLUDE_DIR=$MKL_INCLUDE_DIR/include \
  -DIRRLICHT_ROOT=$PREFIX/include/irrlicht \
  -DMKL_RT_LIBRARY=$MKL_LIB_DIR/lib/libmkl_rt.dylib \
