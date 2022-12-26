@@ -19,6 +19,10 @@ requirements:
     - python
     - cmake   # [not win]
     - ninja   # [linux or osx]
+    - jinja2  # [linux]
+    - libglvnd-glx-cos7-x86_64 # [linux]
+    - freeglut # [linux]
+    - libxxf86vm-devel-cos7-x86_64 # [linux]
     - swig
     - mkl-devel ==2020.0.0 # [not arm64]
     - irrlicht
@@ -30,7 +34,7 @@ requirements:
 
   run:
     - python
-    - pythonocc-core ==7.4.0
+    - pythonocc-core ==7.4.0 # [py<=39]
     - mkl ==2020.0.0 # [not arm64]
     - numpy >=1.24.0
     - irrlicht

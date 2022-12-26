@@ -258,7 +258,6 @@ linux:ubuntu2004:test:
     - conda update conda --yes
     - conda config --add channels https://conda.anaconda.org/conda-forge
     - conda config --add channels https://conda.anaconda.org/intel
-    - conda config --add channels https://conda.anaconda.org/dlr-sc
   environment:
     name: pychrono-ubuntu2004
     url: https://anaconda.org/projectchrono/pychrono
