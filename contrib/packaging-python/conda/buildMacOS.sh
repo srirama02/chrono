@@ -50,16 +50,13 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DBUILD_DEMOS=OFF \
  -DBUILD_TESTING=OFF \
  -DBUILD_BENCHMARKING=OFF \
- -DBUILD_GMOCK=OFF \
- -DENABLE_MODULE_CASCADE=ON \
- -DCASCADE_INCLUDE_DIR=$HOME/miniconda/include/opencascade \
- -DCASCADE_LIBDIR=$HOME/miniconda/lib \
+ -DENABLE_MODULE_CASCADE=OFF \
  -DENABLE_MODULE_PARDISO_MKL=$PARDISO_MKL_ENABLE \
  -DMKL_INCLUDE_DIR=$MKL_INCLUDE_DIR/include \
  -DIRRLICHT_ROOT=$PREFIX/include/irrlicht \
  -DMKL_RT_LIBRARY=$MKL_LIB_DIR/lib/libmkl_rt.dylib \
  -DEIGEN3_INCLUDE_DIR=$PREFIX/include/eigen3 \
- -DPYCHRONO_DATA_PATH=../../../../../../share/chrono/data/ \
+ -DCH_PYCHRONO_DATA_PATH=../../../../../../share/chrono/data/ \
  ./..
 # Build step
 # on linux travis, limit the number of concurrent jobs otherwise
