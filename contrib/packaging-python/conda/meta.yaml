@@ -9,7 +9,6 @@ source:
 build:
   rpaths:
     - lib/
-  script_env:
 
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   binary_relocation: true
@@ -41,15 +40,9 @@ requirements:
     - glew
     - glfw
     - eigen ==3.4.0
-    
-test:
-  requires:
-    - wxpython          [py27]
-    - pyside            [py27]
 
 about:
   home: https://github.com/projectchrono/chrono
   license: BSD 3-Clause
   license_family: BSD
   summary: A physics engine for constrained multi-flexible-body dynamics
-
