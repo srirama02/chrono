@@ -124,7 +124,7 @@ def main():
         patch_mat.SetRestitution(0.01)
         patch_mat.SetYoungModulus(2e7)
     patch = terrain.AddPatch(patch_mat, 
-                             chrono.ChVectorD(0, 0, 0), chrono.ChVectorD(0, 0, 1), 
+                             chrono.CSYSNORM, 
                              300, 50)
     patch.SetTexture(veh.GetDataFile("terrain/textures/tile4.jpg"), 200, 200)
     patch.SetColor(chrono.ChColor(0.8, 0.8, 0.5))
@@ -247,7 +247,7 @@ drive_type = veh.DrivelineTypeWV_AWD
 # Steering type (PITMAN_ARM or PITMAN_ARM_SHAFTS)
 steering_type = veh.SteeringTypeWV_PITMAN_ARM
 
-# Type of tire model (RIGID, RIGID_MESH, PACEJKA, LUGRE, FIALA, PAC89)
+# Type of tire model (RIGID, RIGID_MESH, FIALA, PAC89)
 tire_model = veh.TireModelType_TMEASY
 
 # Contact method
