@@ -452,6 +452,12 @@ class ChApi ChSystem : public ChIntegrableIIorder {
     /// Return the time (in seconds) for narrowphase collision detection, within the time step.
     double GetTimerCollisionNarrow() const { return collision_system->GetTimerCollisionNarrow(); }
 
+    /// Get current estimated RTF (real time factor).
+    double GetRTF() const { return m_RTF; }
+
+    /// Set (overwrite) the RTF value for this system (if calculated externally).
+    void SetRTF(double rtf) { m_RTF = rtf; }
+
     /// Resets the timers.
     void ResetTimers() {
         timer_step.reset();
@@ -954,14 +960,15 @@ class ChApi ChSystem : public ChIntegrableIIorder {
     int nthreads_collision;
 
     // timers for profiling execution speed
-    ChTimer<double> timer_step;       ///< timer for integration step
-    ChTimer<double> timer_advance;    ///< timer for time integration
-    ChTimer<double> timer_ls_solve;   ///< timer for solver (excluding setup phase)
-    ChTimer<double> timer_ls_setup;   ///< timer for solver setup
-    ChTimer<double> timer_jacobian;   ///< timer for computing/loading Jacobian information
-    ChTimer<double> timer_collision;  ///< timer for collision detection
-    ChTimer<double> timer_setup;      ///< timer for system setup
-    ChTimer<double> timer_update;     ///< timer for system update
+    ChTimer timer_step;       ///< timer for integration step
+    ChTimer timer_advance;    ///< timer for time integration
+    ChTimer timer_ls_solve;   ///< timer for solver (excluding setup phase)
+    ChTimer timer_ls_setup;   ///< timer for solver setup
+    ChTimer timer_jacobian;   ///< timer for computing/loading Jacobian information
+    ChTimer timer_collision;  ///< timer for collision detection
+    ChTimer timer_setup;      ///< timer for system setup
+    ChTimer timer_update;     ///< timer for system update
+    double m_RTF;                     ///< real-time factor (simulation time / simulated time)
 
     std::shared_ptr<ChTimestepper> timestepper;  ///< time-stepper object
 

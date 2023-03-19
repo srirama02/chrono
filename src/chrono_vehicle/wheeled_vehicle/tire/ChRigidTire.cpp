@@ -24,7 +24,7 @@
 
 #include "chrono_vehicle/wheeled_vehicle/tire/ChRigidTire.h"
 
-#include "chrono_vehicle/terrain/SCMDeformableTerrain.h"
+#include "chrono_vehicle/terrain/SCMTerrain.h"
 
 namespace chrono {
 namespace vehicle {
@@ -77,6 +77,20 @@ void ChRigidTire::Initialize(std::shared_ptr<ChWheel> wheel) {
     }
 
     wheel_body->GetCollisionModel()->BuildModel();
+}
+
+void ChRigidTire::Synchronize(double time, const ChTerrain& terrain) {
+    WheelState wheel_state = m_wheel->GetState();
+
+    // Calculate tire reference frame
+    ChCoordsys<> tire_frame;
+    double depth;
+    float mu;
+    bool contact = ChTire::DiscTerrainCollision1pt(terrain, wheel_state.pos, wheel_state.rot.GetYaxis(), GetRadius(),
+                                                   tire_frame, depth, mu);
+
+    // Calculate tire kinematics
+    CalculateKinematics(wheel_state, tire_frame);
 }
 
 void ChRigidTire::InitializeInertiaProperties() {
@@ -176,7 +190,7 @@ TerrainForce ChRigidTire::GetTireForce() const {
 TerrainForce ChRigidTire::ReportTireForce(ChTerrain* terrain) const {
     // If interacting with an SCM terrain, interrogate the terrain system
     // for the cumulative force on the associated rigid body.
-    if (auto scm = dynamic_cast<SCMDeformableTerrain*>(terrain)) {
+    if (auto scm = dynamic_cast<SCMTerrain*>(terrain)) {
         return scm->GetContactForce(m_wheel->GetSpindle());
     }
 
@@ -201,6 +215,11 @@ TerrainForce ChRigidTire::ReportTireForce(ChTerrain* terrain) const {
     */
 
     return tire_force;
+}
+
+TerrainForce ChRigidTire::ReportTireForce(ChTerrain* terrain, ChCoordsys<>& tire_frame) const {
+    std::cerr << "ChRigidTire::ReportTireForce for local frame not implemented." << std::endl;
+    throw ChException("ChRigidTire::ReportTireForce for local frame not implemented.");
 }
 
 // -----------------------------------------------------------------------------

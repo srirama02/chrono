@@ -97,8 +97,32 @@ struct DriverInputs {
 // Utility functor classes for force elements
 // -----------------------------------------------------------------------------
 
-/// Utility class for specifying a linear translational spring force.
-class CH_VEHICLE_API LinearSpringForce : public ChLinkTSDA::ForceFunctor {
+/// Base class for linear and nonlinear translational spring forces.
+class CH_VEHICLE_API SpringForce : public ChLinkTSDA::ForceFunctor {
+  public:
+    SpringForce(double preload);
+    void enable_stops(double min_length, double max_length);
+    void set_stops(const std::vector<std::pair<double, double>>& data_bump,
+                   const std::vector<std::pair<double, double>>& data_rebound);
+    void set_stops(double bump_coefficient, double rebound_coefficient);
+    double evaluate_stops(double length);
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+  protected:
+    double m_P;  ///< pre-tension
+
+    bool m_stops;
+    double m_min_length;
+    double m_max_length;
+    ChFunction_Recorder m_bump;
+    ChFunction_Recorder m_rebound;
+};
+
+/// Utility class for specifying a linear translational spring force with pre-tension.
+/// F = P - K * (length - rest_length)
+class CH_VEHICLE_API LinearSpringForce : public SpringForce {
   public:
     LinearSpringForce(double k, double preload = 0);
     virtual double evaluate(double time,
@@ -106,13 +130,36 @@ class CH_VEHICLE_API LinearSpringForce : public ChLinkTSDA::ForceFunctor {
                             double length,
                             double vel,
                             const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
     double m_k;
-    double m_f;
+};
+
+/// Utility class for specifying a nonlinear translational spring force with pre-tension.
+/// F = P - mapK(length - rest_length)
+class CH_VEHICLE_API NonlinearSpringForce : public SpringForce {
+  public:
+    NonlinearSpringForce(double preload = 0);
+    NonlinearSpringForce(const std::vector<std::pair<double, double>>& dataK, double preload = 0);
+    void add_pointK(double x, double y);
+    virtual double evaluate(double time,
+                            double rest_length,
+                            double length,
+                            double vel,
+                            const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+  private:
+    ChFunction_Recorder m_mapK;
 };
 
 /// Utility class for specifying a linear translational damper force.
+/// F = -C * vel
 class CH_VEHICLE_API LinearDamperForce : public ChLinkTSDA::ForceFunctor {
   public:
     LinearDamperForce(double c, double preload = 0);
@@ -121,126 +168,32 @@ class CH_VEHICLE_API LinearDamperForce : public ChLinkTSDA::ForceFunctor {
                             double length,
                             double vel,
                             const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
     double m_c;
 };
 
-/// Utility class for specifying a linear translational spring-damper force.
-class CH_VEHICLE_API LinearSpringDamperForce : public ChLinkTSDA::ForceFunctor {
+/// Utility class for specifying a nonlinear translational damper force.
+/// F = -mapC(vel)
+class CH_VEHICLE_API NonlinearDamperForce : public ChLinkTSDA::ForceFunctor {
   public:
-    LinearSpringDamperForce(double k, double c, double preload = 0);
-    virtual double evaluate(double time,
-                            double rest_length,
-                            double length,
-                            double vel,
-                            const ChLinkTSDA& link) override;
-
-  private:
-    double m_k;
-    double m_c;
-    double m_f;
-};
-
-/// Utility class for specifying a map translational spring force.
-class CH_VEHICLE_API MapSpringForce : public ChLinkTSDA::ForceFunctor {
-  public:
-    MapSpringForce(double preload = 0);
-    MapSpringForce(const std::vector<std::pair<double, double>>& data, double preload = 0);
-    void add_point(double x, double y);
-    virtual double evaluate(double time,
-                            double rest_length,
-                            double length,
-                            double vel,
-                            const ChLinkTSDA& link) override;
-
-  private:
-    ChFunction_Recorder m_map;
-    double m_f;
-};
-
-/// Utility class for specifying a map translational damper force.
-class CH_VEHICLE_API MapDamperForce : public ChLinkTSDA::ForceFunctor {
-  public:
-    MapDamperForce();
-    MapDamperForce(const std::vector<std::pair<double, double>>& data);
-    void add_point(double x, double y);
-    virtual double evaluate(double time,
-                            double rest_length,
-                            double length,
-                            double vel,
-                            const ChLinkTSDA& link) override;
-
-  private:
-    ChFunction_Recorder m_map;
-};
-
-/// Utility class for specifying a map translational spring-damper force with pre-tension.
-class CH_VEHICLE_API MapSpringDamperForce : public ChLinkTSDA::ForceFunctor {
-  public:
-    MapSpringDamperForce(double preload = 0);
-    MapSpringDamperForce(const std::vector<std::pair<double, double>>& dataK,
-                         const std::vector<std::pair<double, double>>& dataC,
-                         double preload = 0);
-    void add_pointK(double x, double y);
+    NonlinearDamperForce();
+    NonlinearDamperForce(const std::vector<std::pair<double, double>>& dataC);
     void add_pointC(double x, double y);
     virtual double evaluate(double time,
                             double rest_length,
                             double length,
                             double vel,
                             const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
-    ChFunction_Recorder m_mapK;
     ChFunction_Recorder m_mapC;
-    double m_f;
-};
-
-/// Utility class for specifying a map translational spring force with bump and rebound stop.
-class CH_VEHICLE_API MapSpringBistopForce : public ChLinkTSDA::ForceFunctor {
-  public:
-    MapSpringBistopForce(double spring_min_length, double spring_max_length, double preload = 0);
-    MapSpringBistopForce(const std::vector<std::pair<double, double>>& data,
-                         double spring_min_length,
-                         double spring_max_length,
-                         double preload = 0);
-    void add_point(double x, double y);
-    virtual double evaluate(double time,
-                            double rest_length,
-                            double length,
-                            double vel,
-                            const ChLinkTSDA& link) override;
-
-  private:
-    void setup_stop_maps();
-    ChFunction_Recorder m_map;
-    ChFunction_Recorder m_bump;
-    ChFunction_Recorder m_rebound;
-    double m_min_length;
-    double m_max_length;
-    double m_f;
-};
-
-/// Utility class for specifying a linear translational spring force with bump and rebound stop.
-class CH_VEHICLE_API LinearSpringBistopForce : public ChLinkTSDA::ForceFunctor {
-  public:
-    /// Use default bump stop and rebound stop maps
-    LinearSpringBistopForce(double k, double min_length, double max_length, double preload = 0);
-
-    virtual double evaluate(double time,
-                            double rest_length,
-                            double length,
-                            double vel,
-                            const ChLinkTSDA& link) override;
-
-  private:
-    double m_k;
-    double m_f;
-    double m_min_length;
-    double m_max_length;
-
-    ChFunction_Recorder m_bump;
-    ChFunction_Recorder m_rebound;
 };
 
 /// Utility class for specifying a degressive translational damper force.
@@ -263,6 +216,9 @@ class CH_VEHICLE_API DegressiveDamperForce : public ChLinkTSDA::ForceFunctor {
                             double length,
                             double vel,
                             const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
     double m_c_compression;
@@ -271,65 +227,174 @@ class CH_VEHICLE_API DegressiveDamperForce : public ChLinkTSDA::ForceFunctor {
     double m_degr_expansion;
 };
 
-/// Utility class for specifying a linear rotational spring torque.
-class CH_VEHICLE_API LinearSpringTorque : public ChLinkRSDA::TorqueFunctor {
+/// Utility class for specifying a linear translational spring-damper force with pre-tension.
+/// F = P - K * (length - rest_length) - C * vel
+class CH_VEHICLE_API LinearSpringDamperForce : public SpringForce {
   public:
-    LinearSpringTorque(double k, double rest_angle = 0, double preload = 0);
-    virtual double evaluate(double time, double angle, double vel, const ChLinkRSDA& link) override;
+    LinearSpringDamperForce(double k, double c, double preload = 0);
+    virtual double evaluate(double time,
+                            double rest_length,
+                            double length,
+                            double vel,
+                            const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
     double m_k;
-    double m_t;
-    double m_rest_angle;
+    double m_c;
+};
+
+/// Utility class for specifying a nonlinear translational spring-damper force with pre-tension.
+/// F = P - mapK(length - rest_length) - mapC(vel)
+class CH_VEHICLE_API NonlinearSpringDamperForce : public SpringForce {
+  public:
+    NonlinearSpringDamperForce(double preload = 0);
+    NonlinearSpringDamperForce(const std::vector<std::pair<double, double>>& dataK,
+                               const std::vector<std::pair<double, double>>& dataC,
+                               double preload = 0);
+    void add_pointK(double x, double y);
+    void add_pointC(double x, double y);
+    virtual double evaluate(double time,
+                            double rest_length,
+                            double length,
+                            double vel,
+                            const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+  private:
+    ChFunction_Recorder m_mapK;
+    ChFunction_Recorder m_mapC;
+};
+
+/// Utility class for specifying a general nonlinear translational spring-damper force with pre-tension.
+/// F = P - map(length - rest_length, vel)
+class CH_VEHICLE_API MapSpringDamperForce : public SpringForce {
+  public:
+    MapSpringDamperForce(double preload = 0);
+    MapSpringDamperForce(const std::vector<double>& defs,
+                         const std::vector<double>& vels,
+                         ChMatrixConstRef data,
+                         double preload = 0);
+    void set_deformations(const std::vector<double> defs);
+    void add_pointC(double x, const std::vector<double>& y);
+    virtual double evaluate(double time,
+                            double rest_length,
+                            double length,
+                            double vel,
+                            const ChLinkTSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+    void print_data();
+
+  private:
+    std::vector<double> m_defs;
+    std::vector<double> m_vels;
+    ChMatrixDynamic<double> m_data;
+
+    std::pair<int, int> m_last;
+};
+
+// -----------------------------------------------------------------------------
+// Utility functor classes for torque elements
+// -----------------------------------------------------------------------------
+
+/// Utility class for specifying a linear rotational spring torque.
+class CH_VEHICLE_API LinearSpringTorque : public ChLinkRSDA::TorqueFunctor {
+  public:
+    LinearSpringTorque(double k, double preload = 0);
+    virtual double evaluate(double time, double rest_angle, double angle, double vel, const ChLinkRSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+  private:
+    double m_k;
+    double m_P;
+};
+
+/// Utility class for specifying a nonlinear rotational spring torque.
+class CH_VEHICLE_API NonlinearSpringTorque : public ChLinkRSDA::TorqueFunctor {
+  public:
+    NonlinearSpringTorque(double preload = 0);
+    NonlinearSpringTorque(const std::vector<std::pair<double, double>>& dataK, double preload = 0);
+    void add_pointK(double x, double y);
+    virtual double evaluate(double time, double rest_angle, double angle, double vel, const ChLinkRSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+  private:
+    ChFunction_Recorder m_mapK;
+    double m_P;
 };
 
 /// Utility class for specifying a linear rotational damper torque.
 class CH_VEHICLE_API LinearDamperTorque : public ChLinkRSDA::TorqueFunctor {
   public:
     LinearDamperTorque(double c);
-    virtual double evaluate(double time, double angle, double vel, const ChLinkRSDA& link) override;
+    virtual double evaluate(double time, double rest_angle, double angle, double vel, const ChLinkRSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
     double m_c;
+};
+
+/// Utility class for specifying a nonlinear rotational damper torque.
+class CH_VEHICLE_API NonlinearDamperTorque : public ChLinkRSDA::TorqueFunctor {
+  public:
+    NonlinearDamperTorque();
+    NonlinearDamperTorque(const std::vector<std::pair<double, double>>& dataC);
+    void add_pointC(double x, double y);
+    virtual double evaluate(double time, double rest_angle, double angle, double vel, const ChLinkRSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
+
+  private:
+    ChFunction_Recorder m_mapC;
 };
 
 /// Utility class for specifying a linear rotational spring-damper torque.
 class CH_VEHICLE_API LinearSpringDamperTorque : public ChLinkRSDA::TorqueFunctor {
   public:
-    LinearSpringDamperTorque(double k, double c, double rest_angle = 0, double preload = 0);
-    virtual double evaluate(double time, double angle, double vel, const ChLinkRSDA& link) override;
+    LinearSpringDamperTorque(double k, double c, double preload = 0);
+    virtual double evaluate(double time, double rest_angle, double angle, double vel, const ChLinkRSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
     double m_k;
     double m_c;
-    double m_t;
-    double m_rest_angle;
+    double m_P;
 };
 
-/// Utility class for specifying a map rotational spring torque.
-class CH_VEHICLE_API MapSpringTorque : public ChLinkRSDA::TorqueFunctor {
+/// Utility class for specifying a nonlinear rotational spring-damper torque.
+class CH_VEHICLE_API NonlinearSpringDamperTorque : public ChLinkRSDA::TorqueFunctor {
   public:
-    MapSpringTorque(double rest_angle = 0, double preload = 0);
-    MapSpringTorque(const std::vector<std::pair<double, double>>& data, double rest_angle = 0, double preload = 0);
-    void add_point(double x, double y);
-    virtual double evaluate(double time, double angle, double vel, const ChLinkRSDA& link) override;
+    NonlinearSpringDamperTorque(double preload = 0);
+    NonlinearSpringDamperTorque(const std::vector<std::pair<double, double>>& dataK,
+                                const std::vector<std::pair<double, double>>& dataC,
+                                double preload = 0);
+    void add_pointK(double x, double y);
+    void add_pointC(double x, double y);
+    virtual double evaluate(double time, double rest_angle, double angle, double vel, const ChLinkRSDA& link) override;
+#ifndef SWIG
+    virtual rapidjson::Value exportJSON(rapidjson::Document::AllocatorType& allocator) override;
+#endif
 
   private:
-    ChFunction_Recorder m_map;
-    double m_rest_angle;
-    double m_t;
-};
-
-/// Utility class for specifying a map rotational damper torque.
-class CH_VEHICLE_API MapDamperTorque : public ChLinkRSDA::TorqueFunctor {
-  public:
-    MapDamperTorque();
-    MapDamperTorque(const std::vector<std::pair<double, double>>& data);
-    void add_point(double x, double y);
-    virtual double evaluate(double time, double angle, double vel, const ChLinkRSDA& link) override;
-
-  private:
-    ChFunction_Recorder m_map;
+    ChFunction_Recorder m_mapK;
+    ChFunction_Recorder m_mapC;
+    double m_P;
 };
 
 // -----------------------------------------------------------------------------
@@ -353,7 +418,8 @@ enum class TireModelType {
     FEA,         ///< FEA co-rotational tire
     PAC89,       ///< Pacejka 89 (magic formula) tire
     TMEASY,      ///< Tire Model Made Easy tire (G. Rill)
-    PAC02        ///< Pacejka 02 (magic formula) tire
+    PAC02,       ///< Pacejka 02 (magic formula) tire
+    TMSIMPLE     ///< Tire Model Simple (W. Hirschberger)
 };
 
 /// Enum for available powertrain model templates.
@@ -378,7 +444,7 @@ enum class SuspensionTypeWV {
     SEMI_TRAILING_ARM,                ///< semi trailing arm
     SOLID_AXLE,                       ///< solid axle
     SOLID_THREE_LINK_AXLE,            ///< rigid suspension + 3 guiding links
-    SOLID_BELLCRANK_THREE_LINK_AXLE,  ///< rigid suspension + 3 guiding linls + bellcrank steering mechanism
+    SOLID_BELLCRANK_THREE_LINK_AXLE,  ///< rigid suspension + 3 guiding links + bellcrank steering mechanism
     THREE_LINK_IRS,                   ///< three-link independent rear suspension
     TOE_BAR_LEAF_SPRING_AXLE,         ///< steerable leaf-spring solid axle
     SAE_TOE_BAR_LEAF_SPRING_AXLE      ///< steerable leaf-spring solid axle with kinematic leaf-spring model

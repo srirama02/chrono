@@ -21,13 +21,13 @@
 
 #include "chrono_vehicle/ChVehicleModelData.h"
 #include "chrono_vehicle/driver/ChPathFollowerDriver.h"
-#include "chrono_vehicle/terrain/SCMDeformableTerrain.h"
+#include "chrono_vehicle/terrain/SCMTerrain.h"
 #include "chrono_vehicle/utils/ChVehiclePath.h"
 
 #include "chrono_models/vehicle/hmmwv/HMMWV.h"
 
 #ifdef CHRONO_IRRLICHT
-    #include "chrono_vehicle/wheeled_vehicle/utils/ChWheeledVehicleVisualSystemIrrlicht.h"
+    #include "chrono_vehicle/wheeled_vehicle/ChWheeledVehicleVisualSystemIrrlicht.h"
 #endif
 
 using namespace chrono;
@@ -94,7 +94,7 @@ class HmmwvScmTest : public utils::ChBenchmarkTest {
   private:
     HMMWV_Full* m_hmmwv;
     HmmwvScmDriver* m_driver;
-    SCMDeformableTerrain* m_terrain;
+    SCMTerrain* m_terrain;
 
     double m_step;
 };
@@ -128,7 +128,7 @@ HmmwvScmTest<TIRE_TYPE, OBJECTS>::HmmwvScmTest() : m_step(2e-3) {
     m_hmmwv->GetSystem()->SetNumThreads(4);
 
     // Create the terrain using 4 moving patches
-    m_terrain = new SCMDeformableTerrain(m_hmmwv->GetSystem());
+    m_terrain = new SCMTerrain(m_hmmwv->GetSystem());
     m_terrain->SetSoilParameters(2e6,   // Bekker Kphi
                                  0,     // Bekker Kc
                                  1.1,   // Bekker n exponent
@@ -148,7 +148,7 @@ HmmwvScmTest<TIRE_TYPE, OBJECTS>::HmmwvScmTest() : m_step(2e-3) {
     m_terrain->AddMovingPatch(m_hmmwv->GetVehicle().GetAxle(1)->GetWheel(VehicleSide::RIGHT)->GetSpindle(),
                               ChVector<>(0, 0, 0), ChVector<>(1.0, 0.3, 1.0));
 
-    m_terrain->SetPlotType(vehicle::SCMDeformableTerrain::PLOT_SINKAGE, 0, 0.1);
+    m_terrain->SetPlotType(vehicle::SCMTerrain::PLOT_SINKAGE, 0, 0.1);
 
     m_terrain->Initialize(patch_size, patch_size, patch_size / num_div);
 
@@ -216,7 +216,7 @@ void HmmwvScmTest<TIRE_TYPE, OBJECTS>::SimulateVis() {
         vis->BeginScene();
         vis->Render();
         ExecuteStep();
-        vis->Synchronize("SMC test", driver_inputs);
+        vis->Synchronize(m_hmmwv->GetSystem()->GetChTime(), driver_inputs);
         vis->Advance(m_step);
         vis->EndScene();
     }
