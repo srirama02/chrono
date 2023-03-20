@@ -197,8 +197,7 @@ if(MSVC)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  #set(CXX_FLAGS "${CXX_FLAGS} -fbracket-depth=8192")
-  add_compile_options(${CXX_FLAGS} -fbracket-depth=8192)
+  set(CXX_FLAGS "${CXX_FLAGS} -fbracket-depth=8192")
 endif()
 
 cuda_add_library(ChronoEngine_fsi SHARED
@@ -210,8 +209,8 @@ cuda_add_library(ChronoEngine_fsi SHARED
 )
 
 set_target_properties(ChronoEngine_fsi PROPERTIES
-                      COMPILE_FLAGS "${CXX_FLAGS}"
-                      LINK_FLAGS "${CH_FSI_LINKER_FLAGS}")
+                      COMPILE_FLAGS ${CXX_FLAGS}
+                      LINK_FLAGS ${CH_FSI_LINKER_FLAGS})
 
 target_compile_definitions(ChronoEngine_fsi PRIVATE "CH_API_COMPILE_FSI")
 target_compile_definitions(ChronoEngine_fsi PRIVATE "CH_IGNORE_DEPRECATED")
