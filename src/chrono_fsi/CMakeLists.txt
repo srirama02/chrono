@@ -197,7 +197,8 @@ if(MSVC)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CXX_FLAGS "${CXX_FLAGS} -fbracket-depth=8192")
+  #set(CXX_FLAGS "${CXX_FLAGS} -fbracket-depth=8192")
+  add_compile_options(${CXX_FLAGS} -fbracket-depth=8192)
 endif()
 
 cuda_add_library(ChronoEngine_fsi SHARED
