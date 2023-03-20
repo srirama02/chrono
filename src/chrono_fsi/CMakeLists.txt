@@ -38,16 +38,6 @@ if(USE_FSI_DOUBLE)
   set(CHRONO_FSI_USE_DOUBLE "#define CHRONO_FSI_USE_DOUBLE")
 endif()
 
-# ------------------------------------------------------------------------------
-# If using MSVC, disable warnings related to missing DLL interface
-# ------------------------------------------------------------------------------
-
-if(MSVC)
-  #add_compile_options(/wd4251)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4251")
-endif()
-
 # ----------------------------------------------------------------------------
 # Collect additional include directories necessary for the FSI module.
 # Make some variables visible from parent directory
@@ -198,6 +188,17 @@ source_group(visualization FILES ${ChronoEngine_FSI_VIS_FILES})
 #-----------------------------------------------------------------------------
 
 set(CXX_FLAGS ${CH_CXX_FLAGS})
+set(C_FLAGS ${CH_C_FLAGS})
+
+if(MSVC)
+  #add_compile_options(/wd4251)
+  set(CXX_FLAGS "${CXX_FLAGS} /wd4251")
+  set(C_FLAGS "${C_FLAGS} /wd4251")
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CXX_FLAGS "${CXX_FLAGS} -fbracket-depth=8192")
+endif()
 
 cuda_add_library(ChronoEngine_fsi SHARED
     ${ChronoEngine_FSI_FILES}
@@ -208,7 +209,7 @@ cuda_add_library(ChronoEngine_fsi SHARED
 )
 
 set_target_properties(ChronoEngine_fsi PROPERTIES
-                      COMPILE_FLAGS "${CH_CXX_FLAGS}"
+                      COMPILE_FLAGS "${CXX_FLAGS}"
                       LINK_FLAGS "${CH_FSI_LINKER_FLAGS}")
 
 target_compile_definitions(ChronoEngine_fsi PRIVATE "CH_API_COMPILE_FSI")
