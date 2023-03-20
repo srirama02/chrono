@@ -85,7 +85,7 @@
 				"vsg_DIR": "$env{HOME}/Packages/vsg/$env{LIB_DIR}/cmake/vsg",
 				"vsgImGui_DIR": "$env{HOME}/Packages/vsg/$env{LIB_DIR}/cmake/vsgImGui",
 				"vsgXchange_DIR": "$env{HOME}/Packages/vsg/$env{LIB_DIR}/cmake/vsgXchange",
-				"SWIG_EXECUTABLE": "swig",
+				"SWIG_EXECUTABLE": "/usr/bin/swig",
 				"USE_CUDA_NVRTC": "OFF",
 				"USE_FAST_DDS": "ON",
 				"CMAKE_BUILD_TYPE": "Release"
