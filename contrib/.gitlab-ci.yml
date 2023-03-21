@@ -363,7 +363,7 @@ windows:vs2022:build:
   extends: .windows
   script:
   # Configuring chrono
-  - cmake -B "$CI_PROJECT_DIR\build" -S "$CI_PROJECT_DIR" --preset=windowsci
+  - cmake -B "$CI_PROJECT_DIR\build" -S "$CI_PROJECT_DIR" --preset=windowsci-vs2022
   - cd build
   # Building chrono
   - cmake --build . -j 8 --config Release
@@ -386,7 +386,7 @@ windows:vs2019:build:
   extends: .windows
   script:
    # Configuring chrono
-  - cmake -B "$CI_PROJECT_DIR\build" -S "$CI_PROJECT_DIR" --preset=windowsci
+  - cmake -B "$CI_PROJECT_DIR\build" -S "$CI_PROJECT_DIR" --preset=windowsci-vs2019
   - cd build
   # Building chrono
   - cmake --build . -j 8 --config Release
