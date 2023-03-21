@@ -92,14 +92,13 @@
 			}
 		},
 		{
-			"name": "macosci-base",
+			"name": "macosci",
 			"displayName": "macOS CI Configuration",
 			"description": "Options for macOS (with brew)",
 			"inherits": [
 				"unixci-base",
 				"genericci-base"
 			],
-			"hidden": true,
 			"cacheVariables": {
 				"BUILD_BENCHMARKING": "OFF",
 				"BUILD_TESTING": "ON",
@@ -132,11 +131,6 @@
 				"PYTHON_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/include/python$env{BREW_PY_MAJOR}",
 				"PYTHON_LIBRARY": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/lib/python$env{BREW_PY_MAJOR}/config-$env{BREW_PY_MAJOR}-darwin/libpython$env{BREW_PY_MAJOR}.dylib"
 			}
-		},
-		{
-			"name": "macosci-intel",
-			"displayName": "MacOS CI Configuration",
-			"inherits": "macosci"
 		},
 		{
 			"name": "windowsci-base",
