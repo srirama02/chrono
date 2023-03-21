@@ -354,20 +354,18 @@ linux:almalinux:test:
   - echo $CI_PROJECT_DIR
   - git submodule init
   - git submodule update
-  - mkdir -Force -p Build/chrono
-  - mkdir -Force -p Install/chrono
+  - mkdir -Force -p build
+  - mkdir -Force -p install
   #- mkdir -Force build
 
 windows:vs2022:build:
   stage: build
   extends: .windows
   script:
-  #- cd $CI_PROJECT_DIR/src/chrono_thirdparty/flatbuffers
-  #- cmake ../ -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release .
-  #- MSBuild.exe FlatBuffers.sln -maxcpucount:8 -property:Configuration=Release
-  #- cmake -DMPIEXEC_EXECUTABLE="C:/Program Files/Microsoft MPI/Bin/mpiexec.exe" --preset=windowsci-vs2022 ..
-  - '& "C:\Users\builder\buildChrono.bat"'
-  - cd Build/chrono
+  # Configuring chrono
+  - cmake -B "$CI_PROJECT_DIR\build" -S "$CI_PROJECT_DIR" --preset=windowsci
+  - cd build
+  # Building chrono
   - cmake --build . -j 8 --config Release
   artifacts:
     expire_in: 60m
@@ -379,7 +377,7 @@ windows:vs2022:test:
   needs: ["windows:vs2022:build"]
   extends: .windows
   script:
-  - cd Build/chrono
+  - cd build
   - ctest --extra-verbose --output-on-failure
   dependencies: ["windows:vs2022:build"]
 
@@ -387,16 +385,11 @@ windows:vs2019:build:
   stage: build
   extends: .windows
   script:
-  # Build flatbuffers
-  #- cd $CI_PROJECT_DIR/src/chrono_thirdparty/flatbuffers
-  #- cmake -G "Visual Studio 17 2022" -T v142 -DCMAKE_BUILD_TYPE=Release .
-  #- MSBuild.exe FlatBuffers.sln -maxcpucount:8 -property:Configuration=Release
-  - '& "C:\Users\builder\buildChrono.bat"'
-  - cd Build/chrono
+   # Configuring chrono
+  - cmake -B "$CI_PROJECT_DIR\build" -S "$CI_PROJECT_DIR" --preset=windowsci
+  - cd build
+  # Building chrono
   - cmake --build . -j 8 --config Release
-  #- Invoke-Expression "& `'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.com`' Chrono.sln -Build `"Release|x64`" -log buildlog.txt"
-  #- '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Chrono.sln -maxcpucount:8 -property:Configuration=Release'
-  #- ninja -j 1
   artifacts:
     expire_in: 60m
     paths:
@@ -407,7 +400,7 @@ windows:vs2019:test:
   needs: ["windows:vs2019:build"]
   extends: .windows
   script:
-  - cd Build/chrono
+  - cd build
   - ctest --extra-verbose --output-on-failure
   dependencies: ["windows:vs2019:build"]
 
