@@ -434,6 +434,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CH_LINKERFLAG_SHARED "${CH_LINKERFLAG_SHARED} -Wl,-no_compact_unwind")
 endif()
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CH_CXX_FLAGS "${CH_CXX_FLAGS} -fbracket-depth=512")
+
 # Compiler warning level and disbaled warnings
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
