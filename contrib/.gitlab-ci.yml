@@ -544,9 +544,11 @@ windows:vs2019:deploy-python3.10:
   stage: build
   extends: .macos-monterey
   script:
-  - ~/buildChronoMac.sh
+  # Configuring chrono
+  - cmake -G "Ninja" -B $CI_PROJECT_DIR/build/ -S $CI_PROJECT_DIR --preset=macosci-intel
   - export CLANG_FORCE_COLOR_DIAGNOSTICS=1
   - cd build
+  # Building chrono
   - cmake --build . --config Release -j 7
   artifacts:
     expire_in: 60m

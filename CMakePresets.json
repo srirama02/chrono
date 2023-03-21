@@ -92,30 +92,51 @@
 			}
 		},
 		{
-			"name": "macosci",
+			"name": "macosci-base",
 			"displayName": "macOS CI Configuration",
 			"description": "Options for macOS (with brew)",
 			"inherits": [
 				"unixci-base",
 				"genericci-base"
 			],
+			"hidden": true,
 			"cacheVariables": {
-				"CMAKE_CXX_FLAGS": "-Wno-deprecated-declarations -Wno-unused-command-line-argument -fcolor-diagnostics",
-				"OpenMP_CXX_FLAGS": "-Xclang -fopenmp -I$env{HOMEBREW_PREFIX}/Cellar/libomp/13.0.1/include",
+				"BUILD_BENCHMARKING": "OFF",
+				"BUILD_TESTING": "ON",
+				"ENABLE_MODULE_POSTPROCESS": "ON",
+				"ENABLE_MODULE_IRRLICHT": "ON",
+				"ENABLE_MODULE_MULTICORE": "ON",
+				"ENABLE_MODULE_VEHICLE": "ON",
+				"ENABLE_OPENCRG": "ON",
+				"ENABLE_MODULE_VSG": "OFF",
+				"ENABLE_MODULE_CASCADE": "ON",
+				"ENABLE_MODULE_MODAL": "ON",
+				"ENABLE_MODULE_PYTHON": "ON",
+				"ENABLE_MODULE_CSHARP": "ON",
+				"CMAKE_INSTALL_PREFIX": "$env{HOME}/install/chrono",
+				"OpenMP_CXX_FLAGS": "-Xclang -fopenmp -I $env{HOMEBREW_PREFIX}/Cellar/libomp/15.0.7/include",
+				"OpenMP_C_FLAGS": "-Xclang -fopenmp",
+				"OpenMP_C_INCLUDE_DIR": "-L $env{HOMEBREW_PREFIX}/opt/libomp/lib",
 				"OpenMP_CXX_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/include",
-				"BLAZE_DIR": "/Users/builder/dependencies/blaze-3.8",
-				"THRUST_INCLUDE_DIR": "/Users/builder/dependencies/thrust",
+				"OpenMP_C_LIB_NAMES": "libomp",
+				"OpenMP_CXX_LIB_NAMES": "libomp",
+				"OpenMP_libomp_LIBRARY": "$env{HOMEBREW_PREFIX}/opt/libomp/lib/libomp.dylib",
+				"THRUST_INCLUDE_DIR": "~/dependencies/thrust",
+				"BLAZE_INSTALL_DIR": "~/dependencies/blaze-3.8",
 				"IRRLICHT_INSTALL_DIR": "$env{HOMEBREW_PREFIX}/include/irrlicht",
-				"GLFW_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/include",
+				"OpenCRG_INCLUDE_DIR": "~/dependencies/OpenCRG/include",
+				"OpenCRG_LIBRARY": "~/dependencies/OpenCRG/lib/libOpenCRG.a",
+				"OpenCASCADE_DIR": "/usr/local/include/opencascade/lib/cmake/opencascade",
+				"SPECTRA_INCLUDE_DIR": "/usr/local/include",
 				"PYTHON_EXECUTABLE": "$env{HOMEBREW_PREFIX}/bin",
 				"PYTHON_INCLUDE_DIR": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/include/python$env{BREW_PY_MAJOR}",
-				"PYTHON_LIBRARY": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/lib/python$env{BREW_PY_MAJOR}/config-$env{BREW_PY_MAJOR}-darwin/libpython$env{BREW_PY_MAJOR}.dylib",
-				"ENABLE_MODULE_DISTRIBUTED": "OFF",
-				"ENABLE_MODULE_FSI": "OFF",
-				"ENABLE_MODULE_GPU": "OFF",
-				"USE_MULTICORE_CUDA": "OFF",
-				"ENABLE_MODULE_SENSOR": "OFF"
+				"PYTHON_LIBRARY": "$env{HOMEBREW_PREFIX}/Cellar/python@$env{BREW_PY_MAJOR}/$env{BREW_PY_VER}/Frameworks/Python.framework/Versions/$env{BREW_PY_MAJOR}/lib/python$env{BREW_PY_MAJOR}/config-$env{BREW_PY_MAJOR}-darwin/libpython$env{BREW_PY_MAJOR}.dylib"
 			}
+		},
+		{
+			"name": "macosci-intel",
+			"displayName": "MacOS CI Configuration",
+			"inherits": "macosci"
 		},
 		{
 			"name": "windowsci-base",
