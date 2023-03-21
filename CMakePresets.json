@@ -170,7 +170,7 @@
 				"GLM_INCLUDE_DIR": "C:/Users/builder/Documents/gl/include",
 				"OpenCRG_INCLUDE_DIR": "C:/Users/builder/Documents/OpenCRG/include",
 				"OpenCRG_LIBRARY": "C:/Users/builder/Documents/OpenCRG/lib/OpenCRG.lib",
-				"OpenCASCADE_DIR": "C:/Users/builder/Documents/OpenCRG/cmake",
+				"OpenCASCADE_DIR": "C:/OpenCASCADE-7.4.0-vc14-64/opencascade-7.4.0/cmake",
 				"SPECTRA_INCLUDE_DIR": "C:/Users/builder/Documents/spectra/include",
 				"MATLAB_SDK_ROOT:PATH": "C:/Program Files/MATLAB/R2019a/extern",
 				"vsg_DIR": "C:/Users/builder/Documents/vsg_test/lib/cmake/vsg",
