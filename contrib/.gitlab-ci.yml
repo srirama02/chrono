@@ -90,7 +90,7 @@ linux:arch-llvm:build:
     - cmake -G "Ninja" -B $CI_PROJECT_DIR/build/ -S $CI_PROJECT_DIR --preset=linuxci
     # Making chrono
     - cd $CI_PROJECT_DIR/build
-    - ninja -j 8
+    - ninja -v -j 8
   artifacts:
     expire_in: 60m
     paths:
