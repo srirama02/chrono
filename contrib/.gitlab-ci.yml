@@ -87,7 +87,7 @@ linux:arch-llvm:build:
     - export C_COMPILER="/usr/bin/clang"
     - export CXX_COMPILER="/usr/bin/clang++"
     # Building chrono
-    - cmake -G "Ninja" -B $CI_PROJECT_DIR/build/ -S $CI_PROJECT_DIR --preset=linuxci -DCMAKE_HOST_COMPILER=/usr/bin/gcc
+    - cmake -G "Ninja" -B $CI_PROJECT_DIR/build/ -S $CI_PROJECT_DIR --preset=linuxci -DCUDA_HOST_COMPILER=/usr/bin/gcc
     # Making chrono
     - cd $CI_PROJECT_DIR/build
     - ninja -v -j 8
