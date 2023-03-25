@@ -435,9 +435,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CH_CXX_FLAGS "${CH_CXX_FLAGS} -fbracket-depth=512")
-  set(CH_C_FLAGS "${CH_C_FLAGS} -fbracket-depth=512")
-  set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -fbracket-depth=512")
+  set(CMAKE_CUDA_FLAGS "-fbracket-depth=512")
 endif()
 
 # Compiler warning level and disbaled warnings
