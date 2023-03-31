@@ -1,7 +1,7 @@
 // =============================================================================
 // PROJECT CHRONO - http://projectchrono.org
 //
-// Copyright (c) 2022 projectchrono.org
+// Copyright (c) 2023 projectchrono.org
 // All rights reserved.
 //
 // Use of this source code is governed by a BSD-style license that can be found
@@ -9,41 +9,43 @@
 // http://projectchrono.org/license-chrono.txt.
 //
 // =============================================================================
-// Authors: Rainer Gericke, Radu Serban
+// Authors: Radu Serban
 // =============================================================================
 //
-// VSG-based visualization wrapper for vehicles.  This class is a derived
-// from ChVisualSystemVSG and provides the following functionality:
-//   - rendering of the entire VSG scene
-//   - custom chase-camera (which can be controlled with keyboard)
-//   - optional rendering of links, springs, stats, etc.
+// OpenGL-based visualization wrapper for vehicles.
 //
 // =============================================================================
 
-#ifndef CH_VEHICLE_VISUAL_SYSTEM_VSG_H
-#define CH_VEHICLE_VISUAL_SYSTEM_VSG_H
+#ifndef CH_VEHICLE_VISUAL_SYSTEM_OPENGL_H
+#define CH_VEHICLE_VISUAL_SYSTEM_OPENGL_H
+
+#include <string>
+
+#include "chrono/physics/ChSystem.h"
+#include "chrono/utils/ChUtilsChaseCamera.h"
+
+#include "chrono_opengl/ChVisualSystemOpenGL.h"
 
 #include "chrono_vehicle/ChApiVehicle.h"
-#include "chrono_vehicle/ChConfigVehicle.h"
+#include "chrono_vehicle/ChVehicle.h"
 #include "chrono_vehicle/ChVehicleVisualSystem.h"
-
-#include "chrono_vsg/ChVisualSystemVSG.h"
+#include "chrono_vehicle/ChDriver.h"
+#include "chrono_vehicle/ChConfigVehicle.h"
+#include "chrono_vehicle/terrain/SCMTerrain.h"
 
 namespace chrono {
 namespace vehicle {
 
-class ChInteractiveDriverVSG;
-
 /// @addtogroup vehicle_vis
 /// @{
 
-/// VSG-based Chrono run-time visualization system.
-class CH_VEHICLE_API ChVehicleVisualSystemVSG : public ChVehicleVisualSystem, public vsg3d::ChVisualSystemVSG {
+/// OpenGL-based Chrono run-time visualization system.
+class CH_VEHICLE_API ChVehicleVisualSystemOpenGL : public ChVehicleVisualSystem, public opengl::ChVisualSystemOpenGL {
   public:
-    /// Construct a vehicle VSG visualization system
-    ChVehicleVisualSystemVSG();
+    /// Construct a vehicle OpenGL visualization system
+    ChVehicleVisualSystemOpenGL();
 
-    virtual ~ChVehicleVisualSystemVSG();
+    virtual ~ChVehicleVisualSystemOpenGL();
 
     /// Initialize the visualization system.
     virtual void Initialize() override;
@@ -54,18 +56,12 @@ class CH_VEHICLE_API ChVehicleVisualSystemVSG : public ChVehicleVisualSystem, pu
     virtual void Advance(double step) override;
 
   protected:
-    virtual void AppendGUIStats() {}
-
-    ChInteractiveDriverVSG* m_driver;
-    bool m_has_TC;
-
-    friend class ChInteractiveDriverVSG;
-    friend class ChVehicleGuiComponentVSG;
-    friend class ChVehicleKeyboardHandlerVSG;
+    friend class ChVehicleKeyboardHandlerOpenGL;
 };
 
 // @} vehicle_vis
 
 }  // namespace vehicle
 }  // namespace chrono
+
 #endif
