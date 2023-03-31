@@ -88,7 +88,8 @@
 				"SWIG_EXECUTABLE": "/usr/bin/swig",
 				"USE_CUDA_NVRTC": "OFF",
 				"USE_FAST_DDS": "ON",
-				"CMAKE_BUILD_TYPE": "Release"
+				"CMAKE_BUILD_TYPE": "Release",
+				"CUDA_ARCH_NAME": "All"
 			}
 		},
 		{
