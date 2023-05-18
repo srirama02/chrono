@@ -130,11 +130,6 @@ linux:arch-llvm:test:
     - apt update
     - apt -y install intel-basekit libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev
       libxcb-shape0-dev libxcb-xkb-dev xorg-dev
-    # Build opencascade
-    - cd ~/Packages/opencascade-7.4.0/build
-    - cmake -DBUILD_MODULE_Draw:BOOL=FALSE ..
-    - make -j 8
-    - make install -j 8
     # Initialize git repository
     - cd $CI_PROJECT_DIR
     - git submodule init
