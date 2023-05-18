@@ -35,16 +35,10 @@ stages:
   - uname -a
   - export LIB_DIR="lib"
   - export IOMP5_DIR=""
-  - pacman -Sy --noconfirm --overwrite git eigen cmake glfw glm glew glut irrlicht ninja wget python python-pip openmpi openssh swig hdf5 intel-oneapi-mkl doxygen fontconfig libxmu
-  - pacman -Sy --noconfirm cuda
+  - pacman -Sy --noconfirm git eigen cmake glfw glm glew glut irrlicht ninja wget python python-pip openmpi openssh swig hdf5 intel-oneapi-mkl doxygen fontconfig libxmu cuda
   # Clean up the package cache to make more space for the build
   - pacman -Scc --noconfirm
   - ldconfig
-  # Building and installing opencascade
-  - cd ~/Packages/opencascade-7.4.0/build
-  - cmake -DBUILD_MODULE_Draw:BOOL=FALSE ..
-  - make -j 8
-  - make install -j 8
   # Initializing git repository
   - cd $CI_PROJECT_DIR
   - git submodule init
