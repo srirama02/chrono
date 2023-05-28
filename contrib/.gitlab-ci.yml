@@ -116,6 +116,7 @@ linux:arch-llvm:test:
     # Defining configuration variables
     - export LIB_DIR="lib"
     - export IOMP5_DIR=""
+    - nvidia-smi
     # Obtain dependencies
     - apt-get update; apt-get -y install unzip wget python3 python3-pip
       git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev 
