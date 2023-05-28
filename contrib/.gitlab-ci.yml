@@ -243,10 +243,10 @@ linux:ubuntu22.04:test:
     - conda config --add channels https://conda.anaconda.org/conda-forge
     - conda config --add channels https://conda.anaconda.org/intel
   environment:
-    name: pychrono-ubuntu2004
+    name: pychrono-ubuntu22.04
     url: https://anaconda.org/projectchrono/pychrono
 
-linux:ubuntu2004:deploy-python3.8:
+linux:ubuntu22.04:deploy-python3.8:
   stage: deploy
   needs: []
   extends: .ubuntu-deploy-base
@@ -257,7 +257,7 @@ linux:ubuntu2004:deploy-python3.8:
     - anaconda -t $ANACONDA_TOKEN upload $HOME/miniconda3/conda-bld/linux-64/pychrono*.bz2 -l main --force
   when: manual
 
-linux:ubuntu2004:deploy-python3.9:
+linux:ubuntu22.04:deploy-python3.9:
   stage: deploy
   needs: []
   extends: .ubuntu-deploy-base
@@ -267,7 +267,7 @@ linux:ubuntu2004:deploy-python3.9:
     - anaconda -t $ANACONDA_TOKEN upload $HOME/miniconda3/conda-bld/linux-64/pychrono*.bz2 -l main --force
   when: manual
 
-linux:ubuntu2004:deploy-python3.10:
+linux:ubuntu22.04:deploy-python3.10:
   stage: deploy
   needs: []
   extends: .ubuntu-deploy-base
