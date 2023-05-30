@@ -1,3 +1,7 @@
+if(NOT ENABLE_MODULE_IRRLICHT AND NOT_ENABLE_MODULE_VSG)
+   return()
+endif()   
+
 #--------------------------------------------------------------
 # List of all Parsers demos
 
@@ -17,8 +21,19 @@ endif()
 if(HAVE_URDF)
     set(DEMOS ${DEMOS}
       demo_PARSER_URDF
-      demo_PARSER_RoboSimianURDF
+      demo_PARSER_URDF_RoboSimian
     )
+endif()
+
+if(HAVE_PYTHON)
+    set(DEMOS ${DEMOS}
+      demo_PARSER_Python
+    )
+    if(ENABLE_MODULE_IRRLICHT)
+      set(DEMOS ${DEMOS}
+        demo_PARSER_Python_SolidWorks
+      )
+    endif()
 endif()
 
 #--------------------------------------------------------------
