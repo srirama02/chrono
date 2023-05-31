@@ -93,7 +93,7 @@
 				"CMAKE_BUILD_TYPE": "Release",
 				"CUDA_ARCH_NAME": "All",
 				"IRRLICHT_INSTALL_DIR": "$env{HOME}/Packages/irrlicht-1.8.5", 
-				"urdfdom_DIR": "$env{HOME}/Packages/urdf"
+				"urdfdom_DIR": "$env{HOME}/Packages/urdf/$env{LIB_DIR}/urdfdom/cmake"
 			}
 		},
 		{
