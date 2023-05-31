@@ -92,7 +92,8 @@
 				"USE_FAST_DDS": "ON",
 				"CMAKE_BUILD_TYPE": "Release",
 				"CUDA_ARCH_NAME": "All",
-				"IRRLICHT_INSTALL_DIR": "$env{HOME}/Packages/irrlicht-1.8.5"
+				"IRRLICHT_INSTALL_DIR": "$env{HOME}/Packages/irrlicht-1.8.5", 
+				"urdfdom_INCLUDE_DIRS": "$env{HOME}/Packages/urdf"
 			}
 		},
 		{
