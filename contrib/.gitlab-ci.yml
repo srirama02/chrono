@@ -286,7 +286,7 @@ linux:ubuntu22.04:deploy-python3.10:
   tags:
     - linux
   image:
-    name: uwsbel/packages:alma
+    name: uwsbel/almalinux_packages_image
   before_script:
     # Defining configuration variables
     - export C_COMPILER="/usr/bin/gcc"
