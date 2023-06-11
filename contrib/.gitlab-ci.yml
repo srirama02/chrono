@@ -286,7 +286,7 @@ linux:ubuntu22.04:deploy-python3.10:
   tags:
     - linux
   image:
-    name: uwsbel/almalinux_packages_image
+    name: uwsbel/packages:alma
   before_script:
     # Defining configuration variables
     - export C_COMPILER="/usr/bin/gcc"
@@ -314,7 +314,7 @@ linux:almalinux:build:
   extends: .almalinux
   script:
     # Building chrono
-    - cmake -G "Ninja" -B $CI_PROJECT_DIR/build/ -S $CI_PROJECT_DIR --preset=linuxci
+    - cmake -G "Ninja" -B $CI_PROJECT_DIR/build/ -S $CI_PROJECT_DIR --preset=almaci
     # Making chrono
     - cd $CI_PROJECT_DIR/build
     - ninja -j 8
