@@ -296,7 +296,13 @@ void ChVehicleCosimBaseNode::Render(double step_size) {
     if (m_renderPP && GetSystemPostprocess()) {
         if (!renderPP_initialized) {
             m_blender = chrono_types::make_shared<postprocess::ChBlender>(GetSystemPostprocess());
+<<<<<<< HEAD
             m_blender->SetBasePath(m_node_out_dir + "/blender");
+=======
+            m_blender->SetBlenderUp_is_ChronoZ();
+            m_blender->SetBasePath(m_node_out_dir + "/blender");
+            m_blender->SetRank(m_rank);
+>>>>>>> main
             m_blender->AddAll();
             m_blender->ExportScript();
             renderPP_initialized = true;

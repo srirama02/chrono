@@ -344,8 +344,12 @@ void ChVehicleGuiComponentVSG::render() {
             ImGui::EndTable();
         }
 
+<<<<<<< HEAD
         if (transmission->IsAutomatic() && transmission->asAutomatic()->HasTorqueConverter()) {
             auto transmission_auto = transmission->asAutomatic();
+=======
+        if (transmission_auto && transmission_auto->HasTorqueConverter()) {
+>>>>>>> main
             ImGui::Spacing();
 
             if (ImGui::BeginTable("TorqueConverter", 2, ImGuiTableFlags_BordersOuter | ImGuiTableFlags_SizingFixedFit,
